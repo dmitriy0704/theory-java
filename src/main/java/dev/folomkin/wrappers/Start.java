@@ -13,7 +13,5 @@ public class Start {
         Integer value3 = Integer.parseInt("42");
         System.out.println(value3);
 
-
-
     }
 }
