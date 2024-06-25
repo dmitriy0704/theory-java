@@ -1,4 +1,4 @@
-package dev.folomkin.classes_wrappers.example;
+package dev.folomkin.oop.wrappers.example;
 
 public class ExampleStart {
     public static void main(String[] args) {
