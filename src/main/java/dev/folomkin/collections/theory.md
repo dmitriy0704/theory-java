@@ -1,11 +1,14 @@
-## Обработка исключений
+## Коллекции
 
-__Иерархия исключений:__
+__Иерархия колллекций:__
 
-    Throwable:
-        - Error
-        - Exceptions:
-          - RuntimeExceptions
+    Iterable
+        - Collections
+            - List
+            - Set
+            - Queue
         
+1. __**Iterable**__  
+Объявляет один абстрактный метод _iterator()_ для извлечения объекта, реализующего интерфейс Iterator.
 
 
