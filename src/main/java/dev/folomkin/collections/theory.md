@@ -262,26 +262,32 @@ Map<K,V> - принимает два дженерика типа K и V. Пов�
 
 **Преобразование списка в массив - toArray():**
 
-```
-    List<String> list = new ArrayList<>();
-
-    list.add("A");
-    list.add("B");
-    list.add("C");
-
-    Object[] strArray = list.toArray();
-    System.out.println(Arrays.toString(strArray));
-    String[] strArray2 = list.toArray(new String[list.size()]);
-    System.out.println(Arrays.toString(strArray2));
+```java
+public class ExampleStart {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        list.add("A");
+        list.add("B");
+        list.add("C");
+        Object[] strArray = list.toArray();
+        System.out.println(Arrays.toString(strArray));
+        String[] strArray2 = list.toArray(new String[list.size()]);
+        System.out.println(Arrays.toString(strArray2));
+    }
+}
 ```
 
 **Представление массива в виде списка:**
 
-```
-     String[] strings = {"a", "b", "c", "d"};
-     List<String> list = Arrays.asList(strings);
-     List<String> list2 = Arrays.asList("fd","fgfd","gfgsd");
-     System.out.println(list);
+```java
+public class ExampleStart {
+    public static void main(String[] args) {
+        String[] strings = {"a", "b", "c", "d"};
+        List<String> list = Arrays.asList(strings);
+        List<String> list2 = Arrays.asList("fd", "fgfd", "gfgsd");
+        System.out.println(list);
+    }
+}
 ```
 
 ### ___Vector\<E>___
@@ -372,3 +378,57 @@ LinkedList\<E> является реализацией двусвязного с
 может работать с очередью как по принципу FIFO, так и по принципу LIFO.
 
 ## ___Упорядочение, сортировка и поиск___
+
+Для упорядочения используются способы:
+
+- коллекция или массив с использованием методов Collections.sort() или
+  Arrays.sort(),
+  упорядочивающих по заданной спецификации.
+
+```java
+public class ExampleStart {
+    public static void main(String[] args) {
+        int[] numbers = {1, 3, 2, 45, 67, 8, 9, 10};
+        // Отсортировать массив
+        // Arrays.sort(numbers);
+        System.out.println(Arrays.toString(numbers));
+        List<Integer> numbersList = new ArrayList<>();
+        for (int i = 0; i < numbers.length; i++) {
+            numbersList.add(numbers[i]);
+        }
+        // Или коллекцию
+        Collections.sort(numbersList);
+        System.out.println(numbersList);
+    }
+}
+```
+
+- использование таких упорядоченных коллекций как SortedSet(TreeSet) и
+  SortedMap(TreeMap).
+
+Так же упорядочение можно реализовать:
+
+- Заставить объекты реализовать интерфейс java.lang.Comparable и переопределить
+  метод compareTo() для указания порядка сравнения двух объектов;
+- создать объект Comparator с методом compare()
+
+### ___Comparable\<T>___
+
+Интерфейс java.lang.Comparable<T> указывает, как два объекта должны сравниваться
+в смысле упорядочения. Этот интерфейс определяет один абстрактный метод:
+
+- int compareTo(T o) - возвращает отрицательное целое, ноль или положительное
+  целое число, если данный объект меньше, равен или больше заданного.
+
+Этот способ ссылается на естественный порядок сравнения, и метод compareTo()
+ссылается на метод естественного сравнения.
+Строго рекомендуется, чтобы метод compareTo() был совместимым с equals() и
+hashCode() (наследуемых из java.lang.Object):
+
+1. Если compareTo() возвращает ноль, то equals() должен воз вращать true.
+2. Если equals() возвращает true, то hashCode() будет создавать то же int.
+
+Все восемь классов-оболочек базовых типов (Byte, Short, Integer, Long, Float,
+Double, Character и Boolean) реализуют интерфейс Comparable с методом
+compareTo(), использующим порядок номеров.
+
