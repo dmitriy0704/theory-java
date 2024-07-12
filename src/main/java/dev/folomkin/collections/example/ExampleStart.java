@@ -1,33 +1,33 @@
 package dev.folomkin.collections.example;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Comparator;
 
 public class ExampleStart {
+
+    public static class StringComparator implements Comparator<String> {
+        @Override
+        public int compare(String s1, String s2) {
+            return s1.compareToIgnoreCase(s2);
+        }
+    }
+
+    public static class IntegerComparator implements Comparator<Integer> {
+        @Override
+        public int compare(Integer s1, Integer s2) {
+            return s1 % 10 - s2 % 10;
+        }
+    }
+
     public static void main(String[] args) {
-        // Сортировка и поиск "массива" строк Strings
-        String[] array = {"Hello", "hello", "hi", "HI"};
+        Comparator<String> compStr = new StringComparator();
+        Comparator<Integer> compInt = new IntegerComparator();
 
-        // Используем Comparable из String
-        Arrays.sort(array);
+        // Сортировка и поиск в массиве строк String
+
+        String[] array = {"Hello", "Hi", "HI", "hello"};
+        Arrays.sort(array, compStr);
         System.out.println(Arrays.toString(array));
-
-        //Используем бинарный поиск,
-        // для этого массив должен быть отсортирован.
-
-        System.out.println(Arrays.binarySearch(array, "Hello"));
-        System.out.println(Arrays.binarySearch(array, "HELLO"));
-
-        // Сортировка и поиск в списке List из целых чисел
-        List<Integer> list = new ArrayList<>();
-        list.add(2);
-        list.add(1);
-        list.add(4);
-        list.add(3);
-
-        Collections.sort(list); //Используем Comparable для класса Integer
-        System.out.println(list);
-
-
 
     }
 }

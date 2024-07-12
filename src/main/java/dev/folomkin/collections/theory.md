@@ -432,3 +432,98 @@ hashCode() (наследуемых из java.lang.Object):
 Double, Character и Boolean) реализуют интерфейс Comparable с методом
 compareTo(), использующим порядок номеров.
 
+__Пример Comparable<T>__
+
+```java
+public class ExampleStart {
+    public static void main(String[] args) {
+        // Сортировка и поиск "массива" строк Strings
+        String[] array = {"Hello", "hello", "hi", "HI"};
+
+        // Используем Comparable из String
+        Arrays.sort(array);
+        System.out.println(Arrays.toString(array));
+
+        //Используем бинарный поиск,
+        // для этого массив должен быть отсортирован.
+
+        System.out.println(Arrays.binarySearch(array, "Hello"));
+        System.out.println(Arrays.binarySearch(array, "HELLO"));
+
+        // Сортировка и поиск в списке List из целых чисел
+        List<Integer> list = new ArrayList<>();
+        list.add(2);
+        list.add(1);
+        list.add(4);
+        list.add(3);
+
+        Collections.sort(list); //Используем Comparable для класса Integer
+        System.out.println(list);
+        System.out.println(binarySearch(list, 2));
+    }
+}
+```
+
+### ___Comparator\<T>___
+
+__Метод:__
+
+- int compare(T o1, T o2) - возвращает отрицательное целое, ноль или
+  положительное целое, если объект меньше, равен или больше указанного.
+
+```java
+public class ExampleStart {
+    public static class StringComparator implements Comparator<String> {
+        @Override
+        public int compare(String s1, String s2) {
+            return s1.compareToIgnoreCase(s2);
+        }
+    }
+
+    public static class IntegerComparator implements Comparator<Integer> {
+        @Override
+        public int compare(Integer s1, Integer s2) {
+            return s1 % 10 - s2 % 10;
+        }
+    }
+
+    public static void main(String[] args) {
+        Comparator<String> compStr = new StringComparator();
+        Comparator<Integer> compInt = new IntegerComparator();
+        // Сортировка и поиск в массиве строк String
+        String[] array = {"Hello", "Hi", "HI", "hello"};
+        Arrays.sort(array, compStr);
+        System.out.println(Arrays.toString(array));
+
+    }
+}
+```
+
+## ___Set\<E>___
+
+Интерфейс Set моделирует математическое множество, в котором нет одинаковых
+элементов.
+
+__Методы:__
+
+- **boolean add(E o)** - добавляет указанный элемент в коллекцию, если его еще
+  нет;
+- **boolean remove(Object o)** - удаляет указанный объект, если он есть
+- **boolean contains(Object o)** - возвращает true, если объект присутствует в
+  множестве
+- **boolean addAll(Collections<? extends E> c)** - создает объединение множеств
+- **boolean retainAll(Collection<?> c )** - создает пересечение множеств
+
+Реализации интерфейса Set включают:
+
+- класс HashSet\<E> - хранит элементы в хеш-таблице по хеш коду; HashSet
+  является
+  самой лучшей реализацией для Set;
+- LinkedHashSet\<E> - элементы хранятся в виде двусвязного списка, что позволяет
+  организовать упорядоченные итерации вставки и удаления; элементы хэшируются с
+  использованием метода hashCode() и организованы в связный список в
+  соответствии с порядком вставки;
+- TreeSet\<E> - также поддерживает подинтерфейсы NavigableSet и SortedSet;
+  хранит элементы в виде структуры «дерево», в которой элементы отсортированы и
+  управляемы; это эффективно для поиска, удаления и добавления элементов (оценка
+  времени поиска – O(log(n)).
