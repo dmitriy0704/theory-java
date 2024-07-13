@@ -1,33 +1,58 @@
 package dev.folomkin.collections.example;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Objects;
+import java.util.Set;
 
 public class ExampleStart {
 
-    public static class StringComparator implements Comparator<String> {
-        @Override
-        public int compare(String s1, String s2) {
-            return s1.compareToIgnoreCase(s2);
-        }
-    }
-
-    public static class IntegerComparator implements Comparator<Integer> {
-        @Override
-        public int compare(Integer s1, Integer s2) {
-            return s1 % 10 - s2 % 10;
-        }
-    }
-
     public static void main(String[] args) {
-        Comparator<String> compStr = new StringComparator();
-        Comparator<Integer> compInt = new IntegerComparator();
+        Book book1 = new Book(1, "Анна Каренина");
+        Book book1Dup = new Book(1, "Анна Каренина");
+        Book book2 = new Book(2, "Война и мир");
+        Book book3 = new Book(3, "Java для чайников");
 
-        // Сортировка и поиск в массиве строк String
-
-        String[] array = {"Hello", "Hi", "HI", "hello"};
-        Arrays.sort(array, compStr);
-        System.out.println(Arrays.toString(array));
+        Set<Book> set = new LinkedHashSet<>();
+        set.add(book1);
+        set.add(book1Dup);
+        set.add(book1);
+        set.add(book3);
+        set.add(null);
+        set.add(null);
+        set.add(book2);
+        System.out.println(set);
 
     }
+}
+
+class Book {
+    private int id;
+    private String title;
+
+    public Book(int id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
+    @Override
+    public String toString() {
+        return id + ":" + title;
+    }
+
+    //Две книги равны, если у них одинаковые id;
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Book)) {
+            return false;
+        }
+        return this.id == ((Book) o).id;
+    }
+
+    //Два объекта равны, если они имеют одинаковый хеш-код.
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
 }

@@ -516,14 +516,86 @@ __Методы:__
 
 Реализации интерфейса Set включают:
 
-- класс HashSet\<E> - хранит элементы в хеш-таблице по хеш коду; HashSet
-  является
-  самой лучшей реализацией для Set;
-- LinkedHashSet\<E> - элементы хранятся в виде двусвязного списка, что позволяет
+- **класс HashSet\<E>** - хранит элементы в хеш-таблице по хеш коду; HashSet
+  является самой лучшей реализацией для Set;
+- **LinkedHashSet\<E>** - элементы хранятся в виде двусвязного списка, что позволяет
   организовать упорядоченные итерации вставки и удаления; элементы хэшируются с
   использованием метода hashCode() и организованы в связный список в
   соответствии с порядком вставки;
-- TreeSet\<E> - также поддерживает подинтерфейсы NavigableSet и SortedSet;
+- **TreeSet\<E>** - также поддерживает подинтерфейсы NavigableSet и SortedSet;
   хранит элементы в виде структуры «дерево», в которой элементы отсортированы и
   управляемы; это эффективно для поиска, удаления и добавления элементов (оценка
   времени поиска – O(log(n)).
+
+__Пример HashSet\<E>__
+
+```java
+
+public class ExampleStart {
+
+    public static void main(String[] args) {
+        Book book1 = new Book(1, "Война и мир");
+        Book book1Dup = new Book(1, "Война и мир");
+        Book book2 = new Book(2, "Анна Каренина");
+        Book book3 = new Book(3, "Java для чайников");
+
+        Set<Book> set1 = new HashSet<Book>();
+        set1.add(book1);
+        set1.add(book1Dup);
+        set1.add(book1);
+        set1.add(book3);
+        set1.add(null);
+        set1.add(book2);
+        System.out.println(set1);
+
+        set1.remove(book1);
+        set1.remove(book3);
+        System.out.println(set1);
+
+        Set<Book> set2 = new HashSet<>();
+        set2.add(book3);
+        System.out.println(set2);
+
+        set2.addAll(set1);
+        System.out.println(set2);
+
+        set2.remove(null);
+        System.out.println(set2);
+    }
+}
+
+class Book {
+    private int id;
+    private String title;
+
+
+    public Book(int id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
+    @Override
+    public String toString() {
+        return id + ":" + title;
+    }
+
+    //Две книги равны, если у них одинаковые id;
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Book)) {
+            return false;
+        }
+        return this.id == ((Book) o).id;
+    }
+
+    //Два объекта равны, если они имеют одинаковый хеш-код.
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+}
+```
+
+
+__Пример для LinkedHashSet\<E>__ -  
