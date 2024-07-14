@@ -1,8 +1,6 @@
 package dev.folomkin.collections.example;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Objects;
 import java.util.Set;
 
 public class ExampleStart {
@@ -22,14 +20,12 @@ public class ExampleStart {
         set.add(null);
         set.add(book2);
         System.out.println(set);
-
     }
 }
 
 class Book {
     private int id;
     private String title;
-
     public Book(int id, String title) {
         this.id = id;
         this.title = title;
@@ -54,5 +50,4 @@ class Book {
     public int hashCode() {
         return id;
     }
-
 }

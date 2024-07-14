@@ -597,5 +597,8 @@ class Book {
 }
 ```
 
+__Пример для LinkedHashSet\<E>__
 
-__Пример для LinkedHashSet\<E>__ -  
+```java
+
+```
