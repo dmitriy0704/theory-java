@@ -43,18 +43,23 @@ public class ExampleStart {
 
 ## ___Интерфейс Collections___
 
+Интерфейс Collection<E>, который принимает в качестве параметра дженерик типа
+E (читается как «коллекция элементов типа E), является корневым интерфейсом
+фреймворка «Коллекции». Он определяет общее поведение для всех классов,
+например, устанавливает, как добавить или удалить элемент.
+
 ***Основные подинтерфейсы:***
 
-- **List\<E>** - список - моделирует массив изменяемого размера, для которого
-  разрешаается доступ по индексу. *Может содержать повторяющиеся элементы. Часто
-  используемые реализации:ArrayList, LinkedList, Vector и Stack.
+- **List\<E>** - список, моделирует массив изменяемого размера, для которого
+  разрешается доступ по индексу. *Может содержать повторяющиеся элементы. Часто
+  используемые реализации: ArrayList, LinkedList, Vector и Stack.
 - **Set\<E>** - множество, моделирует математическое множество. Повторяющиеся
   элементы не допустимы. Часто используемые реализации: HashSet, LinkedHashSet.
   Подинтерфейс SortedSet<E> моделирует отсортированное упорядоченное множество
   элементов, реализованное TreeSet.
 - **Queue\<E>** - очередь - моделирует очереди, организованные по принципу First
   In First Out(FIFO) - первым вошел - первым вышел. Подинтерфейс Deque<E>
-  моделирует очереди, с котороми можно работать с двух концов. Реализации
+  моделирует очереди, с котором можно работать с двух концов. Реализации
   включают PriorityQueue, ArrayDeque и LinkedList.
 
 ***Основные методы:***
@@ -62,12 +67,12 @@ public class ExampleStart {
 - **int size()** - возвращает количество элементов данной колеекции
 - **void clear()** - удаляет все элементы данной коллекции
 - **boolean isEmpty()** - возвращает true, если коллекция не пуста
-- **boolean add(E element)** - подтверждает. что данная коллекция содержит
-  заданный элемент
+- **boolean add(E element)** - добавляет и возвращает true, если данная
+  коллекция содержит заданный элемент;
 - **boolean remove(Object element)** - Удаляет заданный элемент, если он имеется
-  в коллекции
+  в коллекции;
 - **boolean contains(Object element)** - Возвращает true, если коллекция
-  содержит заданный элемент
+  содержит заданный элемент;
 
 ***Методы работы с другой коллекцией:***
 
@@ -309,7 +314,7 @@ public class ExampleStart {
 - *Vector(int initialCapacity, int capacityIncrement)* – создает пустой вектор с
   указанными начальным объемом и инкрементом объема.
 
-**Методы:**
+***Методы:***
 
 - **void addElement(E obj)** – добавляет указанный компонент в конец вектора,
   увеличивая его размер на 1;
@@ -360,7 +365,7 @@ while (e.hasMoreElements()) {
 Stack является наследником класса Vector, который является синхронизированным
 массивом с изменяющимся размером.
 
-**Методы:**
+***Методы:***
 
 - **E void push(E element)** – помещает указанный элемент на вершину стека;
 - **E pop()** – удаляет и возвращает элемент с вершины стека;
@@ -439,24 +444,19 @@ public class ExampleStart {
     public static void main(String[] args) {
         // Сортировка и поиск "массива" строк Strings
         String[] array = {"Hello", "hello", "hi", "HI"};
-
         // Используем Comparable из String
         Arrays.sort(array);
         System.out.println(Arrays.toString(array));
-
         //Используем бинарный поиск,
         // для этого массив должен быть отсортирован.
-
         System.out.println(Arrays.binarySearch(array, "Hello"));
         System.out.println(Arrays.binarySearch(array, "HELLO"));
-
         // Сортировка и поиск в списке List из целых чисел
         List<Integer> list = new ArrayList<>();
         list.add(2);
         list.add(1);
         list.add(4);
         list.add(3);
-
         Collections.sort(list); //Используем Comparable для класса Integer
         System.out.println(list);
         System.out.println(binarySearch(list, 2));
@@ -466,7 +466,7 @@ public class ExampleStart {
 
 ### ___Comparator\<T>___
 
-__Метод:__
+***Метод:***
 
 - int compare(T o1, T o2) - возвращает отрицательное целое, ноль или
   положительное целое, если объект меньше, равен или больше указанного.
@@ -494,7 +494,6 @@ public class ExampleStart {
         String[] array = {"Hello", "Hi", "HI", "hello"};
         Arrays.sort(array, compStr);
         System.out.println(Arrays.toString(array));
-
     }
 }
 ```
@@ -504,7 +503,7 @@ public class ExampleStart {
 Интерфейс Set моделирует математическое множество, в котором нет одинаковых
 элементов.
 
-__Методы:__
+***Методы:***
 
 - **boolean add(E o)** - добавляет указанный элемент в коллекцию, если его еще
   нет;
@@ -518,10 +517,14 @@ __Методы:__
 
 - **класс HashSet\<E>** - хранит элементы в хеш-таблице по хеш коду; HashSet
   является самой лучшей реализацией для Set;
-- **LinkedHashSet\<E>** - элементы хранятся в виде двусвязного списка, что позволяет
-  организовать упорядоченные итерации вставки и удаления; элементы хэшируются с
-  использованием метода hashCode() и организованы в связный список в
-  соответствии с порядком вставки;
+- **LinkedHashSet\<E>** - элементы хранятся в виде двусвязного списка, что
+  позволяет организовать упорядоченные итерации вставки и удаления; элементы
+  хэшируются с использованием метода hashCode() и организованы в связный список
+  в соответствии с порядком вставки. В отличие от HashSet, класс LinkedHashSet
+  строит связный список с использованием хэш-таблицы для увеличения
+  эффективности операций вставки и удаления элементов (за счет более сложной
+  структуры). Этот класс поддерживает связный список элементов в том порядке, в
+  котором они вставлялись, т.е. в порядке метода add();
 - **TreeSet\<E>** - также поддерживает подинтерфейсы NavigableSet и SortedSet;
   хранит элементы в виде структуры «дерево», в которой элементы отсортированы и
   управляемы; это эффективно для поиска, удаления и добавления элементов (оценка
@@ -532,13 +535,11 @@ __Пример HashSet\<E>__
 ```java
 
 public class ExampleStart {
-
     public static void main(String[] args) {
         Book book1 = new Book(1, "Война и мир");
         Book book1Dup = new Book(1, "Война и мир");
         Book book2 = new Book(2, "Анна Каренина");
         Book book3 = new Book(3, "Java для чайников");
-
         Set<Book> set1 = new HashSet<Book>();
         set1.add(book1);
         set1.add(book1Dup);
@@ -547,18 +548,14 @@ public class ExampleStart {
         set1.add(null);
         set1.add(book2);
         System.out.println(set1);
-
         set1.remove(book1);
         set1.remove(book3);
         System.out.println(set1);
-
         Set<Book> set2 = new HashSet<>();
         set2.add(book3);
         System.out.println(set2);
-
         set2.addAll(set1);
         System.out.println(set2);
-
         set2.remove(null);
         System.out.println(set2);
     }
@@ -567,7 +564,6 @@ public class ExampleStart {
 class Book {
     private int id;
     private String title;
-
 
     public Book(int id, String title) {
         this.id = id;
@@ -600,5 +596,388 @@ class Book {
 __Пример для LinkedHashSet\<E>__
 
 ```java
+public class ExampleStart {
+    public static void main(String[] args) {
+        Book book1 = new Book(1, "Анна Каренина");
+        Book book1Dup = new Book(1, "Анна Каренина");
+        Book book2 = new Book(2, "Война и мир");
+        Book book3 = new Book(3, "Java для чайников");
+        Set<Book> set = new LinkedHashSet<>();
+        set.add(book1);
+        set.add(book1Dup);
+        set.add(book1);
+        set.add(book3);
+        set.add(null);
+        set.add(null);
+        set.add(book2);
+        System.out.println(set);
+    }
+}
 
+class Book {
+    private int id;
+    private String title;
+
+    public Book(int id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
+    @Override
+    public String toString() {
+        return id + ":" + title;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Book)) {
+            return false;
+        }
+        return this.id == ((Book) o).id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+}
+```
+
+### ___Интерфейсы NavigableSet\<E> и SortedSet\<E>___
+
+Объекты в __SortedSet__ сортируются естественным способом интерфейсом Comparable
+или с помощью объекта Comparator или по добавлению методом add().
+
+Интерфейс __NavigableSet\<E>__ является подинтерфейсом множества Set и объявляет
+дополнительные методы навигации (нахождение ближайшего элемента):
+
+- **Iterator \<E> descendingIterator():** - возвращает итератор для элементов
+  данного множества в убывающем порядке;
+- **Iterator \<E> iterator():** - возвращает итератор для элементов
+  данного множества в возрастающем порядке;
+
+___Операции для отдельных элементов___
+
+- **E floor(E e)** - возвращает наибольший, меньший, равный заданному
+  элементу/null(если такого нет) элемент множества;
+- **E ceiling(E e)** - возвращает наименьший, больший, равный заданному, null(
+  если такого нет) элемент множества;
+- **E lower(E e)** - возвращает наибольший, строго меньший заданного, null(если
+  такого нет) элемент множества;
+- **E higher(E e)** - возвращает наименьший, строго заданного или null(если
+  такого нет) элемент множества;
+
+___Операции над подмножеством___
+
+- **SortedSet\<E> headSet(E toElement)** - возвращает подмножество данного
+  множества, состоящее из элементов строго меньших toElement;
+- **SortedSet\<E> tailSet(E fromElement)** - возвращает подмножество данного
+  множества, состоящее из элементов которые больше или равны fromElement;
+- **SortedSet\<E> subSet(E fromElement, E toElement)** - возвращает подмножество
+  данного множества, элементы которого находятся в диапазоне от fromElement
+  включительно до toElement не включая;
+
+### ___Класс TreeSet\<E> с Comparable___
+
+```java
+class AddressBookEntry implements Comparable<AddressBookEntry> {
+    private String name, address, phone;
+
+    public AddressBookEntry(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public int compareTo(AddressBookEntry another) {
+        return this.name.compareToIgnoreCase(another.name);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof AddressBookEntry)) {
+            return false;
+        }
+        return this.name.equalsIgnoreCase(((AddressBookEntry) obj).name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.length();
+    }
+}
+
+public class ExampleStart {
+    public static void main(String[] args) {
+        AddressBookEntry addr1 = new AddressBookEntry("петр");
+        AddressBookEntry addr2 = new AddressBookEntry("ПАВЕЛ");
+        AddressBookEntry addr3 = new AddressBookEntry("Сергей");
+        AddressBookEntry addr4 = new AddressBookEntry("Олег");
+        AddressBookEntry addr5 = new AddressBookEntry("Алексей");
+        TreeSet<AddressBookEntry> set = new TreeSet<>();
+        set.add(addr1);
+        set.add(addr2);
+        set.add(addr3);
+        set.add(addr4);
+        set.add(addr5);
+        System.out.println(set);
+        System.out.println(set.floor(addr2));
+        System.out.println(set.lower(addr2));
+        System.out.println(set.headSet(addr2));
+        System.out.println(set.tailSet(addr2));
+    }
+}
+```
+
+### ___Класс TreeSet\<E> с Comparator___
+
+```java
+class PhoneBookEntry {
+    public String name, address, phone;
+
+    public PhoneBookEntry(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+}
+
+public class ExampleStart {
+    public static class PhoneBookComparator
+            implements Comparator<PhoneBookEntry> {
+        @Override
+        public int compare(PhoneBookEntry p1, PhoneBookEntry p2) {
+            return p2.name.compareToIgnoreCase(p1.name); //по убыванию от name;
+        }
+    }
+
+    public static void main(String[] args) {
+        PhoneBookEntry addr1 = new PhoneBookEntry("петр");
+        PhoneBookEntry addr2 = new PhoneBookEntry("ПАВЕЛ");
+        PhoneBookEntry addr3 = new PhoneBookEntry("Сергей");
+        PhoneBookEntry addr4 = new PhoneBookEntry("Олег");
+        PhoneBookEntry addr5 = new PhoneBookEntry("Алексей");
+
+        Comparator<PhoneBookEntry> comp = new PhoneBookComparator();
+        TreeSet<PhoneBookEntry> set = new TreeSet<>(comp);
+        set.add(addr1);
+        set.add(addr2);
+        set.add(addr3);
+        set.add(addr4);
+        set.add(addr5);
+        System.out.println(set);
+        Set<PhoneBookEntry> newSet = set.descendingSet();
+        System.out.println(newSet);
+    }
+}
+```
+
+## ___Queue\<E> - интерфейсы и реализации___
+
+**Queue** - это коллекция, элементы которой добавляются и удаляются по принципу
+FIFO.
+**Deque** - двусвязанная коллекция. Элементы добавляются и удалятся с обоих
+концов.
+
+***Методы:***  
+**Вставка в конец очереди:**
+
+- **boolean add(E e)** - вставляет элемент, переданный в параметре, в конец
+  очереди, если есть место. Если емкость очереди ограничена и для вставки не
+  осталось места, она возвращает исключение IllegalStateException. Функция
+  возвращает true при успешной вставке. Метод add() идеален для случаев, когда
+  вы уверены, что в очереди есть место, например, в LinkedList или
+  PriorityQueue, которые не имеют ограничений по размеру. Этот метод будет
+  подходящим решением в указанных условиях.
+- **offer(E e)** - вставляет элемент, в случае невозможности вставки возвращает
+  false, не вызывая исключение.
+
+**Извлечение элемента из начала очереди:**
+
+- **E remove()** - возвращает и удаляет начало очереди и генерирует исключение
+  NoSuchElement, если очередь пуста;
+- **E poll()** - возвращает и удаляет начало очереди или null если очередь
+  пуста;
+- **E element()** - извлекает элемент из начала очереди, но не удаляет его и
+  генерирует исключение NoSuchElement, если очередь пуста;
+- **E peek()** - извлекает и возвращает, но не удаляет начало очереди или null
+  если очередь пуста;
+
+## ___Deque\<E>___
+
+***Методы:***
+
+- **void addFirst(E e)** - добавляет элемент в начало двусторонней очереди;
+- **void addLast(E e)** - добавляет элемент в конец двусторонней очереди;
+- **boolean offerFirst(E e)** - вставляет элемент начало двусторонней очереди;
+- **boolean offerLast(E e)** - вставляет элемент в конец двусторонней очереди;
+
+**Извлечение и удаление:**
+
+- **E removeFirst(E e)** - извлекает и удаляет элемент из начала очереди,
+  генерирует исключение, если очередь пуста;
+- **E removeLast(E e)** - извлекает и удаляет элемент из конца очереди,
+  генерирует исключение, если очередь пуста;
+- **E pollFirst(E e)** - извлекает и удаляет элемент из начала очереди,
+  возвращает null, если очередь пуста;
+- **E pollFirst(E e)** - извлекает и удаляет элемент из конца очереди,
+  возвращает null, если очередь пуста;
+
+**Извлечение без удаления:**
+
+- **E getFirst(E e)** - извлекает первый элемент очереди;
+- **E getLast(E e)** - извлекает последний элемент очереди;
+- **E peekFirst()** - извлекает, но не удаляет начало очереди или null если
+  очередь пуста;
+- **E peekLast()** - извлекает, но не удаляет начало очереди или null если
+  очередь пуста;
+
+**Deque методы кратко:**
+
+![deque-methods.png](/img/deque-methods.png)
+
+**Сравнение Queue и Deque методов**
+
+| Queue Method | Equivalent Deque Method |
+|--------------|-------------------------|
+| add(e)       | addLast(e)              |
+| offer(e)     | offerLast(e)            |
+| remove()     | removeFirst()           |
+| poll()       | pollFirst()             |
+| element()    | getFirst()              |
+| peek()       | peekFirst()             |
+
+**Сравнение Stack и Deque методов**
+
+| Stack Method | Equivalent Deque Method |
+|--------------|-------------------------|
+| push(e)      | addFirst(e)             |
+| pop()        | removeFirst()           |
+| peek()       | peekFirst()             |
+
+### Реализации для Queue и Deque:
+
+- **PriorityQueue\<E>** - очередь, в которой элементы находятся в заданном
+  порядке, а не в соответствии с принципом FIFO;
+- **ArrayDeque\<E>** - Queue или Deque, организованные как динамический массив,
+  похожий на ArrayList;
+- **LinkedList\<E>** - класс LinkedList<E> также реализует интерфейсы Queue<E> и
+  Deque<E> в дополнение к интерфейсу List<E>, обеспечивая очередь или дек как
+  структуру данных «двусвязный список»;
+
+**Queue\<E> пример:**
+
+```java
+public class ExampleStart {
+    public static void main(String[] args) {
+        Queue<String> queue = new LinkedList<>();
+
+        //offer(), возвращает true или false
+        queue.add("Понедельник");
+        queue.add("Вторник");
+        boolean flag = queue.offer("Среда");
+        System.out.println(queue + ", " + flag);
+
+        //add(), генерирует исключение IllegalStateException
+        try {
+            queue.add("Четверг");
+            queue.add("Пятница");
+            queue.add("Воскресенье");
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Удаляем начало очереди: " + queue.peek()); // <- Тут просто выводим начало очереди.
+        String head = null;
+        try {
+            // для удаления используем метод remove()
+            head = (String) queue.remove();
+
+            System.out.println("1) Изъяли " + head + " из очереди");
+            System.out.println("Теперь новая голова: " + queue.element());
+        } catch (NoSuchElementException e) {
+            e.printStackTrace();
+        }
+
+        // Удаление элемента из начала очереди с помощью метода poll();
+        head = (String) queue.poll();
+        System.out.println("2) Изъяли " + head + " из очереди");
+        System.out.println("Теперь новая голова: " + queue.peek());
+
+        // Проверяем, содержит ли очередь данный объект
+        System.out.println("Содержит ли очередь Воскресенье: "
+                + queue.contains("Воскресенье"));
+        System.out.println("Содержит ли очередь Понедельник: "
+                + queue.contains("Понедельник"));
+
+    }
+}
+```
+
+## Map\<K,V>
+
+**Map** - коллекция пар "ключ-значение". Ключ всегда должен быть уникален,
+значение нет.
+
+**Интерфейсы и реализации:**
+
+- Map
+    - HasMap\<K,V>
+    - HashTable\<K,V>
+    - EnumMap*\<K,V>
+    - LinkedHashMap\<K,V>
+- SortedMap
+    - TreeMap\<K,V>
+
+**Методы Map\<K,V>:**
+
+- **V get(Object key)** - возвращает значение указанного ключа;
+- **V put(K key, V value)** - связывает значение с ключом;
+- **boolean containsKey(Object key)** - проверяет наличие ключа;
+- **boolean containsValue(Object value)** - проверяет наличие значения;
+
+**Представления карты**
+
+- **Set\<K> keySet()** - возвращает представление карты в виде множества ключей;
+- **Collection\<V> values()** - возвращает представление карты в виде коллекции
+  значений;
+- **Set entrySet()** - представление в виде множества пар ключ-значения;
+
+**Реализации Map:**
+
+- **HashMap\<K,V>** - реализация хэш-таблицы, методы не синхронизированы;
+- **TreeMap\<K,V>** - реализация SortedMap в виде дерева;
+- **LinkedHashMap\<K,V>** - хэш-таблица со свойствами связанного списка для
+  улучшения методов вставки и удаления;
+- **HashTable\<K,V>** - реализация синхронизированной хеш-таблицы для интерфейса
+  Map\<K,V>, который не допускает null ключей или значения для наследуемых
+  методов;
+
+**Пример**
+
+```java
+public class ExampleStart {
+    public static void main(String[] args) {
+        HashMap<String, String> aMap = new HashMap<>();
+        aMap.put("1", "Monday");
+        aMap.put("2", "Tuesday");
+        aMap.put("3", "Wednesday");
+        String str1 = aMap.get("1");
+        System.out.println(str1);
+        String str2 = aMap.get("2");
+        System.out.println(str2);
+        String str3 = aMap.get("3");
+        System.out.println(str3);
+        Set<String> keys = aMap.keySet();
+        for (String key : keys) {
+            System.out.println(key + ": " + aMap.get(key));
+        }
+    }
+}
 ```
