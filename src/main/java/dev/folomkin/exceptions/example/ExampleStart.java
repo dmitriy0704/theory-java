@@ -1,41 +1,24 @@
 package dev.folomkin.exceptions.example;
 
-class ExceptionExample {
-    public static void example(int what) {
-        int t;
-        int[] nums = new int[2];
-        System.out.println("Получено " + what);
-        try {
-            switch (what) {
-                case 0:
-                    t = 10 / what;
-                    break;
-                case 1:
-                    nums[4] = 4;
-                    break;
-                case 2:
-                    return;
-            }
 
-        } catch (ArithmeticException e) {
-            System.out.println("Делить на ноль нальзя");
-            return;
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("Соответствующий элемент не найден");
-        } finally {
-            System.out.println("Выход из try");
-        }
-
-
-    }
-}
+import java.io.IOException;
 
 class ExampleStart {
-    public static void main(String[] args) throws Exception {
-        for (int i = 0; i < 3; i++) {
-            ExceptionExample.example(i);
-            System.out.println();
+
+    public static char prompt(String str) throws IOException {
+        System.out.print(str + " : ");
+        return (char) System.in.read();
+    }
+
+    public static void main(String[] args) {
+        char ch;
+        try {
+            ch = prompt("Введите букву: ");
+        } catch (IOException e) {
+            System.out.println("Возникло исключение ввода-вывода");
+            ch = 'X';
         }
+        System.out.println("Вы нажали клавишу " + ch);
     }
 }
 
