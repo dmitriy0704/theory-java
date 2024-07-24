@@ -85,3 +85,12 @@ public class ExampleCode {
 }
 
 ```
+
+**Умножение элементов массива**
+
+```java
+    public static int test(int[] x) {
+        return Arrays.stream(x).reduce(1 ,(a, b) -> a * b);
+    }
+}
+```
