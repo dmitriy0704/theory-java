@@ -1,23 +1,23 @@
 package dev.folomkin.algos;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 public class ExampleCode {
     public static void main(String[] args) {
-        int[] arr = {1, 2, 4, 6, 7, 8, 4, 5};
-        int res = testCode(arr);
-        System.out.println(res);
-    }
+        int[] intArr = {30, 20, 5, 12, 55};
 
-    public static int testCode(int[] nums) {
-        Set<Integer> set = new HashSet<>();
-        for (int num : nums) {
-            if (set.contains(num)) {
-                return num;
-            }
-            set.add(num);
+        //Сортировка
+        Arrays.sort(intArr);
+        System.out.println("Отсортированный массив:");
+        for (int number : intArr) {
+            System.out.println(number + " ");
         }
-        return 0;
+
+        //Значение для поиска:
+        int searchVal = 12;
+        int retVal = Arrays.binarySearch(intArr, searchVal);
+        System.out.println("Индекс элемента: " + retVal);
     }
 }

@@ -10,7 +10,7 @@ public class ExampleStart {
 
         List<String> collection = new ArrayList<>();
         collection.add("A");
-        collection.add("B");
+        collection.add("C");
         collection.add("C");
         System.out.println(collection.indexOf("C"));
         System.out.println(collection);
