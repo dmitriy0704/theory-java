@@ -1,14 +1,19 @@
 # Алгоритмы. Стандартные и практические.
 
 ## Коллекции.
+
 ### Базовые алгоритмы коллекций.
 
 Коллекции содержат два класса утилит:
+
 - java.util.Arrays;
 - java.util.Collections;
 
-
 #### **java.util.Arrays**
+### Сортировка
+**Arrays.sort():**
+- static void sort(int[] arr) - сортировка заданного массива по возростанию;
+- 
 
 
 
@@ -16,28 +21,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+___
 ### Дубликаты.
 
 **Есть ли дубликаты?**
@@ -90,7 +74,7 @@ public class ExampleCode {
 
 ```java
     public static int test(int[] x) {
-        return Arrays.stream(x).reduce(1 ,(a, b) -> a * b);
-    }
+    return Arrays.stream(x).reduce(1, (a, b) -> a * b);
+}
 }
 ```
