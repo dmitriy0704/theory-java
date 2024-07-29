@@ -169,33 +169,5 @@ public class ExampleStart {
 ## Generics. 
 ### Классы.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Методы.
 

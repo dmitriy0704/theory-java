@@ -1,18 +1,15 @@
 package dev.folomkin.theory.collections.example;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class ExampleStart {
     public static void main(String[] args) {
 
-        List<String> collection = new ArrayList<>();
+        Queue<String> collection = new LinkedList<>();
         collection.add("A");
         collection.add("C");
         collection.add("C");
-        System.out.println(collection.indexOf("C"));
+        System.out.println(collection.element());
         System.out.println(collection);
     }
 }
