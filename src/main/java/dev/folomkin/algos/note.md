@@ -210,3 +210,79 @@ public class ExampleCode {
 Методы sort применимы только к List, а не Queue и Map. Но SortedSet(TreeSet) и
 SortedMap(TreeMap) сортируются автоматически.
 
+```java
+public class ExampleCode {
+    public static void main(String[] args) {
+        String[] init = {"Один", "Два", "Три", "Один", "Два", "Три"};
+        List<String> list = new ArrayList<>(Arrays.asList(init));
+        System.out.println("Начальное значение списка " + list);
+        //Сортировка списка
+        Collections.sort(list);
+        System.out.println("Список после сортировки: " + list);
+    }
+}
+```
+
+### Бинарный поиск - Collections.binarySearch()
+
+- public static \<T> int binarySearch(List\<? extends Comparable<? super T>>
+  list, T key);
+- public static \<T> int binarySearch(List\<? extends T> list, T key, T key,
+  Comparator<? super T> c);
+
+### Поиск максимального/минимального элемента в коллекции
+
+Возвращает максимальный/минимальный элемент коллекции в соответствии с
+естественным порядком ее элементов:
+
+- public static <T extends Object & Comparable<? super T>> T max(Collection<?
+  extends T> c);
+- public static <T extends Object & Comparable<? super T>> T min(Collection<?
+  extends T> c);
+
+Возвращает максимальный/минимальный элемент коллекции в соответствии с
+порядком, указанным компаратором:
+
+- public static <T> T max(Collection<Collection? extends T>c, Comparator<? super
+  T> comp);
+- public static <T> T min(Collection<Collection? extends T>c, Comparator<? super
+  T> comp);
+
+### Синхронизированные Collection, List, Set и Map.
+
+Несинхронизированные:
+
+- ArrayList;
+- HashSet;
+- HashMap;
+
+Синхронизированные:
+
+- Vector;
+- HashTable;
+
+Для создания синхронизированного Collection, List, Set, SortedSet, Map,
+SortedMap используется статический метод Collection.synchronizedXxx:
+
+- public static <T> Collection<T> synchronizedCollection(Collection<T> c);
+- public static <T> List<T> synchronizedList(List<T> list);
+- ....
+
+В соответствии со спецификацией JDK API, «чтобы гарантиро- вать последовательный
+доступ, критичным является то, что всякий доступ к исходному списку
+осуществляется через возвращенный список и что пользователь вручную
+синхронизирует возвращенный список, проходя по нему».
+
+```java
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class ExampleCode {
+  public static void main(String[] args) {
+    List list = Collections.synchronizedList(new ArrayList<>());
+    synchronized (list){ // следует организовать синхронизированный блок
+        
+    }
+  }
+}
+```
