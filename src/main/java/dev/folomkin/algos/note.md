@@ -276,12 +276,16 @@ SortedMap используется статический метод Collection.
 ```java
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 public class ExampleCode {
   public static void main(String[] args) {
     List list = Collections.synchronizedList(new ArrayList<>());
-    synchronized (list){ // следует организовать синхронизированный блок
-        
+    synchronized (list) { // следует организовать синхронизированный блок
+      Iterator iterator = list.iterator();
+      while (iterator.hasNext()){
+          iterator.next();
+      }
     }
   }
 }
