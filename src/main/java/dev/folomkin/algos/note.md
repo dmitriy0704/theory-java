@@ -5,11 +5,9 @@
 - java.util.Arrays;
 - java.util.Collections;
 
-#### **java.util.Arrays**
+## **java.util.Arrays**
 
-### Сортировка
-
-**Arrays.sort():**
+### Сортировка - Arrays.sort():
 
 - static void sort(int[] arr) - сортировка заданного массива по возрастанию;
 - static void sort(int[] arr, int fromIndex, int toIndex) - сортировка части
@@ -52,7 +50,7 @@ public class ExampleStart {
   метод compareTo() для указания порядка сравнения двух объектов;
 - создать объект Comparator с методом compare()
 
-### ___Comparable\<T>___
+#### ___Comparable\<T>___
 
 Интерфейс java.lang.Comparable\<T> указывает, как два объекта должны
 сравниваться
@@ -100,7 +98,7 @@ public class ExampleStart {
 }
 ```
 
-### ___Comparator\<T>___
+#### ___Comparator\<T>___
 
 ***Метод:***
 
@@ -134,15 +132,14 @@ public class ExampleStart {
 }
 ```
 
-
-### Поиск
-#### Arrays.binarySearch
+### Поиск - Arrays.binarySearch
 
 Массив должен быть отсортирован до применения поиска.
 
 **Методы:**
 
-Для базовых типов:  
+Для базовых типов:
+
 - static int binarySearch(int[] a, int key)
 - static int binarySearch(int[] a, int fromIndex, int toIndex, int key)
 
@@ -154,7 +151,8 @@ public class ExampleStart {
 Поиск объектов-дженериков с использованием заданного Comparator:
 
 - static \<T> int binarySearch(T[] a, T key, Comparator<? super T> c);
-- static \<T> int binarySearch(T[] a, T key, int fromIndex, int toIndex, Comparator<? super T> c);
+- static \<T> int binarySearch(T[] a, T key, int fromIndex, int toIndex,
+  Comparator<? super T> c);
 
 ```java
 public class ExampleCode {
@@ -174,3 +172,41 @@ public class ExampleCode {
 }
 
 ```
+
+### Проверка равенства массивов - Arrays.equals():
+
+- public static boolean equals(int[] a1, int[] a2);
+
+### Копирование массивов - Arrays.copyOf и Arrays.copyOfRange.
+
+- public static int[] copyOf(int[] original, int[] newLength) - оригинальный
+  размер и новая длина.
+  Если новая длина меньше, то массив усекается, если больше, то массив
+  дополняется нулями.
+- public static int[] copyOfRange(int[] original, int from, int to) - копирует
+  часть массива от from до to, заполняя нулями если to превосходит длину.
+
+### Заполнение массива - Arrays.fill
+
+- public static int[] fill(int[], int value)
+- public static int[] fill(int[], int from, int to, int value)
+
+### Печать массива - Arrays.toString()
+
+- public String toString(int[] arr);
+
+### Преобразование массива в список - Arrays.asList
+
+- public static <T> List<T> asList(T[] a)sort
+
+## java.util.Collections
+
+- public static \<T extends Comparable\<? super T>> void sort(List\<T> list) -
+  сортирует список по возрастанию. Объекты должны реализовывать интерфейс
+  Comparable.
+- public static \<T> void sort(List<T> list, Comparator <? super T> c) -
+  сортирует список в порядке определенном компаратором.
+
+Методы sort применимы только к List, а не Queue и Map. Но SortedSet(TreeSet) и
+SortedMap(TreeMap) сортируются автоматически.
+
