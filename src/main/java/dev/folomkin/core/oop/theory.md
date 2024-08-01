@@ -337,4 +337,22 @@ public List<String> getStrings(){
 экземплярами. Этот класс является подклассом класса java.lang.Record и,
 естественно, не может наследовать другой класс, а также сам не может выступать в
 роли суперкласса. Реализация интерфейсов разрешается. Также класс record может
-объявлять собственные методы.
+объявлять собственные методы.  
+Такая запись гарантирует неизменяемость значений полей записи и избавляет
+от необходимости создавать конструктор, методы equals(Object o), hashCode()
+и toString(), которые для record генерируются автоматически. Вместо геттеров
+генерируются методы с именем поля. В данном случае это name() и id().
+
+```java
+record ImmutableRec(String name, int id) {
+  void method() {
+  }
+}
+public class Example {
+  public static void main(String[] args) {
+    ImmutableRec immutableRec = new ImmutableRec("immutable", 1);
+    System.out.println(immutableRec.id());
+    System.out.println(immutableRec.name());
+  }
+}
+```

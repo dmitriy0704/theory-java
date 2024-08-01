@@ -3,6 +3,16 @@ package dev.folomkin.core.exceptions.example;
 
 import java.io.IOException;
 
+class NonIntResultException extends Exception {
+    int n;
+    int d;
+    NonIntResultException(int i, int j) {
+        n = i;
+        d = j;
+    }
+}
+
+
 class ExampleStart {
 
     public static char prompt(String str) throws IOException {
