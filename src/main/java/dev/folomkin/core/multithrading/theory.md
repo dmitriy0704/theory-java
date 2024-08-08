@@ -465,7 +465,8 @@ class PriorityDemo {
 
 ```
 
-### Синхронизация 
+### Синхронизация
+
 #### (src:ch03)
 
 В случае применения нескольких потоков иногда необходимо координировать действия
@@ -480,4 +481,196 @@ class PriorityDemo {
 использование ключевого слова synchronized.
 
 #### Использование синхронизированных методов
+
+Синхронизировать доступ к методу можно с помощью ключевого слова synchronized.
+При вызове синхронизированного метода вызывающий поток входит в монитор объекта,
+который затем блокирует объект. Пока объект заблокирован, никакой другой поток
+не может войти в данный метод или в любой другой синхронизированный метод,
+определенный в классе объекта. Когда поток возвращается из метода, монитор
+разблокирует объект, позволяя использовать его следующим потоком.
+
+```java
+class SumArray {
+    private int sum;
+
+    synchronized int sumArray(int[] nums) { // <-- Метод синхронизирован
+        sum = 0; // сбросить sum;
+        for (int num = 0; num < nums.length; num++) {
+            sum += nums[num];
+            System.out.println("Промежуточная сумма в потоке " +
+                    Thread.currentThread().getName() + " равна " + sum);
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                System.out.println("Поток прерван");
+            }
+        }
+        return sum;
+    }
+}
+
+class MyThread implements Runnable {
+    Thread thrd;
+    static SumArray sa = new SumArray();
+    int[] a;
+    int answer;
+
+    //Конструктор нового потока;
+    MyThread(String name, int[] nums) {
+        thrd = new Thread(this, name);
+        a = nums;
+    }
+
+    //Фабричный метод, который создает и запускает поток
+    public static MyThread createAndStartThread(String name, int[] nums) {
+        MyThread thread = new MyThread(name, nums);
+        thread.thrd.start();
+        return thread;
+    }
+
+    //Точка входа в поток
+    public void run() {
+        int sum;
+        System.out.println("Поток " + thrd.getName() + " запущен");
+        answer = sa.sumArray(a);
+        System.out.println("Сумма в потоке " + thrd.getName() + "равна " + answer);
+        System.out.println("Поток " + thrd.getName() + " завершен");
+    }
+}
+
+class Sync {
+    public static void main(String[] args) {
+        int[] a = {1, 2, 3, 4, 5};
+        MyThread mt1 = MyThread.createAndStartThread("Child #1", a);
+        MyThread mt2 = MyThread.createAndStartThread("Child #2", a);
+
+        try {
+            mt1.thrd.join();
+            mt2.thrd.join();
+        } catch (InterruptedException e) {
+            System.out.println("Главный поток прерван");
+        }
+    }
+}
+
+```
+
+Первый класс —SumArray. Он содержит метод sumArray (), подсчитывающий сумму
+элементов целочисленного массива. Второй класс, MyThread, задействует
+статический объект типа SumArray для получения суммы элементов целочисленного
+массива. Объект имеет имя sa и поскольку он статический, существует только одна
+его копия, совместно используемая всеми экземплярами MyThread. Наконец, третий
+класс, Sync,создает два потока, каждый из которых вычисляет сумму элементов
+целочисленного массива.  
+Внутри sumArray() вызывается метод sleep() , чтобы намеренно разрешить
+переключение задач, если оно возможно. Так как метод sumArray() синхронизирован,
+он может применяться одновременно только одним потоком. Таким образом,
+когда второй дочерний поток начинает выполнение, он не входит в sumArray() до
+тех пор, пока первый дочерний поток не закончит с ним работу. В результате
+гарантируется получение корректного результата.
+
+Итог:
+
+- Синхронизированный метод создается предварением его объявления
+  ключевым словом synchronized.
+- Для любого заданного объекта после вызова синхронизированного метода объект
+  блокируется, и никакие синхронизированные методы на том же объекте не могут
+  применяться другим потоком выполнения.
+- Другие потоки, пытающиеся вызвать используемый синхронизированный объект,
+  перейдут в состояние ожидания, пока объект не будет разблокирован.
+- Когда поток покидает синхронизированный метод, объект деблокируется.
+
+### Оператор synchronized
+
+    synchronized(objRef) {
+         // операторы , подлежащие синхронизации
+    }
+
+Здесь objRef — это ссылка на синхронизируемый объект. Блок synchronized
+гарантирует, что вызов синхронизированного метода, который является членом
+класса objRef, произойдет только после того, как текущий поток успешно войдет
+в монитор objRef.
+
+```java
+class SumArray {
+    private int sum;
+
+    int sumArray(int[] nums) { // <-- Метод синхронизирован
+        sum = 0; // сбросить sum;
+        for (int num = 0; num < nums.length; num++) {
+            sum += nums[num];
+            System.out.println("Промежуточная сумма в потоке " +
+                    Thread.currentThread().getName() + " равна " + sum);
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                System.out.println("Поток прерван");
+            }
+        }
+        return sum;
+    }
+}
+
+class MyThread implements Runnable {
+    Thread thrd;
+    static SumArray sa = new SumArray();
+    int[] a;
+    int answer;
+
+    //Конструктор нового потока;
+    MyThread(String name, int[] nums) {
+        thrd = new Thread(this, name);
+        a = nums;
+    }
+
+    //Фабричный метод, который создает и запускает поток
+    public static MyThread createAndStartThread(String name, int[] nums) {
+        MyThread thread = new MyThread(name, nums);
+        thread.thrd.start();
+        return thread;
+    }
+
+    //Точка входа в поток
+    public void run() {
+        int sum;
+        System.out.println("Поток " + thrd.getName() + " запущен");
+        synchronized (sa) {
+            answer = sa.sumArray(a);
+        }
+        System.out.println("Сумма в потоке " + thrd.getName() + "равна " + answer);
+        System.out.println("Поток " + thrd.getName() + " завершен");
+    }
+}
+
+class Sync {
+    public static void main(String[] args) {
+        int[] a = {1, 2, 3, 4, 5};
+        MyThread mt1 = MyThread.createAndStartThread("Child #1", a);
+        MyThread mt2 = MyThread.createAndStartThread("Child #2", a);
+        try {
+            mt1.thrd.join();
+            mt2.thrd.join();
+        } catch (InterruptedException e) {
+            System.out.println("Главный поток прерван");
+        }
+    }
+}
+
+```
+
+### Взаимодействие между потоками с использованием notify(), wait() и notifyAll()
+
+Методы wait(), notify() и notifyAll() являются частью всех объектов,
+поскольку они реализованы классом Object. Указанные методы должны вызываться
+только из контекста synchronized. Они используются следующим образом. Когда
+выполнение потока временно блокируется, он вызывает метод wait(), что
+приводит к переводу потока в спящий режим, а монитор для данного объекта
+освобождается, позволяя другому потоку использовать этот объект. Позже спящий
+поток пробуждается, когда другой поток входит в тот же монитор и вызывает
+метод notify() или notifyAll().
+
+Вызов notify() возобновляет работу одного ожидающего потока. Вызов notifyAll()
+уведомляет все потоки, а планировщик определяет, какой поток получает доступ к
+объекту.
+
 
