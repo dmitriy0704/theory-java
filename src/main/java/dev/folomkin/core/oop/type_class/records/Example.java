@@ -1,4 +1,4 @@
-package dev.folomkin.core.oop.records;
+package dev.folomkin.core.oop.type_class.records;
 
 record ImmutableRec(String name, int id) {
     void method() {
