@@ -173,7 +173,7 @@ public class ExampleCode {
 
 ```
 
-### Проверка равенства массивов - Arrays.equals():
+### Сравнение массивов - Arrays.equals():
 
 - public static boolean equals(int[] a1, int[] a2);
 
@@ -183,8 +183,30 @@ public class ExampleCode {
   размер и новая длина.
   Если новая длина меньше, то массив усекается, если больше, то массив
   дополняется нулями.
+
+```java
+public class Code {
+    public static void main(String[] args) {
+        int[] arr1 = {1, 2, 3, 4, 5}, arr2;
+        arr2 = Arrays.copyOf(arr1, 7);
+        System.out.println(Arrays.toString(arr1));
+        System.out.println(Arrays.toString(arr2));
+    }
+}
+```
+
 - public static int[] copyOfRange(int[] original, int from, int to) - копирует
   часть массива от from до to, заполняя нулями если to превосходит длину.
+```java
+public class Code {
+    public static void main(String[] args) {
+        int[] arr1 = {1, 2, 3, 4, 5}, arr2;
+        arr2 = Arrays.copyOfRange(arr1, 3, arr1.length);
+        System.out.println(Arrays.toString(arr1));  // [1, 2, 3, 4, 5]
+        System.out.println(Arrays.toString(arr2));  // [4, 5]
+    }
+}
+```
 
 ### Заполнение массива - Arrays.fill
 
@@ -279,14 +301,37 @@ import java.util.Collections;
 import java.util.Iterator;
 
 public class ExampleCode {
-  public static void main(String[] args) {
-    List list = Collections.synchronizedList(new ArrayList<>());
-    synchronized (list) { // следует организовать синхронизированный блок
-      Iterator iterator = list.iterator();
-      while (iterator.hasNext()){
-          iterator.next();
-      }
+    public static void main(String[] args) {
+        List list = Collections.synchronizedList(new ArrayList<>());
+        synchronized (list) { // следует организовать синхронизированный блок
+            Iterator iterator = list.iterator();
+            while (iterator.hasNext()) {
+                iterator.next();
+            }
+        }
     }
-  }
 }
 ```
+
+**Сортировка Set/Map?**
+
+Для Map можно привести ключи/значения к виду Collection, переложить в новый List
+и отсортировать с помощью Collections.sort. То же делается с Set. Этот метод
+конечно же неэффективный, так как потребует полного копирования содержимого.
+Эффективный способ – хранить данные уже отсортированными. Для таких реализаций
+созданы интерфейсы-наследники SortedSet и SortedMap.
+Реализации SortedSet дают линейный порядок множества. Элементы упорядочены по
+возрастанию. Порядок либо натуральный (элементы реализуют интерфейс Comparable),
+либо его определяет переданный в конструктор Comparator.
+Этот интерфейс добавляет методы получения подмножества от указанного элемента (
+tailSet), до элемента (headSet), и между двумя (subSet). Подмножество включает
+нижнюю границу, не включает верхнюю.
+SortedSet расширяется интерфейсом NavigableSet для итерации по порядку,
+получения ближайшего снизу (floor), сверху (ceiling), большего (higher) и
+меньшего (lower) заданному элемента.
+Все те же правила применяются к элементам SortedMap/NavigableMap относительно их
+ключей.
+Основными реализациями являются TreeSet и TreeMap. Внутри это
+самобалансирующиеся красно-чёрные деревья. Их структура и способ балансировки –
+вопрос достойный отдельного поста. Другая любопытная реализация из
+java.util.concurrent – ConcurrentSkipListMap.
