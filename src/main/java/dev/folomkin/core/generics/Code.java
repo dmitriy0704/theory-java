@@ -1,34 +1,28 @@
 package dev.folomkin.core.generics;
 
-// Простой обобщенный класс
-// Здесь Т - параметр типа, который будет заменен при создании
-// объекта типа Gen
 
-class Gen<T> { // Обобщенный класс, Т - параметр обобщенного типа.
-    T ob; // <-- объявлен объект типа Т;
-
-    // Передаем конструктору ссылку на объект типа Т
-    Gen(T o) {
-        ob = o;
-    }
-
-    // Возвратить ob
-    T getOb() {
-        return ob;
-    }
-
-    // Отобразить тип Т
-    void showType() {
-        System.out.println("Тип T: " + ob.getClass().getName());
-    }
+class A{
+    // ...
 }
 
-// Демонстрация использования обобщенного класса
+class B extends A{
+    // ...
+}
+class C extends A{
+    // ...
+}
 
+class D{
+    // ...
+}
 
-public class Code {
+class Gen<T>{
+    T ob;
+
+}
+
+class Code {
     public static void main(String[] args) {
 
     }
 }
-
