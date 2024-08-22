@@ -1,50 +1,40 @@
 package dev.folomkin.core.lambda;
 
 
-// Функциональный интерфейс
-interface MyValue {
-    double getValue();
-}
+// Использование обобщенного функционального интерфейса;
 
-// Функциональный интерфейс
-interface MyParamValue {
-    double getValue(double value);
+// Обобщенный функциональный интерфейс с двумя параметрами,
+// который возвращает результат типа boolean
+interface SomeTest<T> {
+    boolean test(T n, T m);
 }
-
 
 public class Code {
     public static void main(String[] args) {
-        MyValue myVal; // Ссылка на функциональный интерфейс
 
-        // Здесь лямбда-выражение представляет собой константное выражение.
-        // Когда оно присваивается myVal, конструируется экземпляр класса,
-        // где лямбда-выражение реализует метод getValue() из MyValue.
+        // Это лямбда выражение определяет, является
+        // ли одно число типа Integer делителем другого
+        SomeTest<Integer> testI = (n, d) -> (n % d) == 0;
+        if (testI.test(10, 2))
+            System.out.println("2 является делителем 10");
 
-        // Интерфейс реализуется с помощью анонимного класса
-//        myVal = new MyValue() {
-//            public double getValue() {
-//                return 42.0;
-//            }
-//        };
+        // Это лямбда-выражение определяет, является ли одно число типа Double
+        // делителем другого
+        SomeTest<Double> testD = (n, d) -> (n % d) == 0;
+        if (testD.test(10.0, 2.0))
+            System.out.println("2 является делителем 10");
 
-        // Который можно записать как лямбда выражение:
-        myVal = () -> 42.0; // <- Простое лямбда-выражение
 
-        // Вызвать метод getValue(), предоставляемый ранее присвоенным лямбда-выражением
-        System.out.println(myVal.getValue());
+        // Это лямбда-выражение определяет, является
+        // л и одна строка частью другой строки.
+        SomeTest<String> isIn = (a, b) -> a.indexOf(b) != -1;
+        String str = "Generic Functional Interface";
 
-        // Создать параметризованное лямбда-выражение и присвоить
-        // его ссылке MyParamValue. Это лямбда-выражение возвращает
-        // обратную величину переданного ему аргумента.
-        MyParamValue myParamVal = (value) -> 1 / value; // Лямбда-выражение имеющее параметры
+        System.out.println("Проверяемая строка: " + str);
+        if (isIn.test(str, "face"))
+            System.out.println("Строка 'face' найдена.");
+        else
+            System.out.println("Строка 'face' не найдена.");
 
-        // Вызываем getValue через ссылку myPval
-        System.out.println(myParamVal.getValue(4.0));
-        System.out.println(myParamVal.getValue(8.0));
-
-        // Лямбда-выражение должно быть совместимым с методом, определенным
-        // в функциональном интерфейсе. Таким образом, следующий код недопустим:
-        // myVal = О -> "three"; // Ошибка! Типы String и double не совместимы !
-        // myPval = () > Math.random(); // Ошибка! Требуется параметр!
     }
 }
