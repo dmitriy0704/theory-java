@@ -82,36 +82,36 @@ values() и valueOf() со следующими общими формами:
 package dev.folomkin.core.oop.type_class.enums;
 
 public enum Transport {
-    //  Использование конструктора, переменной экземпляра и метода перечисления
-    CAR(100), TRUCK(90), AIRPLANE(950);
-    private int speed; // переменная экземпляра;
+  //  Использование конструктора, переменной экземпляра и метода перечисления
+  CAR(100), TRUCK(90), AIRPLANE(950);
+  private int speed; // переменная экземпляра;
 
-    // Конструктор
-    Transport(int s) { // Конструктор
-        speed = s;
-    }
+  // Конструктор
+  Transport(int s) { // Конструктор
+    speed = s;
+  }
 
-    public int getSpeed() { // Метод
-        return speed;
-    }
+  public int getSpeed() { // Метод
+    return speed;
+  }
 }
 
 class EnumDemo2 {
-    public static void main(String[] args) {
-        Transport transport;
-        System.out.println("Все константы Transport");
+  public static void main(String[] args) {
+    dev.folomkin.core.enums.Transport transport;
+    System.out.println("Все константы Transport");
 
-        // Метод values;
-        Transport[] transports = Transport.values();
-        for (Transport t : transports) {
-            System.out.println(t);
-        }
-        System.out.println();
-
-        //  Метод valueOf;
-        transport = Transport.valueOf("TRUCK");
-        System.out.println("transport " + transport);
+    // Метод values;
+    dev.folomkin.core.enums.Transport[] transports = dev.folomkin.core.enums.Transport.values();
+    for (dev.folomkin.core.enums.Transport t : transports) {
+      System.out.println(t);
     }
+    System.out.println();
+
+    //  Метод valueOf;
+    transport = dev.folomkin.core.enums.Transport.valueOf("TRUCK");
+    System.out.println("transport " + transport);
+  }
 }
 
 
@@ -129,31 +129,31 @@ class EnumDemo2 {
 package dev.folomkin.core.oop.type_class.enums;
 
 public enum Transport {
-    //  Использование конструктора, переменной экземпляра и метода перечисления
-    CAR(100), TRUCK(90), AIRPLANE(950);
+  //  Использование конструктора, переменной экземпляра и метода перечисления
+  CAR(100), TRUCK(90), AIRPLANE(950);
 
-    private int speed; // переменная экземпляра;
+  private int speed; // переменная экземпляра;
 
-    // Конструктор
-    Transport(int s) { // Конструктор
-        speed = s;
-    }
+  // Конструктор
+  Transport(int s) { // Конструктор
+    speed = s;
+  }
 
-    public int getSpeed() { // Метод
-        return speed;
-    }
+  public int getSpeed() { // Метод
+    return speed;
+  }
 }
 
 
 class EnumDemo3 {
-    public static void main(String[] args) {
-        Transport transport;
-        System.out.println("Скорость равна " + Transport.CAR.getSpeed());
-        //      Все скорости:
-        for (Transport t : Transport.values()) {
-            System.out.println(t.getSpeed());
-        }
+  public static void main(String[] args) {
+    dev.folomkin.core.enums.Transport transport;
+    System.out.println("Скорость равна " + dev.folomkin.core.enums.Transport.CAR.getSpeed());
+    //      Все скорости:
+    for (dev.folomkin.core.enums.Transport t : dev.folomkin.core.enums.Transport.values()) {
+      System.out.println(t.getSpeed());
     }
+  }
 }
 ```
 

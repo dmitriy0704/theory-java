@@ -1,4 +1,4 @@
-package dev.folomkin.core.oop.type_class.enums;
+package dev.folomkin.core.enums;
 
 public enum Transport {
     //  Использование конструктора, переменной экземпляра и метода перечисления
