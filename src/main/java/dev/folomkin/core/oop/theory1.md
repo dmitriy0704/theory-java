@@ -31,6 +31,91 @@ implements. Подкласс имеет прямой доступ ко всем 
 переопределенного метода в зависимости от переданного по ссылке типа объекта
 называется **_полиморфизмом_**.
 
+```java
+class CardAction {
+    public void doPayment(double amountPayment) {
+        System.out.println("complete from debt card");
+    }
+}
+
+class CreditCardAction extends CardAction {
+    @Override
+    public void doPayment(double amountPayment) { // override method
+        System.out.println("complete from credit card");
+    }
+
+    public boolean checkCreditLimit() { // own method
+        return true;
+    }
+}
+
+public class Code {
+    public static void main(String[] args) {
+        CardAction action1 = new CardAction();
+        CardAction action2 = new CreditCardAction();
+        CreditCardAction cc = new CreditCardAction();
+        // CreditCardAction cca = new CardAction(); // compile error: class cast
+        action1.doPayment(15.5); // method of CardAction
+        action2.doPayment(21.2); // polymorphic method: CreditCardAction
+        // dc2.checkCreditLimit(); // compile error: non-polymorphic method
+        ((CreditCardAction) action2).checkCreditLimit(); // ок
+        cc.doPayment(7.0); // polymorphic method: CreditCardAction
+        cc.checkCreditLimit(); // non-polymorphic method CreditCardAction
+        ((CreditCardAction) action1).checkCreditLimit(); // runtime error: class cast
+    }
+}
+
+```
+
+Объект по ссылке action1 создается при помощи вызова конструктора класса
+CardAction и, соответственно, при вызове метода doPayment() вызывается версия
+метода из класса CardAction.
+При создании объекта action2 ссылка типа CardAction инициализируется объектом
+типа CreditCardAction.
+При таком способе инициализации ссылка на суперкласс получает доступ к методам,
+переопределенным в подклассе.
+При объявлении совпадающих по сигнатуре (имя, тип, область видимости) полей в
+суперклассе и подклассах их значения не переопределяются и никак не
+пересекаются, т.е. существуют в одном объекте независимо друг от друга.
+Для доступа к полям текущего объекта можно использовать указатель **this**, для
+доступа к полям суперкласса — указатель **super**.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Полиморфизм
 
 ### Перегрузка методов
@@ -75,7 +160,6 @@ public class ExampleStart {
 
 ```
 
-
 ### Статические методы и поля
 
 Статические поля являются переменными класса, но не объекта. Могут быть
@@ -96,7 +180,6 @@ public class ExampleStart {
 - Переопределение статических методов невозможно, так как обращение к
   статическому методу осуществляется посредством имени класса, которому они
   принадлежат;
-
 
 ## Модификатор Final
 
