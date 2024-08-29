@@ -23,3 +23,7 @@
 ## Immutable Class
 
 [читать](theory5.md)
+
+## Внутренние классы
+
+[читать](theory6.md)
