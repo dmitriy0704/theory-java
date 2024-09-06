@@ -199,47 +199,285 @@ double result = new ActionType(3, 5).action((a, b) -> (a + b) * 4);
     Predicate<String> predicateStr = s -> s.length() < 2;
 ```
 
-Предикаты применяются в stream с методами:
+#### Predicate для Stream:
 
-### boolean test(T t):
+##### boolean test(T t):
 
-- в методе **filter(Predicate\<? super T>predicate)**,
-  удаляющем из потока объекты, не удовлетворяющие условию предиката.
-
-```java
-class Code {
-    public static void main(String[] args) {
-        String[] arrayStr = {"as", "a", "the", " ", "d", "on", "and", ""};
-        System.out.println(
-                Arrays.stream(arrayStr)
-                        .filter(s -> s.length() < 2)
-                        .collect(Collectors.toList())
-        );
-    }
-}
-```
-
-- Tерминальный метод anyMatch(Predicate<? super T> predicate) ищет в потоке хотя
-  бы один объект, удовлетворяющий предикату, и только в этом случае
-  возвратит истину.
-- метод allMatch(Predicate<? super T> predicate) возвратит истину, если все
-  объекты потока удовлетворяют условию.
-
-
-### default Predicate<T> and(Predicate<? super T> other):
-
-Метод - логическое И.
+- stream.filter(Predicate<? super T>predicate) - удаляет из списка объекты, не
+  удовлетворяющие условию:
 
 ```java
-class Code {
-  public static void main(String[] args) {
+public static void main(String[] args) {
     String[] arrayStr = {"as", "a", "the", " ", "d", "on", "and", ""};
-    Predicate<String> predicate1 = s -> s.contains("a");
-    System.out.println(Arrays.stream(arrayStr)
-            .filter(predicate1.and(s -> s.contains("n")))
-            .collect(Collectors.toList()));
-    
-
-  }
+    System.out.println(
+            Arrays.stream(arrayStr)
+                    .filter(str -> str.length() > 0)
+                    .collect(Collectors.toList())
+    );
+// [the, and]
 }
 ```
+
+- stream.anyMatch(Predicate<? super T> predicate) - true, если хотя бы один
+  объект из потока соответствует условию:
+
+```java
+    public static void main(String[] args) {
+    String[] arrayStr = {"as", "a", "the", " ", "d", "on", "and", ""};
+    System.out.println(
+            Arrays.stream(arrayStr)
+                    .anyMatch(String::isBlank)
+    );
+}
+```
+
+- stream.allMatch(Predicate<? super T> predicate) - все объекты должны
+  удовлетворять условию:
+
+```java
+public static void main(String[] args) {
+    int[] arrayInt = {1, 3, 5, 9, 17, 33, 65};
+    System.out.println(
+            Arrays.stream(arrayInt)
+                    .allMatch(i -> i == 1)
+    );
+}
+```
+
+##### default Predicate\<T> or(Predicate<? super T> other) - логическое "ИЛИ".
+
+- stream.filter(default Predicate\<T> or(Predicate<? super T> other)) - объект
+  из потока должен соответствовать хотя бы одному условию;
+
+```java
+public static void main(String[] args) {
+    int[] arrayInt = {1, 3, 5, 9, 17, 33, 65};
+    System.out.println(
+            Arrays.stream(arrayInt)
+                    .filter(((IntPredicate) i -> i > 32).or(i -> i < 4))
+                    .boxed()
+                    .collect(Collectors.toList())
+    );
+}
+```
+
+##### default Predicate\<T> negate() - логическое отрицание предиката
+
+- stream.filter() - выводит все объекты, которые не соответствуют условию:
+
+```java
+public static void main(String[] args) {
+    int[] arrayInt = {1, 3, 5, 9, 17, 33, 65};
+    String[] arrayStr = {"as", "a", "the", " ", "d", "on", "and", ""};
+    System.out.println(
+            Arrays.stream(arrayStr)
+                    .filter(
+                            ((Predicate<String>) s -> s.contains("and")).negate()
+                    )
+                    .collect(Collectors.toList())
+    );
+}
+```
+
+##### static Predicate<T> not(Predicate<? super T> target) - короткий вариант negate()
+
+- stream.filter():
+
+```java
+public static void main(String[] args) {
+    System.out.println(Arrays.stream(arrayStr)
+            .filter(Predicate.not(s -> s.contains("and")))
+            .collect(Collectors.toList()));
+}
+```
+
+##### static Predicate<T> isEqual(Object targetRef) - возвращает предикат эквивалент метода equals() класса Object. Применяется для поиска точного совпадения объектов:
+
+- stream.filter():
+
+```java
+public static void main(String[] args) {
+    System.out.println(Arrays.stream(arrayStr)
+            .filter(Predicate.isEqual("and"))
+            .collect(Collectors.toList()));
+}
+```
+
+- filter(Predicate<? super T> predicate);
+- remove(Predicate<? super E> filter);
+- allMatch(Predicate<? super T> predicate);
+- noneMatch(Predicate<? super T> predicate);
+- anyMatch(Predicate<? super T> predicate);
+- takeWhile(Predicate<? super T> predicate);
+- iterate(T seed, Predicate<? super T> hasNext, UnaryOperator<T> next).
+
+В пакет java.util.function объявлен еще один интерфейс-предикат
+BiPredicate\<T,U> c абстрактным методом boolean test(T t, U u).
+
+    BiPredicate<String, Integer> biPredicate = (s, max) -> s.length() <= max;
+    System.out.println(biPredicate.test("java", 7));
+
+## Интерфейс Function
+
+Основной абстрактный метод R apply(T t) принимает объект типа T и возвращает
+объект типа R. Выполняет действие над объектом одного типа и возвратить объект
+другого типа.
+
+Пример:
+
+    Function<String, Integer> fun1 = s -> s.length();// String to Integer
+    Function<Integer, String> fun2 = i -> Integer.toBinaryString(i);//int to String
+
+#### Function для Steam
+
+##### R apply(T t):
+
+- stream.map():
+
+```java
+public static void main(String[] args) {
+    Function<String, Integer> fun1 = s -> s.length();// String to Integer
+    Function<Integer, String> fun2 = i -> Integer.toBinaryString(i);//int to String
+    String[] arrayStr = {"as", "a", "the", " ", "d", "on", "and", ""};
+    int[] arrayInt = {1, 3, 5, 9, 17, 33, 65};
+    System.out.println(
+            Arrays.stream(arrayInt)
+                    .map(s -> s * 2)
+                    .boxed()
+                    .collect(Collectors.toList())
+    );
+
+    System.out.println(
+            Arrays.stream(arrayStr)
+                    .map(fun1)
+                    .collect(Collectors.toList())
+    );
+}
+```
+
+##### default <V> Function<V, R> compose(Function<? super V, ? extends T>before)
+
+Возвращает составную функцию, которая сначала применяет функцию before к своему
+входу, а затем применяет эту функцию к результату:
+
+    Function<String, Integer> fun1 = s -> s.length();// String to Integer
+    Function<Integer, String> fun2 = i -> Integer.toBinaryString(i);//int to String
+    Function<Integer, Integer> fun3 = fun1.compose(fun2);
+    Function<Integer, Integer> fun3 = fun1.compose(i -> Integer.toBinaryString(i));
+
+Первой будет вызвана функция fun2, она преобразует число в его двоичное
+представление 10100 в виде строки, затем на результат будет вызвана функция
+fun2, которая вычислит длину строки. То есть на входе в композицию функций будет
+передано число, и на выходе получится число. Если изменить функцию fun2 так,
+чтобы она возвращала какой-либо другой тип данных, то на входе в композицию
+функций будет число, а на выходе другой тип данных.
+
+    System.out.println(fun1.compose(fun2).apply(17)); // -> 5
+
+```java
+public static void main(String[] args) {
+    int[] arrayInt = {1, 3, 5, 9, 17, 33, 65};
+    System.out.println(Arrays.stream(arrayInt)
+            .boxed()
+            .map(((Function<String, Integer>) s -> s.length())
+                    .compose(i -> Integer.toBinaryString(i)))
+            .collect(Collectors.toList()));
+    // -> [1, 2, 3, 4, 5, 6, 7]
+}
+```
+
+##### default <V> Function<T,V> andThen(Function<? super R, ? extends V> after)
+
+Возвращает составную функцию, которая сначала применяет эту
+функцию к своему входу, а затем применяет функцию after к результату.
+Метод andThen() вызовет функции в порядке, обратном методу compose().
+
+    Function<String, String> fun4 = fun1.andThen(fun2);
+
+Или
+
+    Function<String, String> fun4 = fun1.andThen(i -> Integer.toBinaryString(i));
+
+Первой будет вызвана функция fun1, вычисляющая длину строки, а после — функция
+fun2, преобразующая число в двоичное представление в виде строки.
+
+    System.out.println(fun1.andThen(fun2).apply("java"));
+    System.out.println(Arrays.stream(arrayStr)
+      .map(((Function<String, Integer>)s -> s.length()).andThen(i -> 
+              Integer.toBinaryString(i)))
+      .collect(Collectors.toList()));
+
+##### static <T> Function<T, T> identity()
+
+Возвращает функцию, которая всегда возвращает свой входной аргумент.
+
+- reduce(BinaryOperator<T> accumulator);
+- sorted(Comparator<? super T> order);
+- max(Comparator<? super T> comparator);
+- min(Comparator<? super T> comparator);
+- map(Function<? super T,? extends R> mapper);
+- flatMap(Function<? super T,? extends Stream<? extends R>> mapper);
+- iterate(T seed, UnaryOperator<T> t);
+- mapToInt(ToIntFunction<? super T> mapper);
+- toArray(IntFunction<A[]> generator).
+
+#### Специализированные интерфейсы Function
+
+**_BiFunction\<T, U, R>. Метод R apply(T t, U u)_**
+
+```java
+public static void main(String[] args) {
+    BiFunction<Double, String, Integer> bi = (d, s) -> (Double.toString(d) + s).length();
+    int length = bi.apply(1.23, "java");
+    System.out.println(length);
+}
+```
+
+**_ToIntFunction\<T>_**
+
+Метод которого int applyAsInt(T t) принимает любой
+тип данных, но должен возвращать значение типа int.
+
+**_IntFunction\<R>_**
+
+Метод R apply(int value) принимает значение типа int, но может
+возвращать значение любого типа.
+
+**_Интерфейс BinaryOperator<T, T>_**
+
+Объявляет метод T apply(T t1, T t2), что соответствует обычному бинарному
+оператору:
+
+    BinaryOperator<String> binaryOperator = (s1, s2) -> s1 + s2.toUpperCase();
+    System.out.println(binaryOperator.apply("oracle", "epam"));
+
+**_Comparator\<T>_**
+
+int compare(T o1, T o2) - функция, принимающая два объекта одного типа и
+возвращающая
+значение типа int.
+
+### Интерфейс Consumer
+
+Интерфейс Consumer\<T> представляет абстрактный метод **void accept(T t)**,
+функция, принимающая объект типа T и выполняющая над ним некоторое действие.
+Результат действия можно сохранить во внешнем объекте, например,
+коллекции или вывести в поток вывода, например, в файл или на консоль.
+
+```java
+    public static void main(String[] args) {
+        String str = "as a- the-d -on and";
+        String regex = "-";
+        Consumer<String> consumer = s -> System.out.println(Arrays.toString(s.split(regex)));
+        consumer.accept(str);
+        // -> [as a, the, d , on and]
+
+        int[] arrInt = {1, 2, 3};
+        Arrays.stream(arrInt)
+                .forEach(i -> System.out.print(i * 2 + ", "));
+        // -> [2, 4, 6];
+    }
+```
+
+**Методы**:  
+**_default Consumer\<T> andThen(Consumer<? super T> after)_**
