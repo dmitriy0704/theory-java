@@ -1,4 +1,4 @@
-package dev.folomkin.core.lambda;
+package dev.folomkin.core.fp;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -67,5 +67,14 @@ class Code {
         // Передать numTestO ссылку на метод isPositive.
         result = numTest(MyIntPredicates::isPositive, 11);
         if (result) System.out.println("11 является положительным.");*/
+    }
+
+    public static class LambdaArgumentDemo {
+        interface StringFunc {
+            String func(String str);
+        }
+
+
+
     }
 }
