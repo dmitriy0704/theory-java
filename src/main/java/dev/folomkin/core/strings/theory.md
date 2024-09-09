@@ -18,14 +18,22 @@
 объектная ссылка при этом сохраняет прежнее значение и хранится в стеке.
 Произведенные изменения можно сохранить переинициализируя ссылку.
 
-Класс String поддерживает несколько конструкторов, например: String(),
-String(String original), String(byte[] bytes), String(char[] value), String(
-char[] value, int offset, int count), String(StringBuffer buffer),
-String(StringBuilder builder) и др. Эти конструкторы используются для создания
-объектов класса String на основе их инициализации значениями из массива типа
-char, byte и др.
+Класс String поддерживает несколько конструкторов, например:
 
-Cтрока хранится в массиве типа byte, а ее кодировка в отдельном поле.
+- String(),
+- String(String original),
+- String(byte[] bytes),
+- String(char[] value),
+- String(char[] value, int offset, int count),
+- String(StringBuffer buffer),
+- String(StringBuilder builder) и др.
+
+Эти конструкторы используются для создания объектов класса String на основе их
+инициализации значениями из массива типа char, byte и др.
+
+В Java 8 класс String был подвержен серьезному изменению внутренней структуры.
+Вместо массива символов char теперь строка хранится в массиве типа byte,
+а ее кодировка в отдельном поле.
 
 Когда Java встречает литерал, заключенный в двойные кавычки, автоматически
 создается объект-литерал типа String, на который можно установить
@@ -41,13 +49,6 @@ Cтрока хранится в массиве типа byte, а ее кодир
 - **boolean equals(Object ob)** и **equalsIgnoreCase(String s)** — сравнение
   строк с учетом и без учета нижнего и верхнего регистра символов
   соответственно;
-- **int compareTo(String s)** и **compareToIgnoreCase(String s)** —
-  лексикографическое сравнение строк с учетом и без учета их регистра. Метод
-  осуществляет вычитание кодов первых различных символов вызывающей и
-  передаваемой строки в метод строк и возвращает целое значение. Метод
-  возвращает значение 0 в случае, когда equals() возвращает значение true;
-- **boolean contentEquals(CharSequence ob)** — сравнение строки и содержимого
-  объекта типа StringBuffer, StringBuilder и пр.;
 - **boolean matches(String regex)** — проверка строки на соответствие
   регулярному выражению;
 - **String substring(int n, int m)** — извлечение из строки подстроки длины m-n,
@@ -92,23 +93,101 @@ Cтрока хранится в массиве типа byte, а ее кодир
 - **IntStream chars()** — преобразование строки в stream ее символов;
 - **Stream<String> lines()** — извлечение строк, разделенных символом перехода
   на другую строку, в поток (stream) строк.
+- **int compareTo(String s)** и **compareToIgnoreCase(String s)** —
+  лексикографическое сравнение строк с учетом и без учета их регистра. Метод
+  осуществляет вычитание кодов первых различных символов вызывающей и
+  передаваемой строки в метод строк и возвращает целое значение. Метод
+  возвращает значение 0 в случае, когда equals() возвращает значение true;
+- **boolean contentEquals(CharSequence ob)** — сравнение строки и содержимого
+  объекта типа StringBuffer, StringBuilder и пр.;
 
 _Во всех случаях вызова методов, изменяющих строку, создается новый объект типа
 String._
 
-При создании экземпляра класса String путем присваивания его ссылки на
-литерал, последний помещается в «пул литералов» типа String, который теперь
-перенесен из стека в heap. Если в дальнейшем будет создана еще одна ссылка
-на литерал, эквивалентный ранее объявленному, то будет произведена попытка
-добавления его в «пул литералов». Так как идентичный литерал там уже
-существует, то дубликат не может быть размещен, и вторая ссылка будет
-ссылаться на существующий литерал. В случае, если литерал является вычисляемым,
-то компилятор воспринимает литералы "Java" и "Ja" + "va" как эквивалентные.
+**Преобразование строки в массив строк и сортировка по алфавиту.**
 
 ```java
     public static void main(String[] args) {
+
+    String str = "Java PHP Python JavaScript Kotlin";
+    String[] arrString = str.split("\\s");
+
+    for (int j = 0; j < arrString.length; j++) {
+        for (int i = j + 1; i < arrString.length; i++) {
+
+            if (arrString[i].compareToIgnoreCase(arrString[j]) < 0) {
+                String temp = arrString[j];
+                arrString[j] = arrString[i];
+                arrString[i] = temp;
+            }
+
+        }
+    }
+
+    for (String s : arrString) {
+        if (!s.isEmpty())
+            System.out.println(s);
+    }
+
+    //  Или
+
+    Arrays.stream(arrString)
+            .filter(s -> !s.isEmpty())
+            .sorted(String::compareToIgnoreCase)
+            .forEach(System.out::println);
+
+    // Метод compareToIgnoreCase()
+    // выполняет лексикографическое сравнение строк между собой по правилам
+    // Unicode с игнорированием регистра. Оператор if(!arg.isEmpty()) не позволяет
+    // выводить пустые строки. Метод isEmpty() был введен в класс для замены не­
+    // экономной проверки на пустую строку оператором if(str.length() == 0).
+}
+```
+
+**Удаление всех пробелов с помощью StringBuilder**:
+
+```java
+   public static void main(String[] args) {
+    StringBuilder sb = new StringBuilder("
+            sb.codePoints()
+                    .filter(o -> o != ' ')
+                    .forEach(o -> sb.append((char) o));
+}
+```
+
+При использовании методов класса String, изменяющих строку, создается новый
+объект класса String. Сохранить произведенные изменения экземпляра класса String
+можно только с применением оператора присваивания, т.е. установив ссылку на
+вновь созданный объект. В следующем примере будет подтвержден тезис о
+неизменяемости экземпляра типа String.
+
+```java
+   public static void changeString(String s) {
+    s.concat(" Certified");
+    s = s.concat(" Certified");
+    s += " Certified";
+}
+
+public static void main(String[] args) {
+    String str = new String("Java");
+    changeString(str);
+    System.out.print(str);
+}
+```
+
+При создании экземпляра класса String путем присваивания его ссылки на
+литерал, последний помещается в «пул литералов» типа String, который теперь
+перенесен из стека в heap. Если в дальнейшем будет создана еще одна
+ссылка на литерал, эквивалентный ранее объявленному, то будет произведена
+попытка добавления его в «пул литералов». Так как идентичный литерал там
+уже существует, то дубликат не может быть размещен, и вторая ссылка будет
+ссылаться на существующий литерал. В случае, если литерал является вычисляемым,
+то компилятор воспринимает литералы "Java" и "Ja" + "va" как эквивалентные.
+
+```java 
+public static void main(String[] args) {
     String s1 = "Java16";
-    String s2 = "Ja" + "va" + "17";
+    String s2 = "Ja" + "va" + 16;
     String s3 = new String("Java16");
     String s4 = new String(s1);
     System.out.println(s1 + "==" + s2 + " : " + (s1 == s2)); // true
@@ -122,6 +201,7 @@ String._
 
 Несмотря на то, что одинаковые по значению строковые объекты расположены в
 различных участках памяти, значения их хэш-кодов совпадают.
+
 Так как в Java все ссылки хранятся в стеке, а объекты — в heap, то при создании
 объектов s1, s2 сначала создается ссылка, а затем этой ссылке устанавливается в
 соответствие объект. В данной ситуации s2 ассоциируется с уже существующим
@@ -129,3 +209,143 @@ String._
 происходит вызов конструктора, т.е. выделение памяти происходит раньше
 инициализации, и в этом случае в куче создается новый объект.
 
+Существует возможность сэкономить память и переприсвоить ссылку с объекта на
+литерал при помощи вызова метода intern().
+
+    String s1 = "Java";
+    String s2 = new String("Java");
+    System.out.println(s1 == s2); // false
+    s2 = s2.intern();
+    System.out.println(s1 == s2); // true
+
+В данной ситуации ссылка s1 инициализируется литералом, обладающим всеми
+свойствами объекта вплоть до вызова методов. Вызов метода intern() организует
+поиск в «пуле литералов» соответствующего значению объекта s2 литерала
+и при положительном результате возвращает ссылку на найденный литерал, а при
+отрицательном — заносит значение в пул и возвращает ссылку на него.
+
+**Текстовые блоки** упрощают объявление многострочных литералов, содержащих
+символы, которые требуют экранирования в случае использования внутри
+строки, двойные кавычки, перенос строки и некоторые другие. Например, если
+необходимо в виде строки сохранить XML-документ, то для удобочитаемости
+использовалась бы конкатенация строк, и строка выглядела бы так:
+
+```java
+    public static void main(String[] args) {
+    String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
+            "<book>\n" +
+            " <name>Java from EPAM</name>\n" +
+            " <author id=\"777\">Blinov</author>\n" +
+            "</book>\n";
+
+}
+```
+
+Три двойные кавычки подряд в начале и конце строки гарантируют ее идентичное
+сохранение:
+
+```java
+    public static void main(String[] args) {
+    String xmlBlock = """
+            <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+            <book>
+            <name>Java from EPAM</name>
+            <author id="777">Blinov</author>
+            </book>
+            """;
+}
+```
+
+## StringJoiner
+
+Основное назначением которого, является объединение нескольких строк в одну
+с заданием разделителя, префикса и суффикса. У класса два конструктора:
+
+- StringJoiner(CharSequence delimiter, CharSequence prefix, CharSequence suffix)
+- StringJoiner(CharSequence delimiter).
+
+```java
+    public static void main(String[] args) {
+    StringJoiner joiner = new StringJoiner(":", "<<", ">>");
+    String result = joiner.add("blanc").add("rouge").add("blanc").toString();
+    System.out.println(result);
+
+    // -> <<blanc:rouge:blanc>> 
+}
+```
+
+## StringBuilder и StringBuffer
+
+В отличие от String содержимое и размеры объектов классов StringBuilder и
+StringBuffer можно динамически изменять в приложении. StringBuffer
+потокобезопасен, StringBuilder нет. StringBuffer, StringBuilder и String можно
+преобразовывать друг в друга.
+
+### StringBuffer
+
+Методы:
+
+- void setLength(int newLength) — установка размера буфера;
+- void ensureCapacity(int minimumCapacity) — установка гарантированного
+  минимального размера буфера;
+- void trimToSize() — сжатие буфера до размеров контента;
+- int capacity() — возвращение текущего размера буфера;
+- StringBuffer append(parameters) — добавление к содержимому объекта строкового
+  представления аргумента, который может быть символом, значением базового типа,
+  массивом и строкой;
+- StringBuffer insert(parameters) — вставка символа, объекта или строки в
+  указанную позицию;
+- StringBuffer deleteCharAt(int index) — удаление символа;
+- StringBuffer delete(int start, int end) — удаление подстроки;
+- StringBuffer reverse() — обращение содержимого объекта;
+- из String: replace(), substring(), charAt(), length(), getChars(), indexOf().
+
+При создании объекта StringBuffer конструктор по умолчанию автоматически
+резервирует некоторый буфер — объем памяти (16 символов), что в дальнейшем
+позволяет быстро менять содержимое объекта, оставаясь в границах участка памяти,
+выделенного под объект. Размер резервируемой памяти при необходимости можно
+указывать в конструкторе. Если длина строки StringBuffer после изменения
+превышает его размер, то емкость объекта автоматически увеличивается, оставляя
+при этом некоторый резерв для дальнейших изменений.
+
+### StringBuilder
+
+Методы StringBuilder производят изменения в его содержимом, это не приводит к
+созданию нового объекта, как String, а изменяет текущий объект StringBuilder.
+
+```java
+public static void changeStringBuilder(StringBuilder builder) {
+    builder.append(" Certified");
+}
+
+public static void main(String[] args) {
+    StringBuilder str = new StringBuilder("Oracle");
+    changeStringBuilder(str);
+    System.out.println(str); // -> Oracle Certified
+}
+// Объект StringBuilder передан в метод changeStringBuilder() по ссылке, по-
+// этому все изменения объекта сохраняются и для вызывающего метода.
+```
+
+Для классов StringBuffer и StringBuilder не переопределены методы equals() и
+hashCode(), т.е. сравнить содержимое двух объектов невозможно, следовательно,
+хэш-коды всех объектов этого типа вычисляются так же, как и для класса Object.
+При идентичном содержимом у двух экземпляров, размеры буфера каждого могут
+отличаться, поэтому сравнение на эквивалентность объектов представляется
+неоднозначным.
+
+```java
+public static void main(String[] args) {
+  StringBuffer sb1 = new StringBuffer();
+  StringBuffer sb2 = new StringBuffer();
+
+  sb1.append("Java");
+  sb2.append("Java");
+  System.out.print(sb1.equals(sb2)); // false.
+  System.out.print(sb1.hashCode() == sb2.hashCode()); // false.
+  
+  //Сравнить :
+
+  sb1.toString().contentEquals(sb2);
+}
+```
