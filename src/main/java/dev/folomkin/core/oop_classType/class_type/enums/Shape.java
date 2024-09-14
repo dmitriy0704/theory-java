@@ -1,4 +1,4 @@
-package dev.folomkin.core.enums;
+package dev.folomkin.core.oop_classType.class_type.enums;
 
 enum Shape {
     RECTANGLE, TRIANGLE, CIRCLE;

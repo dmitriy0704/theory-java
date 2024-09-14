@@ -79,7 +79,7 @@ values() и valueOf() со следующими общими формами:
   перечисления, соответствующую строке str переданную в аргументе;
 
 ```java
-package dev.folomkin.core.oop.type_class.enums;
+package dev.folomkin.core.oop_classType.type_class.enums;
 
 public enum Transport {
   //  Использование конструктора, переменной экземпляра и метода перечисления
@@ -98,18 +98,18 @@ public enum Transport {
 
 class EnumDemo2 {
   public static void main(String[] args) {
-    dev.folomkin.core.enums.Transport transport;
+    dev.folomkin.core.oop_classType.class_type.enums.Transport transport;
     System.out.println("Все константы Transport");
 
     // Метод values;
-    dev.folomkin.core.enums.Transport[] transports = dev.folomkin.core.enums.Transport.values();
-    for (dev.folomkin.core.enums.Transport t : transports) {
+    dev.folomkin.core.oop_classType.class_type.enums.Transport[] transports = dev.folomkin.core.oop_classType.class_type.enums.Transport.values();
+    for (dev.folomkin.core.oop_classType.class_type.enums.Transport t : transports) {
       System.out.println(t);
     }
     System.out.println();
 
     //  Метод valueOf;
-    transport = dev.folomkin.core.enums.Transport.valueOf("TRUCK");
+    transport = dev.folomkin.core.oop_classType.class_type.enums.Transport.valueOf("TRUCK");
     System.out.println("transport " + transport);
   }
 }
@@ -126,7 +126,7 @@ class EnumDemo2 {
 экземпляра, определенных перечислением.
 
 ```java
-package dev.folomkin.core.oop.type_class.enums;
+package dev.folomkin.core.oop_classType.type_class.enums;
 
 public enum Transport {
   //  Использование конструктора, переменной экземпляра и метода перечисления
@@ -147,10 +147,10 @@ public enum Transport {
 
 class EnumDemo3 {
   public static void main(String[] args) {
-    dev.folomkin.core.enums.Transport transport;
-    System.out.println("Скорость равна " + dev.folomkin.core.enums.Transport.CAR.getSpeed());
+    dev.folomkin.core.oop_classType.class_type.enums.Transport transport;
+    System.out.println("Скорость равна " + dev.folomkin.core.oop_classType.class_type.enums.Transport.CAR.getSpeed());
     //      Все скорости:
-    for (dev.folomkin.core.enums.Transport t : dev.folomkin.core.enums.Transport.values()) {
+    for (dev.folomkin.core.oop_classType.class_type.enums.Transport t : dev.folomkin.core.oop_classType.class_type.enums.Transport.values()) {
       System.out.println(t.getSpeed());
     }
   }

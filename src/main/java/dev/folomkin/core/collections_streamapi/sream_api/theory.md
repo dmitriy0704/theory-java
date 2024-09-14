@@ -88,9 +88,12 @@ public class Code {
     public static void main(String[] args) {
         List<String> strings = List.of("as a the d on and".split("\\s"));
         strings.stream()
-                .map(s -> s.length())
+                .map(String::toUpperCase)
                 .forEach(System.out::println);
     }
 }
 ```
+- **flatMap(Function<T, Stream<R>> mapper)** - преобразовывает один объект,
+  как правило составной, в объект более простой структуры, например, массив
+  в строку, список в объект, список списков в один список
 

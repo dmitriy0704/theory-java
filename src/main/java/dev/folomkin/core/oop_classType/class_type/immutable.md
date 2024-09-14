@@ -1,7 +1,4 @@
-# Типы классов
-
-
-## Immutable
+# Immutable
 
 **Immutable**
 

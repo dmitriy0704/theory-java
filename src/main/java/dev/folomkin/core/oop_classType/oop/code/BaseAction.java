@@ -1,4 +1,4 @@
-package dev.folomkin.core.oop.code;
+package dev.folomkin.core.oop_classType.oop.code;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;

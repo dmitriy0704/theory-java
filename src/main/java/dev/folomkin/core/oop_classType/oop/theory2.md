@@ -85,80 +85,80 @@ interface AccountAction {
 абстрактных методов, объявленных в интерфейсе.
 
 ```java
-package dev.folomkin.core.oop.code;
+package dev.folomkin.core.oop_classType.code;
 
 import java.util.StringJoiner;
 
 interface LineGroupAction {
-    double computePerimeter(AbstractShape shape);
+  double computePerimeter(AbstractShape shape);
 }
 
 interface ShapeAction extends LineGroupAction {
-    double computeSquare(AbstractShape shape);
+  double computeSquare(AbstractShape shape);
 }
 
 class AbstractShape {
-    private long shapeId;
+  private long shapeId;
 
-    public long getShapeId() {
-        return shapeId;
-    }
+  public long getShapeId() {
+    return shapeId;
+  }
 
-    public void setShapeId(long shapeId) {
-        this.shapeId = shapeId;
-    }
+  public void setShapeId(long shapeId) {
+    this.shapeId = shapeId;
+  }
 
 }
 
 class RectangleAction implements ShapeAction {
 
-    @Override
-    public double computeSquare(AbstractShape shape) {
-        double square;
-        if (shape instanceof Rectangle rectangle) {
-            square = rectangle.getHeight() * rectangle.getWidth();
-        } else {
-            throw new IllegalArgumentException("Incompatible shape " + shape.getClass());
-        }
-        return square;
+  @Override
+  public double computeSquare(AbstractShape shape) {
+    double square;
+    if (shape instanceof Rectangle rectangle) {
+      square = rectangle.getHeight() * rectangle.getWidth();
+    } else {
+      throw new IllegalArgumentException("Incompatible shape " + shape.getClass());
     }
+    return square;
+  }
 
-    @Override
-    public double computePerimeter(AbstractShape shape) {
-        double perimeter;
-        if (shape instanceof Rectangle rectangle) {
-            perimeter = 2 * (rectangle.getWidth() + rectangle.getHeight());
-        } else {
-            throw new IllegalArgumentException("Incompatible shape " + shape.getClass());
-        }
-        return perimeter;
+  @Override
+  public double computePerimeter(AbstractShape shape) {
+    double perimeter;
+    if (shape instanceof Rectangle rectangle) {
+      perimeter = 2 * (rectangle.getWidth() + rectangle.getHeight());
+    } else {
+      throw new IllegalArgumentException("Incompatible shape " + shape.getClass());
     }
+    return perimeter;
+  }
 }
 
 class TriangleAction implements ShapeAction {
-    @Override
-    public double computeSquare(AbstractShape shape) {
-        double square;
-        if (shape instanceof RightTriangle triangle) {
-            square = 1. / 2 * triangle.getSideA() * triangle.getSideB();
-        } else {
-            throw new IllegalArgumentException("Incompatible shape " + shape.getClass());
-        }
-        return square;
+  @Override
+  public double computeSquare(AbstractShape shape) {
+    double square;
+    if (shape instanceof RightTriangle triangle) {
+      square = 1. / 2 * triangle.getSideA() * triangle.getSideB();
+    } else {
+      throw new IllegalArgumentException("Incompatible shape " + shape.getClass());
     }
+    return square;
+  }
 
-    @Override
-    public double computePerimeter(AbstractShape shape) {
-        double perimeter = 0;
-        if (shape instanceof RightTriangle triangle) {
-            double a = triangle.getSideA();
-            double b = triangle.getSideB();
-            perimeter = a + b + Math.hypot(a, b);
-        } else {
-            throw new IllegalArgumentException("Incompatible shape " + shape.getClass());
-        }
-        return perimeter;
+  @Override
+  public double computePerimeter(AbstractShape shape) {
+    double perimeter = 0;
+    if (shape instanceof RightTriangle triangle) {
+      double a = triangle.getSideA();
+      double b = triangle.getSideB();
+      perimeter = a + b + Math.hypot(a, b);
+    } else {
+      throw new IllegalArgumentException("Incompatible shape " + shape.getClass());
     }
+    return perimeter;
+  }
 }
 
 //public abstract class PentagonAction implements ShapeAction {
@@ -169,74 +169,74 @@ class TriangleAction implements ShapeAction {
 //}
 
 class Rectangle extends AbstractShape {
-    private double height;
-    private double width;
+  private double height;
+  private double width;
 
-    public Rectangle(double height, double width) {
-        this.height = height;
-        this.width = width;
-    }
+  public Rectangle(double height, double width) {
+    this.height = height;
+    this.width = width;
+  }
 
-    public double getHeight() {
-        return height;
-    }
+  public double getHeight() {
+    return height;
+  }
 
-    public double getWidth() {
-        return width;
-    }
+  public double getWidth() {
+    return width;
+  }
 
 
 }
 
 class RightTriangle extends AbstractShape {
-    private double sideA;
-    private double sideB;
+  private double sideA;
+  private double sideB;
 
-    public RightTriangle(double sideA, double sideB) {
-        this.sideA = sideA;
-        this.sideB = sideB;
-    }
+  public RightTriangle(double sideA, double sideB) {
+    this.sideA = sideA;
+    this.sideB = sideB;
+  }
 
-    public double getSideA() {
-        return sideA;
-    }
+  public double getSideA() {
+    return sideA;
+  }
 
-    public void setSideA(double sideA) {
-        this.sideA = sideA;
-    }
+  public void setSideA(double sideA) {
+    this.sideA = sideA;
+  }
 
-    public double getSideB() {
-        return sideB;
-    }
+  public double getSideB() {
+    return sideB;
+  }
 
-    public void setSideB(double sideB) {
-        this.sideB = sideB;
-    }
+  public void setSideB(double sideB) {
+    this.sideB = sideB;
+  }
 
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", RightTriangle.class.getSimpleName() + "[", "]")
-                .add("sideA=" + sideA).add("sideB=" + sideB).toString();
-    }
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", RightTriangle.class.getSimpleName() + "[", "]")
+            .add("sideA=" + sideA).add("sideB=" + sideB).toString();
+  }
 }
 
 class Code {
-    public static void main(String[] args) {
-        ShapeAction action;
-        try {
-            Rectangle rectShape = new Rectangle(2, 5);
-            action = new RectangleAction();
-            System.out.println("Square rectangle: " + action.computeSquare(rectShape));
-            System.out.println("Perimeter rectangle: " + action.computePerimeter(rectShape));
-            RightTriangle trShape = new RightTriangle(3, 4);
-            action = new TriangleAction();
-            System.out.println("Square triangle: " + action.computeSquare(trShape));
-            System.out.println("Perimeter triangle: " + action.computePerimeter(trShape));
-            action.computePerimeter(rectShape); // runtime exception
-        } catch (IllegalArgumentException e) {
-            System.err.println(e.getMessage());
-        }
+  public static void main(String[] args) {
+    ShapeAction action;
+    try {
+      Rectangle rectShape = new Rectangle(2, 5);
+      action = new RectangleAction();
+      System.out.println("Square rectangle: " + action.computeSquare(rectShape));
+      System.out.println("Perimeter rectangle: " + action.computePerimeter(rectShape));
+      RightTriangle trShape = new RightTriangle(3, 4);
+      action = new TriangleAction();
+      System.out.println("Square triangle: " + action.computeSquare(trShape));
+      System.out.println("Perimeter triangle: " + action.computePerimeter(trShape));
+      action.computePerimeter(rectShape); // runtime exception
+    } catch (IllegalArgumentException e) {
+      System.err.println(e.getMessage());
     }
+  }
 }
 ```
 

@@ -48,6 +48,13 @@ class Book {
     }
 }
 
+class BookList extends ArrayList<String> {
+    private String title;
+
+    public BookList(String title) {
+        this.title = title;
+    }
+}
 
 public class Code {
     public static void main(String[] args) {
@@ -58,9 +65,8 @@ public class Code {
 
         List<Book> listBooks = books
                 .stream()
-                .filter(b -> b.getPages() < 500)
                 .map(b -> {
-                    b.setTitle(b.getTitle().toUpperCase() );
+                    b.setTitle(b.getTitle().toUpperCase());
                     return b;
                 })
                 .toList();
@@ -68,7 +74,12 @@ public class Code {
 
         List<String> strings = List.of("as a the d on and".split("\\s"));
         strings.stream()
-                .map(s -> s.length())
+                .map(String::toUpperCase)
                 .forEach(System.out::println);
+
+
+        BookList bookList = new BookList("Kotlin in Actions");
+        bookList.add("");
+
     }
 }
