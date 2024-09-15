@@ -93,7 +93,125 @@ public class Code {
     }
 }
 ```
+
 - **flatMap(Function<T, Stream<R>> mapper)** - преобразовывает один объект,
-  как правило составной, в объект более простой структуры, например, массив
+  как правило, составной, в объект более простой структуры, например, массив
   в строку, список в объект, список списков в один список
 
+```java
+
+class BookList implements Iterable<String> {
+    private int year;
+    private List<String> names = new ArrayList<>();
+
+    public BookList(int year) {
+        this.year = year;
+    }
+
+    public List<String> getNames() {
+        return List.copyOf(names);
+    }
+
+    public boolean add(String name) {
+        return names.add(name);
+    }
+
+    @Override
+    public Iterator<String> iterator() {
+        return names.iterator();
+    }
+}
+
+public class Code {
+    public static void main(String[] args) {
+        BookList books1 = new BookList(2023);
+        books1.add("Spring in Actions");
+        books1.add("Spring Pro");
+        books1.add("Spring QuickStart");
+        BookList books2 = new BookList(2024);
+        books2.add("Kotlin in Actions");
+        books2.add("Kotlin for Android");
+        List<BookList> booksList = List.of(books1, books2);
+        List<String> currencyList = booksList.stream()
+                .map(b -> b.getNames())         // -> Stream<List<String>>
+                .flatMap(b -> b.stream())       // -> Stream<String>
+                .collect(Collectors.toList());
+        System.out.println(currencyList);
+    }
+```
+
+- **peek(Consumer<T> consumer)** — возвращает поток, содержащий все элементы
+  исходного потока. Используется для просмотра элементов в текущем состоянии
+  потока. Можно использовать для записи логов:
+
+```java
+ public static void main(String[] args) {
+    List<String> strings = List.of("Java Python C# C++ JavaScript PHP".split("\\s+"));
+    strings.stream()
+            .peek(System.out::println)
+            .map(String::toUpperCase)
+            .forEach(System.out::println);
+
+}
+```
+
+- **sorted(Comparator<T> comparator) и sort()** — сортировка в новый поток:
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python C# C++ JavaScript PHP".split("\\s+"));
+    strings.stream()
+            .sorted(String::compareToIgnoreCase)
+            //.sorted(Comparator.comparingInt(String::length))
+            .forEach(System.out::println);
+}
+```
+
+- **limit(long maxSize)** — ограничивает выходящий поток заданным в параметре
+  значением;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python C# C++ JavaScript PHP".split("\\s+"));
+    strings.stream()
+            .limit(3) // -> выведет первые 3 значения 
+            .forEach(System.out::println);
+
+}
+```
+
+- **skip(long n)** — не включает в выходной поток первые n элементов исходного
+  потока;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python C# C++ JavaScript PHP".split("\\s+"));
+    strings.stream()
+            .skip(3) // -> пропустит первые 3 значения 
+            .forEach(System.out::println);
+}
+```
+
+- **distinct()** — удаляет из потока все идентичные элементы;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Java JavaScript PHP".split("\\s+"));
+    strings.stream()
+            .distinct()
+            .forEach(System.out::println);
+
+    // -> Java Python JavaScrip PHP
+}
+```
+
+### Терминальные:
+
+Сводят поток к результату. Результатом может быть новая коллекция, объект
+некоторого класса, число. Промежуточные операции обязательно должны завершаться
+терминальными, иначе они не выполнятся, так как просто не имеют смысла.
+
+- void forEach(Consumer<T> action) — выполняет действие над каждым элементом
+  потока. Чтобы результат действия сохранялся, реализация action должна
+  предусматривать фиксацию результата в каком-либо объекте или потоке вывода;
+- Optional<T> findFirst() - находит первый элемент в потоке;
