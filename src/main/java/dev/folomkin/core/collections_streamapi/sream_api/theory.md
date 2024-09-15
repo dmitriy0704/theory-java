@@ -216,4 +216,157 @@ public static void main(String[] args) {
   предусматривать фиксацию результата в каком-либо объекте или потоке вывода;
 - **Optional<T> findFirst()** - находит первый элемент в потоке;
 
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Java JavaScript PHP".split("\\s+"));
+    String strFirst = strings.stream()
+            .filter(s -> s.matches("J\\w*"))
+            .findFirst()
+            .orElse("none");
+    System.out.println(strFirst); // -> Java
 
+    // Фильтр выбрал в потоке все элементы, удовлетворяющие условию 
+    // предиката, а метод findFirst() нашел первый элемент.
+}
+```
+
+- **Optional<T> findAny()** - находит элемент в потоке:
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Java JavaScript PHP".split("\\s+"));
+    String anyStr = strings.stream()
+            .filter(s -> s.matches("an[a-z]"))
+            .findAny()
+            .orElse("none");
+    System.out.println(anyStr);
+
+    // Фильтр выбрал в потоке все элементы, удовлетворяющие условию 
+    // предиката, а метод findFirst() нашел первый элемент.
+}
+```
+
+- **long count()** - возвращает число элементов потока;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Java JavaScript PHP".split("\\s+"));
+    long count = strings.stream()
+            .filter(s -> s.matches("a\\w*"))
+            .count();
+    System.out.println(count);
+}
+```
+
+- **boolean allMatch(Predicate<T> predicate)** - возвращает истину, если все
+  элементы stream удовлетворяют условию предиката;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Java JavaScript PHP".split("\\s+"));
+    long count = strings.stream()
+            .allMatch(s -> s.length() < 5); // false
+}
+```
+
+- **boolean anyMatch(Predicate<T> predicate)** — возвращает истину, если
+  хотя бы один элемент stream удовлетворяет условию предиката;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Java JavaScript PHP".split("\\s+"));
+    boolean res2 = strings.stream().anyMatch(s -> s.startsWith("a")); // true
+}
+```
+
+- **boolean noneMatch(Predicate<T> predicate)** — возвращает истину, если ни
+  один элемент stream не удовлетворяет условию предиката;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Java JavaScript PHP".split("\\s+"));
+    boolean res3 = strings.stream().noneMatch(s -> s.endsWith("z")); // true
+}
+```
+
+- **Optional<T> reduce(T identity, BinaryOperator<T> accumulator)** — сводит все
+  элементы потока к одному результирующему объекту, завернутому в оболочку
+  Optional;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Java JavaScript PHP".split("\\s+"));
+    int sumLength = strings.stream()
+          .map(s -> s.length())
+          .reduce(0, (n1, n2) -> n1 + n2);
+    // Поток строк преобразуется в поток их длин и метод reduce() вычисляет 
+    // сумму всех длин строк.
+}
+```
+
+- **<R, A> R collect(Collector<? super T, A, R> collector)** -  собирает элементы
+  в коллекцию или объект другого типа;
+
+```java
+  public static void main(String[] args) {
+  Map<String, Integer> map = Arrays.stream("Java Python JavaScript PHP".split("\\s+"))
+          .collect(Collectors.toMap(s -> s, s -> s.length()));
+  System.out.println(map); // -> {Java=4, JavaScript=10, PHP=3, Python=6}
+}
+```
+- **Optional<T> min(Comparator<T> comparator)** - находит минимальный элемент;
+```java
+    public static void main(String[] args) {
+        List<String> strings = List.of("Java PHP".split("\\s+"));
+        String min = strings.stream()
+                .min(Comparator.comparingInt(s -> s.charAt(s.length() - 1)))
+                .orElse("none");
+        System.out.println(min); // -> PHP
+    }
+```
+
+- **Optional<T> max(Comparator<T> comparator)** — находит максимальный элемент.
+
+```java
+//  Action и его метод подсчета суммы кодов — символов строки:
+class Action {
+  public static int sumCharCode(String str) {
+    return str.codePoints().reduce(0, (v1, v2) -> v1 + v2);
+  }
+}
+
+public class Code {
+  public static void main(String[] args) {
+    List<String> strings = List.of("Java PHP".split("\\s+"));
+    String max = strings.stream()
+            .max(Comparator.comparingInt(Action::sumCharCode))
+            .orElse("empty");
+    System.out.println(max);
+  }
+}
+
+ // Поиск строки с максимальной суммой кодов его символов.
+// -> Java
+```
+
+### Источники Stream API:
+
+- collection.stream(), 
+- Arrays.stream(int[] array),
+- Files.walk(Path path),
+- Files.list(Path path),
+- bufferedReader.lines(),
+- Stream.iterate(T seed, UnaryOperator<T> f),
+- Stream.generate(Supplier<? extends T> s),
+- Stream.of(T...t),
+- Stream.ofNullable(T t),
+- Stream.empty(),
+- Stream.concat(Stream<? extends T> a, Stream<? extends T> b),
+- string.lines(),
+- string.codePoints(),
+- string.chars(),
+- random.ints(),
+- random.doubles(),
+- random.longs() и другие.
+
+## Алгоритмы сведения Collectors
