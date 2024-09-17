@@ -297,32 +297,34 @@ public static void main(String[] args) {
 public static void main(String[] args) {
     List<String> strings = List.of("Java Python Java JavaScript PHP".split("\\s+"));
     int sumLength = strings.stream()
-          .map(s -> s.length())
-          .reduce(0, (n1, n2) -> n1 + n2);
+            .map(s -> s.length())
+            .reduce(0, (n1, n2) -> n1 + n2);
     // Поток строк преобразуется в поток их длин и метод reduce() вычисляет 
     // сумму всех длин строк.
 }
 ```
 
-- **<R, A> R collect(Collector<? super T, A, R> collector)** -  собирает элементы
+- **<R, A> R collect(Collector<? super T, A, R> collector)** - собирает элементы
   в коллекцию или объект другого типа;
 
 ```java
   public static void main(String[] args) {
-  Map<String, Integer> map = Arrays.stream("Java Python JavaScript PHP".split("\\s+"))
-          .collect(Collectors.toMap(s -> s, s -> s.length()));
-  System.out.println(map); // -> {Java=4, JavaScript=10, PHP=3, Python=6}
+    Map<String, Integer> map = Arrays.stream("Java Python JavaScript PHP".split("\\s+"))
+            .collect(Collectors.toMap(s -> s, s -> s.length()));
+    System.out.println(map); // -> {Java=4, JavaScript=10, PHP=3, Python=6}
 }
 ```
+
 - **Optional<T> min(Comparator<T> comparator)** - находит минимальный элемент;
+
 ```java
     public static void main(String[] args) {
-        List<String> strings = List.of("Java PHP".split("\\s+"));
-        String min = strings.stream()
-                .min(Comparator.comparingInt(s -> s.charAt(s.length() - 1)))
-                .orElse("none");
-        System.out.println(min); // -> PHP
-    }
+    List<String> strings = List.of("Java PHP".split("\\s+"));
+    String min = strings.stream()
+            .min(Comparator.comparingInt(s -> s.charAt(s.length() - 1)))
+            .orElse("none");
+    System.out.println(min); // -> PHP
+}
 ```
 
 - **Optional<T> max(Comparator<T> comparator)** — находит максимальный элемент.
@@ -330,28 +332,28 @@ public static void main(String[] args) {
 ```java
 //  Action и его метод подсчета суммы кодов — символов строки:
 class Action {
-  public static int sumCharCode(String str) {
-    return str.codePoints().reduce(0, (v1, v2) -> v1 + v2);
-  }
+    public static int sumCharCode(String str) {
+        return str.codePoints().reduce(0, (v1, v2) -> v1 + v2);
+    }
 }
 
 public class Code {
-  public static void main(String[] args) {
-    List<String> strings = List.of("Java PHP".split("\\s+"));
-    String max = strings.stream()
-            .max(Comparator.comparingInt(Action::sumCharCode))
-            .orElse("empty");
-    System.out.println(max);
-  }
+    public static void main(String[] args) {
+        List<String> strings = List.of("Java PHP".split("\\s+"));
+        String max = strings.stream()
+                .max(Comparator.comparingInt(Action::sumCharCode))
+                .orElse("empty");
+        System.out.println(max);
+    }
 }
 
- // Поиск строки с максимальной суммой кодов его символов.
+// Поиск строки с максимальной суммой кодов его символов.
 // -> Java
 ```
 
-### Источники Stream API:
+**Источники Stream API:**
 
-- collection.stream(), 
+- collection.stream(),
 - Arrays.stream(int[] array),
 - Files.walk(Path path),
 - Files.list(Path path),
@@ -370,3 +372,179 @@ public class Code {
 - random.longs() и другие.
 
 ## Алгоритмы сведения Collectors
+
+Методы класса java.util.stream.Collectors представляют основные возможности,
+позволяя произвести обработку stream к результату, будь то число, строка или
+коллекция. Каждый статический метод класса создает экземпляр Collector для
+передачи методу collect() интерфейса Stream, который и выполнит действия по
+преобразованию stream алгоритмом, содержащимся в экземпляре Collector.
+
+**Методы:**
+
+- **toCollection(Supplier<C> collectionFactory), toList(), toSet()** -
+  преобразование в коллекцию;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Go JavaScript PHP".split("\\s+"));
+    List<Integer> listLengths = strings.stream()
+            .map(String::length)
+            .collect(Collectors.toList());
+    System.out.println(listLengths); // -> [4, 6, 2, 10, 3]
+}
+```
+
+- **joining(CharSequence delimiter)** - обеспечивает конкатенацию строк с
+  заданным
+  разделителем;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Go JavaScript PHP".split("\\s+"));
+    String res = strings.stream()
+            .map(String::toUpperCase)
+            .collect(Collectors.joining(" : "));
+    System.out.println(res); // -> JAVA : PYTHON : GO : JAVASCRIPT : PHP
+}
+```
+
+- **mapping(Function<? super T,? extends U> mapper,Collector<? super
+  U,A,R> downstream)** - позволяет преобразовать элементы одного типа в элементы
+  другого типа;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Go JavaScript PHP".split("\\s+"));
+    List<Integer> result = strings.stream()
+            .collect(Collectors.mapping(s ->
+                    (int) s.charAt(0), Collectors.toList()));
+    System.out.println(result); // -> [74, 80, 71, 74, 80]
+}
+```
+
+- **minBy(Comparator<? super T> c)/maxBy(Comparator<? super T> c)** - коллектор
+  для нахождения минимального или максимального элемента в потоке;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Go JavaScript PHP".split("\\s+"));
+    String minLex = strings.stream()
+            .collect(Collectors.minBy(String::compareTo))
+            .orElse("none");
+    System.out.println(minLex); // -> Go
+}
+```
+
+- **filtering(Predicate<? super T> predicate, Collector<? R> downstream)** -
+  выполняет фильтрацию элементов;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Go JavaScript PHP".split("\\s+"));
+    List<String> lists = strings.stream()
+            .collect(Collectors.filtering(s -> s.length() > 2, Collectors.toList()));
+    System.out.println(lists); // -> Java Python JavaScript PHP
+}
+```
+
+- **counting()** - позволяет посчитать количество элементов потока;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Go JavaScript PHP".split("\\s+"));
+    long counter = strings.stream()
+            .collect(Collectors.counting());
+    System.out.println(counter); // -> 5
+}
+```
+
+- summingInt(ToIntFunction<? super T> mapper) — выполняет суммирование
+  элементов. Существуют версии для Long и Double;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Go JavaScript PHP".split("\\s+"));
+    int length = strings.stream()
+            .collect(Collectors.summingInt(
+                    String::length)
+            );
+    System.out.println(length);
+}
+```
+
+- **averagingInt(ToIntFunction<? super T> mapper)** - вычисляет среднее
+  арифметическое элементов потока. Существуют версии для Long и Double;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Go JavaScript PHP".split("\\s+"));
+    Double averageLength = strings.stream()
+            .collect(Collectors.averagingDouble(
+                            String::length
+                    )
+            );
+    System.out.println(averageLength);
+}
+```
+
+- **reducing(T identity, BinaryOperator<T> op)** - коллектор, осуществляющий
+  редукцию (сведение) элементов на основании заданного бинарного оператора;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Go JavaScript PHP".split("\\s+"));
+    int sumCodeFirstChars = strings.stream()
+            .map(s -> (int) s.charAt(0))
+            .collect(Collectors.reducing(0, (a, b) -> a + b));
+    System.out.println(sumCodeFirstChars);
+}
+```
+
+- **reducing(U identity, Function<? super T,? extends U> mapper,
+  BinaryOperator<U> op)** - аналогичное предыдущему действие. В примере ниже
+  производится умножение всех длин строк, но без предварительного преобразования
+  stream к другому типу;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Go JavaScript PHP".split("\\s+"));
+    int productLength = strings.stream()
+            .collect(Collectors.reducing(1, s -> s.length(), (s1, s2) -> s1 * s2));
+    System.out.println(productLength);
+}
+```
+
+- **groupingBy(Function<? super T, ? extends K> classifier)** - коллектор
+  группировки элементов потока;
+
+```java
+public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Go JavaScript PH".split("\\s+"));
+    Map<Integer, List<String>> byLength = strings.stream()
+            .collect(Collectors.groupingBy(String::length));
+    System.out.println(byLength);
+    // -> {2=[Go, PH], 4=[Java], 6=[Python], 10=[JavaScript]}
+}
+```
+
+- **partitioningBy(Predicate<? super T> predicate)** — коллектор разбиения
+  элементов потока;
+
+```java
+  public static void main(String[] args) {
+    List<String> strings = List.of("Java Python Go JavaScript PH".split("\\s+"));
+    Map<Boolean, List<String>> boolLength = strings.stream()
+            .collect(Collectors.partitioningBy(s -> s.length() < 3));
+    System.out.println(boolLength);
+    // -> {false=[Java, Python, JavaScript], true=[Go, PH]}
+}
+```
+
+### Метасимвол в коллекции
+
+Метасимволы используются при параметризации коллекций для расширения
+возможностей самой коллекции и обеспечения ее типобезопасности.
+Например, если параметр метода предыдущего примера изменить с List<Order>
+на List<? extends Order>, то в метод можно будет передавать коллекции,
+параметризованные любым допустимым типом, а именно классом Order и любым
+его подклассом, что невозможно при записи без анонимного символа.
