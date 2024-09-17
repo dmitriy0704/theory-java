@@ -59,7 +59,7 @@ Enumeration для работы с элементами этих классов.
 ме WeakHashMap).
 
 **Иерархия колллекций:**
-![collection.jpg](/img/collection.jpg)
+![collection.jpg](/img/collection/collection.jpg)
 
 ## ___Iterable___
 
@@ -766,7 +766,7 @@ FIFO.
 
 **Deque методы кратко:**
 
-![deque-methods.png](/img/deque-methods.png)
+![deque-methods.png](/img/collection/deque-methods.png)
 
 **Сравнение Queue и Deque методов**
 

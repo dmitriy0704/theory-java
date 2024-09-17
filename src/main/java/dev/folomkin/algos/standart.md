@@ -144,8 +144,6 @@ class Solution {
         }
     }
 }
-
-
 //
 
 class Solution {
@@ -203,7 +201,7 @@ class Solution {
 
 ```
 
-![bubbleSort.png](/img/sort/bubbleSort.png)
+![bubbleSort.png](/img/algos/sort/bubbleSort.png)
 
 Временная сложность O(N²), так как имеются вложенные циклы. Внешний проход по
 элементам выполняется за N раз, внутренний — тоже N раз, и в итоге мы получаем
@@ -304,32 +302,32 @@ public class Solution {
 английские слова, и делаем мы это только потому, что Sorted — гораздо короче,
 чем «Отсортированная часть» и будет лучше смотреться на картинках).
 
-![sortedSelection.png](/img/sort/sortedSelection0.png)
+![sortedSelection.png](/img/algos/sort/sortedSelection0.png)
 
 Находим минимальное число в неотсортированной части массива (то есть, на этом
 шаге — во всем массиве). Это число 2. Теперь меняем его с первым среди
 неотсортированных и ставим его в конец отсортированного массива (на этом шаге —
 на первое место). На этом шаге это первое число в массиве, то есть 3.
 
-![sortedSelection.png](/img/sort/sortedSelection1.png)
+![sortedSelection.png](/img/algos/sort/sortedSelection1.png)
 Шаг второй. На число 2 мы не смотрим, оно уже в отсортированном подмассиве.
 Начинаем искать минимальное, начиная со второго элемента, это 5. Убеждаемся, что
 3 — минимальное среди неотсортированных, 5 — первое среди неотсортированных.
 Меняем их местами и прибавляем 3 к отсортированному подмассиву.
-![sortedSelection.png](/img/sort/sortedSelection2.png)
+![sortedSelection.png](/img/algos/sort/sortedSelection2.png)
 
 На третьем шаге мы видим, что в неотсортированном подмассиве самое маленькое
 число — 4. Меняем его с первым числом среди неотсортированных — 5.
-![sortedSelection.png](/img/sort/sortedSelection3.png)
+![sortedSelection.png](/img/algos/sort/sortedSelection3.png)
 
 На четвертом шаге мы обнаруживаем, что в неотсортированном массиве минимальное
 число — 5. Меняем его с 6 и прибавляем к отсортированному подмассиву.
 
-![sortedSelection.png](/img/sort/sortedSelection4.png)
+![sortedSelection.png](/img/algos/sort/sortedSelection4.png)
 Когда среди неотсортированных остается только одно число (наибольшее), это
 значит, что весь массив отсортирован!
 
-![sortedSelection.png](/img/sort/sortedSelection5.png)
+![sortedSelection.png](/img/algos/sort/sortedSelection5.png)
 
 В обоих, самом лучшем и самом худшем случаях, чтобы найти минимальный
 неотсортированный элемент, мы должны сравнить каждый элемент с каждым элементом
@@ -339,7 +337,7 @@ public class Solution {
 сравнения, на втором — 3, на третьем — 2. Чтобы получить количество сравнений,
 нам нужно сложить все эти числа. Мы получаем сумму
 
-![sortedSelection.png](/img/sort/sortedSelection7.png)
+![sortedSelection.png](/img/algos/sort/sortedSelection7.png)
 
 Таким образом, ожидаемая скорость алгоритма в лучшем и худшем случае — O(n2) =
 O(n2).
@@ -915,11 +913,11 @@ ____
 
 Обычные соединяющие линии называют ребрами:
 
-![graph0.png](/img/graph/graph0.png)
+![graph0.png](/img/algos/graph/graph0.png)
 
 Линии со стрелками — дугами:
 
-![graph0.png](/img/graph/graph1.png)
+![graph0.png](/img/algos/graph/graph1.png)
 
 Как правило, граф представляют с помощью схемы, на которой некоторые вершины
 соединены ребрами (дугами).
@@ -932,17 +930,17 @@ ____
 Связный граф — граф, в котором от каждой вершины к любой другой вершине ведёт
 хотя бы один путь:
 
-![graph1.png](/img/graph/graph1.png)
+![graph1.png](/img/algos/graph/graph1.png)
 
 Если это не так, граф становится несвязным:
 
-![graph2.png](/img/graph/graph2.png)
+![graph2.png](/img/algos/graph/graph2.png)
 
 Также ребрам (дугам) могут присваиваться веса — числа, представляющие физическое
 расстояние между двумя вершинами (или относительное время перехода между двумя
 вершинами). Такие графы и называют взвешенными:
 
-![graph3.png](/img/graph/graph3.png)
+![graph3.png](/img/algos/graph/graph3.png)
 
 ### Алгоритмы поиска пути (глубина, ширина)
 
@@ -959,7 +957,7 @@ ____
 Для дальнейшего рассмотрения алгоритмов в глубину и ширину возьмем следующий
 граф:
 
-![graph4.png](/img/graph/graph4.png)
+![graph4.png](/img/algos/graph/graph4.png)
 
 ### Обход в глубину
 
