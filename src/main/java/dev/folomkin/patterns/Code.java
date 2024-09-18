@@ -1,24 +1,48 @@
 package dev.folomkin.patterns;
 
+abstract class Car {
+    abstract void build();
+}
 
-class Probe {
-    // Instance variables
-    // Important methods
+abstract class CarModifications extends Car {
+    Car car;
 
-    // Конструктор приватный, чтобы не создавалось несколько объектов
-    private Probe() {
-        // Initialize variables here
+    public CarModifications(Car car) {
+        this.car = car;
+    }
+}
+
+class Spoiler extends CarModifications {
+    public Spoiler(Car car) {
+        super(car);
     }
 
-    //Каждый раз, когда вызывается этот метод, он возвращает один и тот же
-    // объект. Таким образом, шаблон способен блокировать создание нескольких
-    // объектов.
-    private static Probe getInstance(Probe probe) {
-        if (probe == null)
-            probe = new Probe();
-        return probe;
+    public void build() {
+        car.build();
+        addSpoiler();
+    }
+
+    void addSpoiler() {
+        System.out.println("Spoiler built");
+    }
+}
+
+class Ford extends Car {
+    public void build() {
+        System.out.println("Ford built");
+    }
+}
+
+class Audi extends Car {
+    public void build() {
+        System.out.println("Audi built");
     }
 }
 
 public class Code {
+    public static void main(String[] args) {
+        Car audi = new Audi();
+        Car audiWithSpoiler = new Spoiler(audi);
+        audiWithSpoiler.build();
+    }
 }

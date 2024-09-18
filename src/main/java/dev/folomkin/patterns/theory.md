@@ -29,54 +29,37 @@
 - Creational (C) - порождающие;
 - Structural (S) - структурные;
 
-## Список шаблонов:
+### Поведенческие:
 
-- Хранитель (memento) - B
-  ![01_memento.png](/img/design_pattern/design_patterns/01_memento.png)
-- Цепочка обязанностей (chain of responsibility) - B
-  ![02_chain.png](/img/design_pattern/design_patterns/02_chain.png)
-- Наблюдатель (observer) - B
-  ![03_observer.png](/img/design_pattern/design_patterns/03_observer.png)
-- Команда (command) - B
-  ![04_command.png](/img/design_pattern/design_patterns/04_command.png)
-- Состояние (state) - B
-  ![05_state.png](/img/design_pattern/design_patterns/05_state.png)
-- Интерпретатор (interpreter) - B
-  ![06_interpreter.png](/img/design_pattern/design_patterns/06_interpreter.png)
-- Стратегия (strategy) - B
-  ![07_strategy.png](/img/design_pattern/design_patterns/07_strategy.png)
-- Итератор (iterator) - B
-  ![08_iterator.png](/img/design_pattern/design_patterns/08_iterator.png)
-- Шаблонный метод (template method) - B
-  ![09_templatemethod.png](/img/design_pattern/design_patterns/09_templatemethod.png)
-- Посетитель (visitor) - B
-  ![10_visitor.png](/img/design_pattern/design_patterns/10_visitor.png)
-- Посредник (mediator) - B
-  ![11_mediator.png](/img/design_pattern/design_patterns/11_mediator.png)
-- Строитель (builder) - C
-  ![17_builder.png](/img/design_pattern/design_patterns/17_builder.png)
-- Фабричный метод (factory method) - C
-  ![19_factorymethod.png](/img/design_pattern/design_patterns/19_factorymethod.png)
-- Абстрактная фабрика (abstract factory) - C
-  ![14_abstractfactory.png](/img/design_pattern/design_patterns/14_abstractfactory.png)
-- Прототип (prototype) - C
-  ![20_prototype.png](/img/design_pattern/design_patterns/20_prototype.png)
-- Одиночка (singleton) - C
-  ![23_singleton.png](/img/design_pattern/design_patterns/23_singleton.png)
-- Адаптер (adapter) - S
-  ![12_adapter.png](/img/design_pattern/design_patterns/12_adapter.png)
-- Мост (bridge) - S
-  ![15_bridge.png](/img/design_pattern/design_patterns/15_bridge.png)
-- Компоновщик (composite) - S
-  ![16_composite.png](/img/design_pattern/design_patterns/16_composite.png)
-- Декоратор (decorator) - S
-  ![18_decorator.png](/img/design_pattern/design_patterns/18_decorator.png)
-- Фасад (facade) - S
-  ![21_facade.png](/img/design_pattern/design_patterns/21_facade.png)
-- Приспособленец (flyweight) - S
-  ![22_flyweight.png](/img/design_pattern/design_patterns/22_flyweight.png)
-- Прокси (proxy) - S
-  ![13_proxy.png](/img/design_pattern/design_patterns/13_proxy.png)
+- **_Хранитель (memento)_**
+- **_Цепочка обязанностей (chain of responsibility)_**
+- Наблюдатель (observer)
+- Команда (command)
+- Состояние (state)
+- Интерпретатор (interpreter)
+- Стратегия (strategy)
+- Итератор (iterator)
+- Шаблонный метод (template method) -
+- Посетитель (visitor)
+- Посредник (mediator)
+
+### Порождающие:
+
+- Строитель (builder)
+- Фабричный метод (factory method)
+- Абстрактная фабрика (abstract factory)
+- Прототип (prototype)
+- Одиночка (singleton)
+
+### Структурные:
+
+- Адаптер (adapter)
+- Мост (bridge)
+- Компоновщик (composite)
+- Декоратор (decorator)
+- Фасад (facade)
+- Приспособленец (flyweight)
+- Прокси (proxy)
 
 ## Шаблоны подробно
 
@@ -106,6 +89,379 @@ class Probe {
 }
 ```
 
-### - Наблюдатель (observer, поведенческий)
+### Наблюдатель (observer, поведенческий)
 
+Один объект отслеживает изменения другого.
+
+Пример реализации:
+
+Допустим, вы подписаны на страницу в социальной сети.
+Всякий раз, когда на этой странице добавляется новая запись,
+вы хотели бы получать уведомления об этом.
+
+Итак, в том случае, если один объект (страница) выполняет действие
+(добавляет пост), другой объект (подписчик) получает уведомление.
+
+Этот сценарий может быть реализован с помощью шаблона наблюдателя.
+Давайте создадим класс страницы и интерфейс подписчика.
+
+На странице могут быть разные типы подписчиков: обычный пользователь, рекрутер
+и официальное лицо.
+У нас будет класс для каждого типа подписчика, и все классы будут
+реализовывать интерфейс подписчика.
+
+Здесь класс страницы - это тема, а подписчики - классы наблюдателей.
+Если тема меняет своё состояние (страница добавляет новую запись),
+все наблюдатели, то есть подписчики, получают уведомление.
+
+Класс страницы будет содержать следующие методы:
+
+- registerFollower() - Этот метод регистрирует новых подписчиков.
+- notifyFollowers() - Этот метод уведомляет всех подписчиков о том, что на
+  странице появилась новая запись.
+- getLatestPost() и addNewPost() - получатель и установщики для последней записи
+  на странице.
+
+С другой стороны, интерфейс последователя имеет только один метод update(),
+который будет переопределен типами последователей, реализующими этот
+интерфейс, также называемыми конкретными наблюдателями.
+
+```java
+interface Follower {
+    // Метод вызывается, когда на странице появляется новая запись
+    void update();
+}
+
+class Page {
+    private ArrayList<Follower> followers;
+    String latestPost;
+
+    public Page() {
+        followers = new ArrayList<>();
+    }
+
+    public void registerFollower(Follower f) {
+        followers.add(f);
+    }
+
+    public void notifyFollowers() {
+        for (int i = 0; i < followers.size(); i++) {
+            Follower follower = followers.get(i);
+            follower.update();
+        }
+    }
+
+    public String getLatestPost() {
+        return latestPost;
+    }
+
+    public void addNewPost(String post) {
+        this.latestPost = post;
+        notifyFollowers();
+    }
+}
+```
+
+В этом классе у нас есть список всех подписчиков. Когда новый подписчик хочет
+перейти на страницу, он вызывает метод registerFollower(). latestPost содержит
+новую запись, добавленную страницей.  
+Когда добавляется новая запись, вызывается метод notifyFollowers(), где он
+перебирает каждого подписчика и уведомляет их, вызывая метод update().
+
+Первый подписчик:
+
+```java
+class User implements Follower {
+    Page page;
+
+    public User(Page page) {
+        this.page = page;
+        page.registerFollower(this);
+    }
+
+    public void update() {
+        System.out.println("Latest post seen by a normal user: " + page.getLatestPost());
+    }
+}
+```
+Когда создаётся новый пользовательский объект, он выбирает страницу, на которую
+хочет перейти, и регистрируется для неё. Когда страница добавляет новую запись,
+пользователь получает уведомление с помощью метода update().
+
+Ещё два класса, которые будут следить за страницей:
+
+```java
+class Recruiter implements Follower {
+    String company;
+    Page page;
+
+    public Recruiter(Page page) {
+        this.page = page;
+        page.registerFollower(this);
+    }
+
+    public void update() {
+        System.out.println("Latest post seen by a normal user: " + page.getLatestPost());
+    }
+}
+
+class Official implements Follower {
+    String designation;
+
+    Page page;
+
+    public Official(Page page) {
+        this.page = page;
+        page.registerFollower(this);
+    }
+
+    public void update() {
+        System.out.println("Latest post seen by a normal user: " + page.getLatestPost());
+    }
+}
+
+```
+
+Итог работы:
+```java
+package dev.folomkin.patterns;
+
+import java.util.ArrayList;
+
+// Интерфейс подписчика на страницу
+interface Follower {
+  // Метод вызывается, когда на странице появляется новая запись
+  void update();
+}
+
+
+class User implements Follower {
+  Page page;
+
+  public User(Page page) {
+    this.page = page;
+    page.registerFollower(this);
+  }
+
+  public void update() {
+    System.out.println("Latest post seen by a normal user: " + page.getLatestPost());
+  }
+}
+
+class Recruiter implements Follower {
+  String company;
+  Page page;
+
+  public Recruiter(Page page) {
+    this.page = page;
+    page.registerFollower(this);
+  }
+
+  public void update() {
+    System.out.println("Latest post seen by a normal user: " + page.getLatestPost());
+  }
+}
+
+class Official implements Follower {
+  String designation;
+
+  Page page;
+
+  public Official(Page page) {
+    this.page = page;
+    page.registerFollower(this);
+  }
+
+  public void update() {
+    System.out.println("Latest post seen by a normal user: " + page.getLatestPost());
+  }
+}
+
+
+class Page {
+  private ArrayList<Follower> followers;
+  String latestPost;
+
+  public Page() {
+    followers = new ArrayList<>();
+  }
+
+  public void registerFollower(Follower f) {
+    followers.add(f);
+  }
+
+  public void notifyFollowers() {
+    for (int i = 0; i < followers.size(); i++) {
+      Follower follower = followers.get(i);
+      follower.update();
+    }
+  }
+
+  public String getLatestPost() {
+    return latestPost;
+  }
+
+  public void addNewPost(String post) {
+    this.latestPost = post;
+    notifyFollowers();
+  }
+}
+
+public class Code {
+  public static void main(String[] args) {
+    Page page = new Page();
+    page.addNewPost("I am feeling lucky!");
+    //-> Страница создана, но никто не подписан
+
+    User user = new User(page);
+    page.addNewPost("It's a beautiful day!");
+    //-> User подписан и получает уведомление
+    
+    Recruiter recruiter = new Recruiter(page);
+    Official official = new Official(page);
+    page.addNewPost("Ready to go for a run!!");
+    //-> Остальные подписаны и уведомлены
+  }
+}
+```
+
+
+### Стратегия (strategy, поведенческий)
+
+```java
+package dev.folomkin.patterns;
+
+
+interface Diveable {
+    void dive();
+}
+
+class DiveBehaviour implements Diveable {
+    public void dive() {
+        // Implementation here
+    }
+}
+
+class NoDiveBehaviour implements Diveable {
+    public void dive() {
+        // Implementation here
+    }
+}
+
+abstract class Boat {
+    Diveable diveable;
+
+    void sway() {
+        // ...
+    }
+
+    void roll() {
+        // ...
+    }
+
+    abstract void present();
+
+    public void performDive() {
+        diveable.dive();
+    }
+}
+
+class FishBoat extends Boat {
+    public FishBoat() {
+        diveable = new NoDiveBehaviour();
+    }
+
+    void present() {
+        // ...
+    }
+}
+
+class DinghyBoat extends Boat {
+    public DinghyBoat() {
+        diveable = new NoDiveBehaviour();
+    }
+
+    void present() {
+        // ...
+    }
+}
+
+class SubBoat extends Boat {
+    // ...
+    public SubBoat() {
+        diveable = new DiveBehaviour();
+    }
+
+    void present() {
+        // ...
+    }
+    // ...
+}
+
+public class Code {
+    public static void main(String[] args) {
+        Boat fishBoat = new FishBoat();
+        fishBoat.performDive();
+        Boat subBoat = new SubBoat();
+        subBoat.performDive();
+    }
+}
+```
+
+
+### Декоратор (decorator, структурный)
+
+```java
+package dev.folomkin.patterns;
+
+abstract class Car {
+    abstract void build();
+}
+
+abstract class CarModifications extends Car {
+    Car car;
+
+    public CarModifications(Car car) {
+        this.car = car;
+    }
+}
+
+class Spoiler extends CarModifications {
+    public Spoiler(Car car) {
+        super(car);
+    }
+
+    public void build() {
+        car.build();
+        addSpoiler();
+    }
+
+    void addSpoiler() {
+        System.out.println("Spoiler built");
+    }
+}
+
+class Ford extends Car {
+    public void build() {
+        System.out.println("Ford built");
+    }
+}
+
+class Audi extends Car {
+    public void build() {
+        System.out.println("Audi built");
+    }
+}
+
+public class Code {
+    public static void main(String[] args) {
+        Car audi = new Audi();
+        Car audiWithSpoiler = new Spoiler(audi);
+        audiWithSpoiler.build();
+    }
+}
+```
+
+
+## Фабричный метод (factory method, порождающий)
 
