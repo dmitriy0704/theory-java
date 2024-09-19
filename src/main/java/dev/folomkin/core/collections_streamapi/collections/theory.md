@@ -66,7 +66,7 @@ Enumeration для работы с элементами этих классов.
 
 ## Iterator
 
-Интерфейс Iterator<E> используется для последовательного доступа к элементам
+Интерфейс Iterator\<E> используется для последовательного доступа к элементам
 коллекции. К этому типу относится объект, возвращаемый методом iterator(). Такой
 объект позволяет осуществлять навигацию по содержимому коллекции
 последовательно, элемент за элементом. Позиции итератора условно
@@ -78,20 +78,20 @@ N элементов, существует N+1 позиций итератора
 - **boolean hasNext()** - проверяет наличие следующего элемента, а в случае его
   отсутствия (завершения коллекции) возвращает false. Итератор при этом остается
   неизменным;;
-- E next() - возвращает ссылку на объект, на который указывает итератор, и
+- **E next()** - возвращает ссылку на объект, на который указывает итератор, и
   передвигает текущий указатель на следующий, предоставляя доступ К следующему
   элементу. Если следующий элемент коллекции отсутствует, то метод next()
   генерирует исключение NoSuchElementException;
-- void remove() - удаляет объект, возвращенный последним вызовом метода next().
-  Если метод next() до вызова remove() не вызывался, то будет сгенерировано
+- **void remove()** - удаляет объект, возвращенный последним вызовом метода
+  next(). Если метод next() до вызова remove() не вызывался, то будет сгенерировано
   исключение IllegalStateException;
-- removeIf(Predicate<? super T> filter) - ...
-- foreach(Consumer<? super T> action) - ...
-- void forEachRemaining(Consumer<? super E> action) - выполняет дейст- вие над
-  каждым оставшимся необработанным элементом коллекции.
+- **removeIf(Predicate\<? super T> filter)** - ...
+- **foreach(Consumer\<? super T> action)** - ...
+- **void forEachRemaining(Consumer\<? super E> action)** - выполняет действие
+  над каждым оставшимся необработанным элементом коллекции.
 
 ```java
-    public static void main(String[] args) {
+public static void main(String[] args) {
     List<Integer> list = new ArrayList<>();
     list.add(1);
     list.add(2);
@@ -114,7 +114,7 @@ N элементов, существует N+1 позиций итератора
 Для доступа к элементам списка может также использоваться специализированный
 интерфейс ListIterator<E>, который позволяет получить доступ
 сразу в необходимую позицию списка вызовом метода listIterator(int index) на
-объекте списка. Интерфейс ListIterator<E> расширяет интерфейс Iterator<E>,
+объекте списка. Интерфейс `ListIterator<E>` расширяет интерфейс Iterator<E>,
 предназначен для обработки списков и их вариаций. Наличие методов
 E previous(), int previousIndex() и boolean hasPrevious() обеспечивает обратную
 навигацию по списку. Метод int nextIndex() возвращает номер следующего
@@ -144,18 +144,14 @@ HAS-A:
 ```java
 public class OrderType implements Iterable<String> {
     private int orderId;
-    private List<String> currencyNames = new ArrayList<>();/* SEK, DKK, NOK, CZK,
-    
-    GBP, EUR, PLN */
-
+    private List<String> currencyNames = new ArrayList<>();
+    /* SEK, DKK, NOK, CZK,  GBP, EUR, PLN */
     public OrderType(int orderId) {
         this.orderId = orderId;
     }
-
     public List<String> getCurrencyNames() {
         return List.copyOf(currencyNames);
     }
-
     // delegated method
     public boolean add(String e) {
         return currencyNames.add(e);

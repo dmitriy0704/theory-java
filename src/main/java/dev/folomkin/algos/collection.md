@@ -132,17 +132,6 @@ public class ExampleStart {
 }
 ```
 
-
-
-
-
-
-
-
-
-
-
-
 # Алгоритмы коллекций
 
 ## Упорядочение, сортировка и поиск
@@ -260,6 +249,7 @@ public class ExampleStart {
     }
 }
 ```
+
 ### Поиск - Arrays.binarySearch
 
 Массив должен быть отсортирован до применения поиска.
@@ -325,6 +315,7 @@ public class Code {
 
 - public static int[] copyOfRange(int[] original, int from, int to) - копирует
   часть массива от from до to, заполняя нулями если to превосходит длину.
+
 ```java
 public class Code {
     public static void main(String[] args) {
