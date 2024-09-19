@@ -1,6 +1,4 @@
-# ___Коллекции___
-
-[StreamAPI](../../sream_api/theory.md)
+# Коллекции
 
 ## Введение
 
@@ -61,12 +59,12 @@ Enumeration для работы с элементами этих классов.
 **Иерархия колллекций:**
 ![collection.jpg](/img/collection/collection.jpg)
 
-## ___Iterable___
+## Iterable
 
 Объявляет один абстрактный метод _iterator()_ для извлечения объекта,
 реализующего интерфейс Iterator.
 
-## ___Iterator___
+## Iterator
 
 Интерфейс Iterator<E> используется для последовательного доступа к элементам
 коллекции. К этому типу относится объект, возвращаемый методом iterator(). Такой
@@ -75,7 +73,7 @@ Enumeration для работы с элементами этих классов.
 располагаются в коллекции между элементами. В коллекции, состоящей из
 N элементов, существует N+1 позиций итератора.
 
-**Основные методы:**
+**_Основные методы:_**
 
 - **boolean hasNext()** - проверяет наличие следующего элемента, а в случае его
   отсутствия (завершения коллекции) возвращает false. Итератор при этом остается
@@ -183,14 +181,14 @@ public class OrderType extends ArrayList<String> {
 }
 ```
 
-## ___Интерфейс Collection___
+## Интерфейс Collection
 
 Интерфейс Collection<E>, который принимает в качестве параметра дженерик типа
 E (читается как «коллекция элементов типа E), является корневым интерфейсом
 фреймворка «Коллекции». Он определяет общее поведение для всех классов,
 например, устанавливает, как добавить или удалить элемент.
 
-### Основные подинтерфейсы:
+**_Основные подинтерфейсы:_**
 
 - **List\<E>** - список, моделирует массив изменяемого размера, для которого
   разрешается доступ по индексу. Может содержать повторяющиеся элементы. Часто
@@ -205,7 +203,7 @@ E (читается как «коллекция элементов типа E), 
   Подинтерфейс SortedSet<E> моделирует отсортированное упорядоченное множество
   элементов, реализованное TreeSet.
 
-### Основные методы Collection:
+**_Основные методы Collection:_**
 
 - **boolean add(E element)** - добавляет и возвращает true, если данная
   коллекция содержит заданный элемент и false, если такой элемент уже есть
@@ -220,7 +218,7 @@ E (читается как «коллекция элементов типа E), 
 - **default boolean removeIf(Predicate<? super E> filter)** — удаляет все эле-
   менты коллекции в зависимости от условия.
 
-### Методы работы с другой коллекцией:
+**_Методы работы с другой коллекцией:_**
 
 - **boolean addAll(Collection<? extends E> c)** - метод добавляет все элементы
   указанной коллекции в конец коллекции Collection типа E или ее подтипам, c -
@@ -233,19 +231,19 @@ E (читается как «коллекция элементов типа E), 
 - **boolean retainsAll(Collection<?> c)** - оставляет только те элементы,
   которые содержатся в указанной коллекции **с**.
 
-### Методы сравнения:
+**_Методы сравнения:_**
 
 - **boolean equals(Object o)**
 - **int hashCode()**
 
-### Методы работы с массивами:*
+**_Методы работы с массивами:_**
 
 - **Object[] toArrays()** - копирует все элементы коллекции в массив, возвращает
   массив типа Object[];
 - **<T>T[] toArray(T[] a)** - возвращает массив, содержащий все элементы данной
   коллекции заданного типа T; тип возвращаемого массива
 
-***Методы для Stream API:***
+**_Методы для Stream API:_**
 
 - **default Stream <E> stream()** - преобразует коллекцию в stream объектов;
 - **default Stream<E> parallelStream()** — преобразует коллекцию в параллельный
@@ -258,3 +256,49 @@ E (читается как «коллекция элементов типа E), 
 При работе с элементами коллекции применяются интерфейсы: Iterator<E>,
 ListIterator<E>, Map.Entry<K, V> — для перебора коллекции и доступа к объектам
 коллекции.
+
+## Алгоритмы класса Collection
+
+Класс java.util.Collections содержит большое количество статических методов,
+предназначенных для манипулирования коллекциями.
+
+- <T> void copy(List<? super T> dest, List<? extends T> src) — копирует все элементы из одного списка в другой;
+- boolean disjoint(Collection<?> c1, Collection<?> c2) — возвращает true, если
+  коллекции не содержат одинаковых элементов;
+- <T> List <T> emptyList(), <K, V> Map <K, V> emptyMap(), <T> Set <T>emptySet() — возвращают пустой список, карту отображения и множество со-ответственно;
+- <T> void fill(List<? super T> list, T obj) — заполняет список заданным элементом;
+- int frequency(Collection<?> c, Object o) — возвращает количество вхождений в
+  коллекцию заданного элемента;
+- <T> boolean replaceAll(List<T> list, T oldVal, T newVal) — заменяет все заданные элементы новыми;
+- void reverse(List<?> list) — «переворачивает» список;
+- void rotate(List<?> list, int distance) — сдвигает список циклически на
+  заданное число элементов;
+- void shuffle(List<?> list) — перетасовывает элементы списка;
+- singleton(T o), singletonList(T o), singletonMap(K key, V value) — создают
+  множество, список и карту отображения, позволяющие добавлять только один
+  элемент;
+- <T extends Comparable<? super T>> void sort(List<T> list),
+- <T> void sort(List<T> list, Comparator<? super T> c) — сортировка списка естественным порядком и с использованием Comparable или Comparator со-ответственно;
+- void swap(List<?> list, int i, int j) — меняет местами элементы списка,
+  стоящие на заданных позициях;
+- <T> List<T> unmodifiableList(List<? extends T> list) — возвращает ссылку насписок с запрещением его модификации. Аналогичные методы есть для всех коллекций.
+
+```java
+public static void main(String[] args) {
+    ArrayList<Integer> list = new ArrayList();
+    Collections.addAll(list, 1, 2, 3, 4, 5);
+    Collections.shuffle(list);
+    System.out.println(list);
+    Collections.sort(list);
+    System.out.println(list);
+    Collections.reverse(list);
+    System.out.println(list);
+    Collections.rotate(list, 3);
+    System.out.println(list);
+    System.out.println("min: " + Collections.min(list));
+    System.out.println("max: " + Collections.max(list));
+    List<Integer> singletonList = Collections.singletonList(777);
+    System.out.println(singletonList);
+//singletonList.add(21); // runtime error
+}
+```
