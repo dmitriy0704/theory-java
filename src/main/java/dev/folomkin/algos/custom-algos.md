@@ -207,3 +207,39 @@ public class ExampleCode {
         .forEach(o -> sb.append((char)o));
 }
 ```
+
+
+
+# Многопоточность
+
+## Посчитать сумму в потоке
+
+```java
+class ActionCallable implements Callable<Integer> {
+    private List<Integer> integers;
+    public ActionCallable(List<Integer> integers) {
+        this.integers = integers;
+    }
+    @Override
+    public Integer call() throws Exception {
+        int sum = 0;
+        for (Integer integer : integers) {
+            sum += integer;
+        }
+        return sum;
+    }
+}
+
+
+public class Code {
+    public static void main(String[] args) {
+        ActionCallable actionCallable = new ActionCallable(List.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10));
+        try {
+            int res = actionCallable.call();
+            System.out.println(res);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+```

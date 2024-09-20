@@ -487,7 +487,7 @@ public static void main(String[] args) {
 }
 ```
 
-- **reducing(T identity, BinaryOperator<T> op)** - коллектор, осуществляющий
+- **reducing(T identity, BinaryOperator\<T> op)** - коллектор, осуществляющий
   редукцию (сведение) элементов на основании заданного бинарного оператора;
 
 ```java
@@ -500,8 +500,8 @@ public static void main(String[] args) {
 }
 ```
 
-- **reducing(U identity, Function<? super T,? extends U> mapper,
-  BinaryOperator<U> op)** - аналогичное предыдущему действие. В примере ниже
+- **reducing(U identity, Function\<? super T,? extends U> mapper,
+  BinaryOperator\<U> op)** - аналогичное предыдущему действие. В примере ниже
   производится умножение всех длин строк, но без предварительного преобразования
   stream к другому типу;
 
@@ -514,7 +514,7 @@ public static void main(String[] args) {
 }
 ```
 
-- **groupingBy(Function<? super T, ? extends K> classifier)** - коллектор
+- **groupingBy(Function\<? super T, ? extends K> classifier)** - коллектор
   группировки элементов потока;
 
 ```java
@@ -527,15 +527,31 @@ public static void main(String[] args) {
 }
 ```
 
-- **partitioningBy(Predicate<? super T> predicate)** — коллектор разбиения
+- **partitioningBy(Predicate\<? super T> predicate)** - коллектор разбиения
   элементов потока;
 
 ```java
-  public static void main(String[] args) {
+public static void main(String[] args) {
     List<String> strings = List.of("Java Python Go JavaScript PH".split("\\s+"));
     Map<Boolean, List<String>> boolLength = strings.stream()
             .collect(Collectors.partitioningBy(s -> s.length() < 3));
     System.out.println(boolLength);
     // -> {false=[Java, Python, JavaScript], true=[Go, PH]}
+}
+```
+
+
+# Задачи
+
+## Посчитать сумму 
+
+```java
+public static void main(String[] args) {
+    int sum = list.stream().mapToInt(i -> i).sum();
+    int sum2 = list.stream().reduce(0, (x, y) -> x + y);
+    int sum3 = list.stream().reduce(0, Integer::sum);
+    System.out.println(sum);
+    System.out.println(sum2);
+    System.out.println(sum3);
 }
 ```
