@@ -216,13 +216,109 @@ public class Code {
 Теперь метод t.getState() вероятнее всего в консоль выведет "RUNNABLE".
 Почему вероятнее всего? Дело в том, что когда наш элемент управления достигнет
 t.getState(), мы не всегда можем быть уверены, что он будет находиться в
-состоянии RUNNABLE. Это связано с тем, что в некоторых случаях элемент может
-быть немедленно запланирован планировщиком потоков (Thread-Scheduler) и
+состоянии **_RUNNABLE_**. Это связано с тем, что в некоторых случаях элемент
+может
+быть немедленно запланирован планировщиком потоков (**_Thread-Scheduler_**) и
 завершить своё выполнение. Именно в таких ситуациях возможны другие результаты.
 
 #### BLOCKED
 
-Поток переходит в состояние BLOCKED, когда ожидает блокировки монитора(monitor 
+Поток переходит в состояние BLOCKED, когда ожидает блокировки монитора(monitor
 lock) и пытается получить доступ к разделу кода, который заблокирован каким-либо
 другим потоком.
 
+```java
+class State implements Runnable {
+    @Override
+    public void run() {
+        commonResource();
+    }
+
+    public static synchronized void commonResource() {
+        while (true) {
+        }
+    }
+}
+
+public class Code {
+    public static void main(String[] args) throws InterruptedException {
+        Thread t1 = new Thread(new State());
+        Thread t2 = new Thread(new State());
+        t1.start();
+        t2.start();
+        Thread.sleep(1000);
+        System.out.println(t2.getState()); // -> BLOCKED
+        System.exit(0);
+    }
+}
+```
+
+_**Разбор кода:**_
+
+1. Мы создали два разных потока – t1 и t2
+2. t1 запускается и вводит синхронизированный метод commonResource(); это
+   означает, что только один поток может получить к нему доступ; все остальные
+   последующие потоки, которые попытаются получить доступ к этому методу, будут
+   заблокированы от дальнейшего выполнения до тех пор, пока текущий не завершит
+   обработку.
+3. Когда t1 входит в этот метод, он сохраняется в бесконечном цикле while; Это
+   сделано для имитации интенсивной обработки, чтобы все остальные потоки не
+   могли войти в этот метод.
+4. Теперь, когда мы запускаем t2, он пытается ввести метод commonResource(), к
+   которому уже обращается t1, таким образом, t2 будет сохранен в состоянии
+   BLOCKED.
+5. Вызовем t2.getState() и получим результат "BLOCKED"
+
+#### WAITING
+
+Поток находится в состоянии WAITING, когда он ожидает, пока какой-либо другой
+поток выполнит определенное действие. Согласно JavaDocs, любой поток может войти
+в это состояние, вызвав любой из этих трех методов:
+
+- object.wait()
+- thread.join() - в потоке1 вызывается поток2.join() и это переводит поток1 в
+  состояние ожидания;
+- LockSupport.park()
+
+```java
+public class Code implements Runnable {
+    public static Thread t1;
+
+    public static void main(String[] args) throws InterruptedException {
+        t1 = new Thread(new Code());
+        t1.start();
+    }
+
+    @Override
+    public void run() {
+        Thread t2 = new Thread(new State());
+        t2.start();
+        try {
+            t2.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+
+class State implements Runnable {
+    @Override
+    public void run() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println(Code.t1.getState()); // -> WAITING
+    }
+}
+```
+
+Разбор кода:
+
+1. Мы создали и запустили t1
+2. t1 создает t2 и запускает его
+3. Пока продолжается работа t2, мы вызываем t2.join(), это переводит t1 в
+   состояние ожидания(WAITING), пока t2 не завершит выполнение.
+4. Поскольку t1 ожидает завершения t2, мы вызываем t1.getState() из t2 и
+   получаем результат "WAITING"
