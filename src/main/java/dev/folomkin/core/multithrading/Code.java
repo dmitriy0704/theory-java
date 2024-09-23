@@ -1,33 +1,19 @@
 package dev.folomkin.core.multithrading;
 
-public class Code implements Runnable {
-    public static Thread t1;
-
+public class Code {
     public static void main(String[] args) throws InterruptedException {
-        t1 = new Thread(new Code());
-        t1.start();
-    }
-
-    @Override
-    public void run() {
-        Thread t2 = new Thread(new State());
-        t2.start();
+        Thread t = Thread.currentThread();
+        System.out.println("Текущий поток: " + t);
+        // Изменяем имя потока:
+        t.setName("My Thread");
+        System.out.println("Имя потока после изменения : " + t);
         try {
-            t2.join();
+            for (int i = 5; i > 0; i--) {
+                System.out.println(i);
+                Thread.sleep(1000);
+            }
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            System.out.println("Главный поток прерван");
         }
-    }
-}
-
-class State implements Runnable {
-    @Override
-    public void run() {
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        System.out.println(Code.t1.getState());
     }
 }
