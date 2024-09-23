@@ -1,6 +1,6 @@
-# Шаблоны проектирования
+# ШАБЛОНЫ ПРОЕКТИРОВАНИЯ
 
-## Отношения классов:
+## ОТНОШЕНИЯ КЛАССОВ
 
 ![i1.png](/img/design_pattern/class_relations/i1.png)
 
@@ -23,15 +23,15 @@
 Обобщение (generalization) — отношение наследования или реализации интерфейса.
 Со стороны стрелки находится суперкласс или интерфейс.
 
-## Виды паттернов:
+## ВИДЫ ПАТТЕРНОВ:
 
 - Behavioral (B) - поведенческие;
 - Creational (C) - порождающие;
 - Structural (S) - структурные;
 
-## Список шаблонов:
+## СПИСОК ШАБЛОНОВ:
 
-### Поведенческие:
+### ПОВОДЕНЧЕСКИЕ:
 
 - **_Хранитель (memento)_**
   ![01_memento.png](/img/design_pattern/design_patterns/01_memento.png)
@@ -56,7 +56,7 @@
 - Посредник (mediator)
   ![11_mediator.png](/img/design_pattern/design_patterns/11_mediator.png)
 
-### Порождающие:
+### ПОРОЖДАЮШИЕ:
 
 - Строитель (builder)
   ![17_builder.png](/img/design_pattern/design_patterns/17_builder.png)
@@ -69,7 +69,7 @@
 - Одиночка (singleton)
   ![23_singleton.png](/img/design_pattern/design_patterns/23_singleton.png)
 
-Структурные:
+### СТРУКТУРНЫЕ:
 
 - Адаптер (adapter)
   ![12_adapter.png](/img/design_pattern/design_patterns/12_adapter.png)
@@ -86,34 +86,7 @@
 - Прокси (proxy)
   ![13_proxy.png](/img/design_pattern/design_patterns/13_proxy.png)
 
-## Шаблоны подробно
+## ШАБЛОНЫ ПОДРОБНО
 
-### Одиночка (Singleton, порождающий)
-
-В этом шаблоне можно создать только один экземпляр класса. Даже если создано
-несколько ссылочных переменных, все они будут указывать на один и тот же объект.
-
-```java
-class Probe {
-    // Instance variables
-    // Important methods
-
-    // Конструктор приватный, чтобы не создавалось несколько объектов
-    private Probe() {
-        // Initialize variables here
-    }
-
-    //Каждый раз, когда вызывается этот метод, он возвращает один и тот же
-    // объект. Таким образом, шаблон способен блокировать создание нескольких
-    // объектов.
-    private static Probe getInstance(Probe probe) {
-        if (probe == null)
-            probe = new Probe();
-        return probe;
-    }
-}
-```
-
-### - Наблюдатель (observer, поведенческий)
-
+### ШАБЛОНЫ И АНТИШАБЛОНЫ
 
