@@ -60,6 +60,30 @@ public class Code {
 
 ## МЕТОДЫ:
 
+[//]: # ( 
+ПРОМЕЖУТОЧНЫЕ:
+- filter
+- map
+- flatMap
+- peek
+- sorted и sort
+- limit
+- skip
+- distinct
+ТЕРМИНАЛЬНЫЕ:
+- void forEach
+- Optional<T> findFirst
+- Optional<T> findAny
+- long count
+- boolean allMatch
+- boolean anyMatch
+- boolean noneMatch
+- Optional<T> reduce
+-  <R, A> R collect
+- Optional<T> min
+- Optional<T> max
+)
+
 ### ПРОМЕЖУТОЧНЫЕ:
 
 - **filter(Predicate<? super T> predicate)** - выбор элементов из потока на
@@ -203,7 +227,7 @@ public static void main(String[] args) {
 }
 ```
 
-### Терминальные:
+### ТЕРМИНАЛЬНЫЕ:
 
 Сводят поток к результату. Результатом может быть новая коллекция, объект
 некоторого класса, число. Промежуточные операции обязательно должны завершаться
@@ -538,10 +562,9 @@ public static void main(String[] args) {
 }
 ```
 
-
 # Задачи
 
-## Посчитать сумму 
+## Посчитать сумму
 
 ```java
 public static void main(String[] args) {
