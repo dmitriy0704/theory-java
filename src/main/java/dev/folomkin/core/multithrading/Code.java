@@ -1,19 +1,53 @@
 package dev.folomkin.core.multithrading;
 
-public class Code {
-    public static void main(String[] args) throws InterruptedException {
-        Thread t = Thread.currentThread();
-        System.out.println("Текущий поток: " + t);
-        // Изменяем имя потока:
-        t.setName("My Thread");
-        System.out.println("Имя потока после изменения : " + t);
+class CallMe {
+    synchronized void call(String msg) {
+        System.out.print("[ ");
+        System.out.print(msg);
         try {
-            for (int i = 5; i > 0; i--) {
-                System.out.println(i);
-                Thread.sleep(1000);
-            }
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
-            System.out.println("Главный поток прерван");
+            System.out.println("Прерван");
+        }
+        System.out.print(" ]");
+    }
+}
+
+class Caller implements Runnable {
+    String msg;
+    CallMe target;
+    Thread t;
+
+    public Caller(CallMe targ, String s) {
+        target = targ;
+        msg = s;
+        t = new Thread(this);
+    }
+
+    public void run() {
+        target.call(msg);
+    }
+}
+
+public class Code {
+    public static void main(String[] args) {
+        CallMe target = new CallMe();
+        Caller ob1 = new Caller(target, "Hello");
+        Caller ob2 = new Caller(target, "Synchronized");
+        Caller ob3 = new Caller(target, "World");
+
+        // Запускаем потоки
+        ob1.t.start();
+        ob2.t.start();
+        ob3.t.start();
+
+        // Ожидаем завершения потоков
+        try {
+            ob1.t.join();
+            ob2.t.join();
+            ob3.t.join();
+        } catch (InterruptedException e) {
+            System.out.println("Поток прерван");
         }
     }
 }

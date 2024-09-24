@@ -418,13 +418,13 @@ public class Code {
 [Наверх](#titlelist)
 
 Главный поток запускается при запуске программы. Из него порождаются остальные
-потоки. Часто должен завершаться последним. 
+потоки. Часто должен завершаться последним.
 
 Управлять главным потоком можно с помощью объекта Thread и метода
 currentThread(): `static Thread currentThread ( )`
 
 ```java
-    public static void main(String[] args) throws InterruptedException {
+public static void main(String[] args) throws InterruptedException {
     Thread t = Thread.currentThread();
     System.out.println("Текущий поток: " + t);
     // Изменяем имя потока:
@@ -438,6 +438,396 @@ currentThread(): `static Thread currentThread ( )`
     } catch (InterruptedException e) {
         System.out.println("Главный поток прерван");
     }
+    // ->
+    // Текущий пото к : Thread [ mai n , 5 , ma i п ]
+    // После изменения имени : Thread [ My Thread , 5 , maiп ]
+    // 5
+    // 4
+    // 3
+    // 2
+    // 1   
+
 }
 ```
+
+В программе ссылка на текущий (в данном случае главный) поток получается вызовом
+currentThread() и сохраняется в локальной переменной t. Затем программа
+отображает информацию о потоке, вызывает setName() для изменения внутреннего
+имени потока и повторно отображает информацию о потоке. Далее выполняется
+обратный отсчет от пяти до единицы с паузой, составляющей одну секунду, между
+выводом строк. Пауза достигается методом sleep(). Аргумент функции sleep()
+задает период задержки в миллисекундах. Обратите внимание на блок try/ catch,
+внутрь которого помещен цикл. Метод sleep() в Thread может сгенерировать
+исключение InterruptedException в случае, если какой-то другой поток пожелает
+прервать этот спящий поток. В данном примере просто вводится сообщение, если
+поток прерывается, но в реальной программе пришлось бы поступать по-другому.
+
+По порядку отображается имя потока, его приоритет и имя его группы. По умолчанию
+именем главного потока является main. Его приоритет равен 5 - стандартному
+значению, и main также будет именем группы потоков, к которой принадлежит
+текущий поток. Группа потоков представляет собой структуру данных, которая
+управляет состоянием набора потоков в целом. После изменения имени потока,
+переменная t снова выводится. На этот раз отображается новое имя потока.
+
+## <a id="title6">СОЗДАНИЕ ПОТОКА</a>
+
+[Наверх](#titlelist)
+
+Поток создается путем создания экземпляр объекта типа Thread. В языке Java
+предусмотрены два способа:
+
+- можно реализовать интерфейс Runnable;
+- можно расширить класс Thread.
+
+### Реализация интерфейса Runnable
+
+Самый простой способ создать поток - создание класса, реализующего интерфейс
+Runnable, который абстрагирует единицу исполняемого кода. Можно создать поток
+для любого объекта, реализующего Runnable. Для реализации Runnable в классе
+понадобится реализовать только один метод с именем run(): `public void run()`
+
+Внутрь метода run() помещается код, который основывает новый поток. Метод run()
+может вызывать другие методы, использовать другие классы и объявлять переменные
+в точности, как это делает главный поток. Единственное отличие заключается в
+том, что метод run() устанавливает точку входа для другого параллельного потока
+выполнения в программе. Этот поток завершится, когда управление возвратится из
+run().
+
+После создания класса, реализующего интерфейс Runnable, внутри него создается
+объект типа Thread. В классе Thread определено несколько конструкторов:
+
+`Thread(Runnable threadOb, String threadName)`
+
+В приведенном конструкторе threadOb является экземпляром класса, реализующего
+интерфейс Runnable. Он определяет, где начнется выполнение потока. Имя нового
+потока определяется параметром threadName.
+
+Для запуска нового потока вызывается метод start().
+
+```java
+class NewThread implements Runnable { //-> Создание второго потока
+    Thread t;
+
+    NewThread() {
+        t = new Thread(this, "Demo Thread");
+        // -> Первый параметр this для того что бы новый поток вызвал метод
+        // run() для данного объекта
+        System.out.println("Дочерний поток: " + t);
+    }
+
+    public void run() { //-> Точка входа для второго потока
+        try {
+            for (int i = 5; i > 0; i--) {
+                System.out.println("Дочерний поток: " + i);
+                Thread.sleep(500);
+            }
+        } catch (InterruptedException exception) {
+            System.out.println("Дочерний поток прерван");
+        }
+        System.out.println("Завершение дочернего потока");
+    }
+}
+
+public class Code {
+    public static void main(String[] args) throws InterruptedException {
+        NewThread nt = new NewThread(); // Создание нового потока
+        nt.t.start();                   // Запуск нового потока
+        try {
+            for (int i = 5; i > 0; i--) {
+                System.out.println("Главный поток: " + i);
+                Thread.sleep(1000);
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Главный поток прерван");
+        }
+        System.out.println("Завершение главного потока");
+    }
+}
+```
+
+### Расширение класса Thread
+
+```java
+class NewThread extends Thread { //-> Создание второго потока
+    NewThread() {
+        super("Demo Thread");
+        // -> Конструктор расширяющего класса вызывает конструктор класса Thread
+        // и передает имя ноаого потока
+        System.out.println("Дочерний поток: " + this);
+    }
+
+    public void run() { //-> Точка входа для второго потока
+        try {
+            for (int i = 5; i > 0; i--) {
+                System.out.println("Дочерний поток: " + i);
+                Thread.sleep(500);
+            }
+        } catch (InterruptedException exception) {
+            System.out.println("Дочерний поток прерван");
+        }
+        System.out.println("Завершение дочернего потока");
+    }
+}
+
+public class Code {
+    public static void main(String[] args) throws InterruptedException {
+        NewThread nt = new NewThread(); // Создание нового потока
+        nt.start();                   // Запуск нового потока
+        try {
+            for (int i = 5; i > 0; i--) {
+                System.out.println("Главный поток: " + i);
+                Thread.sleep(1000);
+            }
+        } catch (InterruptedException e) {
+            System.out.println("Главный поток прерван");
+        }
+        System.out.println("Завершение главного потока");
+    }
+}
+```
+
+## <a id="title7">СОЗДАНИЕ МНОЖЕСТВА ПОТОКОВ</a>
+
+[Наверх](#titlelist)
+
+```java
+package dev.folomkin.core.multithrading;
+
+class NewThread implements Runnable {
+    String name; // Имя потока
+    Thread thread;
+
+    NewThread(String threadName) {
+        name = threadName;
+        t = new Thread(this, name);
+        System.out.println("Новый поток: " + t);
+    }
+
+    public void run() { // -> Точка входа для потока
+        try {
+            for (int i = 5; i > 0; i--) {
+                System.out.println(name + " : " + i);
+                Thread.sleep(1000);
+            }
+        } catch (InterruptedException e) {
+            System.out.println(name + " прерван");
+        }
+        System.out.println(name + " завершен");
+    }
+}
+
+public class Code {
+    public static void main(String[] args) {
+        NewThread nt1 = new NewThread("One");
+        NewThread nt2 = new NewThread("Two");
+        NewThread nt3 = new NewThread("Three");
+
+        nt1.t.start();
+        nt2.t.start();
+        nt3.t.start();
+
+        // Ожидаем окончания остальных потоков
+        try {
+            Thread.sleep(10000);
+            // -> Засыпание на 10с гарантирует, 
+            // что главный поток завершится последним 
+        } catch (Exception e) {
+            System.out.println("Главный поток прерван");
+        }
+        System.out.println("Main thread exiting");
+    }
+}
+
+```
+
+## <a id="title8">ИСПОЛЬЗОВАНИЕ МЕТОДОВ isAlive() И join()</a>
+
+[Наверх](#titlelist)
+
+Способы определения завершен ли поток:
+
+- вызвать на потоке метод **final boolean isAlive()** из Thread. Метод
+  возвращает
+  true, если поток на котором он был вызван, еще запущен.
+- **final void join() throws InterruptedException** - Этот метод ожидает
+  завершения потока, на котором он вызывается. Его имя происходит от
+  концепции вызывающего потока, ожидающего до тех пор, пока указанный поток не
+  присоединится к нему. Дополнительные формы метода join() позволяют указывать
+  максимальное время ожидания завершения указанного потока.
+
+```java
+class NewThread implements Runnable {
+    String name; // Имя потока
+    Thread t;
+
+    NewThread(String threadName) {
+        name = threadName;
+        t = new Thread(this, name);
+        System.out.println("Новый поток: " + t);
+    }
+
+    public void run() { // -> Точка входа для потока
+        try {
+            for (int i = 5; i > 0; i--) {
+                System.out.println(name + " : " + i);
+                Thread.sleep(1000);
+            }
+        } catch (InterruptedException e) {
+            System.out.println(name + " прерван");
+        }
+        System.out.println(name + " завершен");
+    }
+}
+
+public class Code {
+    public static void main(String[] args) {
+        NewThread nt1 = new NewThread("One");
+        NewThread nt2 = new NewThread("Two");
+        NewThread nt3 = new NewThread("Three");
+
+        // Запустить потоки
+        nt1.t.start();
+        nt2.t.start();
+        nt3.t.start();
+
+        System.out.println("Поток One : " +
+                (nt1.t.isAlive() ? "работает" : "не работает "));
+        System.out.println("Поток Two : " +
+                (nt1.t.isAlive() ? "работает" : "не работает "));
+        System.out.println("Поток Three : " +
+                (nt1.t.isAlive() ? "работает" : "не работает "));
+
+        // Ожидаем окончания остальных потоков
+        try {
+            System.out.println("Ожидаем завершения потоков");
+            nt1.t.join();
+            nt2.t.join();
+            nt3.t.join();
+        } catch (Exception e) {
+            System.out.println("Главный поток прерван");
+        }
+
+        System.out.println("Поток One : " +
+                (nt1.t.isAlive() ? "работает" : "не работает "));
+        System.out.println("Поток Two : " +
+                (nt1.t.isAlive() ? "работает" : "не работает "));
+        System.out.println("Поток Three : " +
+                (nt1.t.isAlive() ? "работает" : "не работает "));
+
+        System.out.println("Main thread exiting");
+    }
+}
+
+```
+
+## <a id="title9">ПРИОРИТЕТЫ ПОТОКОВ</a>
+
+[Наверх](#titlelist)
+
+Приоритеты потоков используются планировщиком потоков для принятия решения о
+том, когда следует разрешить выполнение каждого потока. Теоретически в течение
+заданного периода времени потоки с более высоким приоритетом получают больше
+времени ЦП, чем потоки с более низким приоритетом. На практике количество
+времени ЦП, которое получает поток, часто зависит от нескольких факторов помимо
+ero приоритета. (Например, способ реализации многозадачности в ОС может повлиять
+на относительную доступность времени ЦП.) Поток с более высоким приоритетом
+может также вытеснять поток с более низким приоритетом. Скажем, когда
+выполняется поток с более низким приоритетом и возобновляется выполнение потока
+с более высоким приоритетом (например, происходит его выход из режима сна или
+ожидания ввода-вывода), он вытесняет поток с более низким приоритетом.
+
+Для установки приоритета потока применяется метод setPriority(), который
+является членом класса Thread: `final void setPriority(int level)`
+
+## <a id="title10">СИНХРОНИЗАЦИЯ</a>
+
+[Наверх](#titlelist)
+
+Доступ к ресурсу только одного потока в один момент времени.
+
+Монитор - объект который обеспечивает блокировку используемого ресурса в
+заданный
+момент времени. В заданный момент времени владеть монитором может только
+один поток. Когда поток получает блокировку, то говорят, что он _входит_ в
+монитор. Все другие потоки, пытающиеся войти в заблокированный монитор,
+будут приостановлены до тех пор, пока первый поток не выйдет из монитора.
+Говорят, что эти другие потоки ожидают монитор. Поток, владеющий монитором,
+может при желании повторно войти в тот же самый монитор.
+
+Синхронизировать код можно одним из двух способов, предполагающих
+использование ключевого слова synchronized.
+
+### Использование синхронизированных методов
+
+Синхронизацию в Java обеспечить легко, потому что все объекты имеют собственные
+связанные с ними неявные мониторы. Чтобы войти в монитор объекта, понадобится
+лишь вызвать метод, модифицированный с помощью ключевого слова synchronized.
+Пока поток находится внутри синхронизированного метода, все другие потоки,
+пытающиеся вызвать его (или любой другой синхронизированный метод) на том же
+экземпляре, должны ожидать. Чтобы выйти из монитора и передать управление
+объектом следующему ожидающему потоку, владелец монитора просто возвращает
+управление из синхронизированного метода.
+
+```java
+class CallMe {
+    void call(String msg) {
+        System.out.print("[ ");
+        System.out.print(msg);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            System.out.println("Прерван");
+        }
+        System.out.print(" ]");
+    } // -> [ Hello[ Synchronized[ World ] ] ]
+}
+
+class Caller implements Runnable {
+    String msg;
+    CallMe target;
+    Thread t;
+
+    public Caller(CallMe targ, String s) {
+        target = targ;
+        msg = s;
+        t = new Thread(this);
+    }
+
+    public void run() {
+        target.call(msg);
+    }
+}
+
+public class Code {
+    public static void main(String[] args) {
+        CallMe target = new CallMe();
+        Caller ob1 = new Caller(target, "Hello");
+        Caller ob2 = new Caller(target, "Synchronized");
+        Caller ob3 = new Caller(target, "World");
+
+        // Запускаем потоки
+        ob1.t.start();
+        ob2.t.start();
+        ob3.t.start();
+
+        // Ожидаем завершения потоков
+        try {
+            ob1.t.join();
+            ob2.t.join();
+            ob3.t.join();
+        } catch (InterruptedException e){
+            System.out.println("Поток прерван");
+        }
+    }
+}
+
+```
+
+Три потока соперничают за выполнение действия над объектом. Это состояние гонки.
+Для исправления этой ситуации методу call() добавляется ключевое слово **synchronized**.
+Ключевое слово synchronized н е позволяет остальным потокам входить
+в метод call(), пока он используется другим потоком.
+Тогда вывод будет:
+
+      // -> [ Hello ][ World ][ Synchronized ]
 
