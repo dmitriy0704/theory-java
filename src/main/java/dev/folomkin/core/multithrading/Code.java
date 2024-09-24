@@ -1,7 +1,7 @@
 package dev.folomkin.core.multithrading;
 
 class CallMe {
-    synchronized void call(String msg) {
+    void call(String msg) {
         System.out.print("[ ");
         System.out.print(msg);
         try {
@@ -25,7 +25,9 @@ class Caller implements Runnable {
     }
 
     public void run() {
-        target.call(msg);
+       synchronized (target) {
+           target.call(msg);
+       }
     }
 }
 
