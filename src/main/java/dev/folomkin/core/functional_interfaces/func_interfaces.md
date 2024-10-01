@@ -14,9 +14,11 @@ abstract (правда, при желании его можно указыват
 
 Пример:
 
-    interface MyValue{
-       double getValue();
-    }
+```java
+interface MyValue {
+    double getValue();
+}
+```
 
 В данном случае метод getValue ( ) является неявно абстрактным и единственным
 методом, определенным в MyValue. Таким образом, MyValue функциональный
@@ -73,9 +75,6 @@ public class Code {
 методу getValue(), который возвращает 0.25.
 
 ```java
-package dev.folomkin.core.fp;
-
-
 // Функциональный интерфейс
 interface MyValue {
     double getValue();
@@ -85,7 +84,6 @@ interface MyValue {
 interface MyParamValue {
     double getValue(double value);
 }
-
 
 public class Code {
     public static void main(String[] args) {
@@ -275,7 +273,6 @@ double result = new ActionType(3, 5).action((a, b) -> (a + b) * 4);
 функциональный интерфейс.
 
 ```java
-
 // Использование обобщенного функционального интерфейса;
 
 // Обобщенный функциональный интерфейс с двумя параметрами,
@@ -298,7 +295,6 @@ public class Code {
         if (isFactorD.test(10.0, 2.0))
             System.out.println("2 является делителем 10");
 
-
         // Это лямбда-выражение определяет, является
         // л и одна строка частью другой строки.
         SomeTest<String> isIn = (a, b) -> a.indexOf(b) != -1;
@@ -309,17 +305,15 @@ public class Code {
             System.out.println("Строка 'face' найдена.");
         else
             System.out.println("Строка 'face' не найдена.");
-
     }
 }
 ```
-
 Обобщенный функциональный интерфейс SomeTest в общем виде:
-
-    interface SomeTest <T> {
-        boolean test(T n, T m);
-    }
-
+```java
+interface SomeTest <T> {
+    boolean test(T n, T m);
+}
+```
 Здесь T указывает возвращаемый тип и тип параметра test(). Это означает, что он
 совместим с любым лямбда-выражением, которое принимает два параметра и
 возвращает результат типа boolean.
@@ -329,7 +323,6 @@ public class Code {
 Double, а третье — тип String. Таким образом, один и тот же функциональный
 интерфейс может применяться для ссылки на лямбда-выражения isFactor, isFactorD и
 isIn. Отличается только аргумент типа, передаваемый SomeTest.
-
 
 ## Интерфейс Predicate
 

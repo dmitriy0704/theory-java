@@ -1,4 +1,4 @@
-package dev.folomkin.core.fp;
+package dev.folomkin.core.functional_interfaces;
 
 import java.io.IOException;
 import java.util.Objects;
