@@ -1,38 +1,22 @@
 package dev.folomkin.design_patterns.patterns;
 
 
-class Test {
-    // поля , методы
-    public void addQuest(Quest quest){
-
-// реализация
+class Coffee {
+    public void grindCoffee(){
+        // перемалываем кофе
+    }
+    public void makeCoffee(){
+        // делаем кофе
+    }
+    public void pourIntoCup(){
+        // наливаем в чашку
     }
 }
 
-class Quest {
-    private int idQuest;
-    private int idTest;
-// реализация конструкторов и методов
-}
-
-
-class Course{
-
-    public void makeTest(int id) {
-
-        Test test = new Test(параметры);
-        // реализация
-
-        while(условие) {
-
-            Quest quest = new Quest(параметры);
-
-// реализация
-
-            test.addQuest(quest);
-        }
-    }
-}
+class Americano extends Coffee {}
+class Cappuccino extends Coffee {}
+class CaffeLatte extends Coffee {}
+class Espresso extends Coffee {}
 
 public class Code {
     public static void main(String[] args) {
