@@ -1,22 +1,17 @@
 package dev.folomkin.core.collections_streamapi.sream_api;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 
 public class Code {
     public static void main(String[] args) {
-        List<String> list = List.of("one", "two", "thee");
-        list.stream()
-                .filter(s -> {
-                    System.out.println("filter: " + s);
-                    return s.length() <= 3;
-                })
-                .map(s1 -> {
-                    System.out.println("map: " + s1);
-                    return s1.toUpperCase();
-                })
-                .sorted()
-                .forEach(x -> {
-                    System.out.println("forEach: " + x);
-                });
+
+        Map<String, Set<Worker>> map2 = workers.stream()
+                .collect(
+                        Collectors.groupingBy(
+                                Worker::getPosition, Collectors.toSet()
+                        )
+                );
     }
 }
