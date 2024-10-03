@@ -61,32 +61,46 @@ Enumeration для работы с элементами этих классов.
 
 ## Iterable
 
+Корневой интерфейс, обеспечивает возможность перебирать элементы коллекции.
 Объявляет один абстрактный метод _iterator()_ для извлечения объекта,
 реализующего интерфейс Iterator.
 
-## Iterator
+### Iterator
 
-Интерфейс Iterator\<E> используется для последовательного доступа к элементам
-коллекции. К этому типу относится объект, возвращаемый методом iterator(). Такой
-объект позволяет осуществлять навигацию по содержимому коллекции
+Интерфейс Iterator\<E> используется для перебора элементов коллекции.
+Такой объект позволяет осуществлять навигацию по содержимому коллекции
 последовательно, элемент за элементом. Позиции итератора условно
 располагаются в коллекции между элементами. В коллекции, состоящей из
 N элементов, существует N+1 позиций итератора.
 
 **_Основные методы:_**
 
+- **E next()** - поэволяет получить следуюший элемент коллекции. Если следующий
+  элемент коллекции отсутствует, то метод next() генерирует исключение
+  NoSuchElementException;
 - **boolean hasNext()** - проверяет наличие следующего элемента, а в случае его
   отсутствия (завершения коллекции) возвращает false. Итератор при этом остается
-  неизменным;;
-- **E next()** - возвращает ссылку на объект, на который указывает итератор, и
-  передвигает текущий указатель на следующий, предоставляя доступ К следующему
-  элементу. Если следующий элемент коллекции отсутствует, то метод next()
-  генерирует исключение NoSuchElementException;
-- **void remove()** - удаляет объект, возвращенный последним вызовом метода
-  next(). Если метод next() до вызова remove() не вызывался, то будет сгенерировано
-  исключение IllegalStateException;
-- **removeIf(Predicate\<? super T> filter)** - ...
-- **foreach(Consumer\<? super T> action)** - ...
+  неизменным;
+- **void remove()** - удаляет текущий элемент, возвращенный последним вызовом
+  метода next(). Если метод next() до вызова remove() не вызывался, то будет
+  сгенерировано исключение IllegalStateException;
+
+```java
+public class Code {
+    public static void main(String[] args) {
+        final List<String> names = new ArrayList<>(List.of("Java", "Kotlin", "PHP"));
+        final Iterator<String> iterator = names.iterator();
+        while (iterator.hasNext()) {
+            final String name = iterator.next();
+            if ("Java".equals(name)) {
+                iterator.remove();
+            }
+        }
+        System.out.println(names);// -> [Kotlin, PHP]
+    }
+}
+```
+
 - **void forEachRemaining(Consumer\<? super E> action)** - выполняет действие
   над каждым оставшимся необработанным элементом коллекции.
 
@@ -111,16 +125,22 @@ public static void main(String[] args) {
 }
 ```
 
+### LISTITERATOR
+
 Для доступа к элементам списка может также использоваться специализированный
-интерфейс ListIterator<E>, который позволяет получить доступ
+интерфейс **_ListIterator\<E>_**, который позволяет получить доступ
 сразу в необходимую позицию списка вызовом метода listIterator(int index) на
 объекте списка. Интерфейс `ListIterator<E>` расширяет интерфейс Iterator<E>,
-предназначен для обработки списков и их вариаций. Наличие методов
-E previous(), int previousIndex() и boolean hasPrevious() обеспечивает обратную
-навигацию по списку. Метод int nextIndex() возвращает номер следующего
-итератора. Метод void add(E e) позволяет вставлять элемент в список текущей
-позиции. Вызов метода void set(E e) производит замену текущего
-элемента списка на объект, передаваемый методу в качестве параметра.
+предназначен для обработки списков и их вариаций.
+Методы:
+
+- Наличие методов **E previous()**, **int previousIndex()** и
+  **_boolean hasPrevious()_** обеспечивает обратную навигацию по списку.
+- Метод **_int nextIndex()_** возвращает номер следующего итератора.
+- Метод **_void add(E e)_** позволяет вставлять элемент в список текущей
+  позиции.
+- Вызов метода **_void set(E e)_** производит замену текущего элемента списка
+  на объект, передаваемый методу в качестве параметра.
 
 Внесение изменений в коллекцию методами коллекции после извлечения итератора
 гарантирует генерацию исключения ConcurrentModificationException из пакета
@@ -145,13 +165,16 @@ HAS-A:
 public class OrderType implements Iterable<String> {
     private int orderId;
     private List<String> currencyNames = new ArrayList<>();
+
     /* SEK, DKK, NOK, CZK,  GBP, EUR, PLN */
     public OrderType(int orderId) {
         this.orderId = orderId;
     }
+
     public List<String> getCurrencyNames() {
         return List.copyOf(currencyNames);
     }
+
     // delegated method
     public boolean add(String e) {
         return currencyNames.add(e);
@@ -177,40 +200,120 @@ public class OrderType extends ArrayList<String> {
 }
 ```
 
-## Интерфейс Collection
+## Интерфейс Collection\<E>
 
-Интерфейс Collection<E>, который принимает в качестве параметра дженерик типа
-E (читается как «коллекция элементов типа E), является корневым интерфейсом
+Интерфейс Collection<E> расширяет интерфейс Iterable, который принимает в качестве параметра дженерик типа
+E (читается как коллекция элементов типа E), является корневым интерфейсом
 фреймворка «Коллекции». Он определяет общее поведение для всех классов,
 например, устанавливает, как добавить или удалить элемент.
 
 **_Основные подинтерфейсы:_**
 
-- **List\<E>** - список, моделирует массив изменяемого размера, для которого
-  разрешается доступ по индексу. Может содержать повторяющиеся элементы. Часто
-  используемые реализации: ArrayList, LinkedList, Vector и Stack.
-- **Queue\<E>** - очередь, моделирует очереди, организованные по принципу First
+- **List\<E>** - интерфейс, упорядоченная коллекция, может содержать дубликаты.
+  Часто используемые реализации: ArrayList, LinkedList, Vector и Stack.
+- **Set\<E>** - коллекция, которая не может содержать дубликаты. Часто
+  используемые реализации: HashSet, LinkedHashSet. Подинтерфейс SortedSet<E> -
+  отсортированное упорядоченное множество элементов, реализованное TreeSet.
+- **Queue\<E>** - очередь, используется для хранения элементов, которые
+  обрабатываются в определенном порядке. Организована по принципу First
   In First Out(FIFO) - первым вошел - первым вышел. Элементы добавляются в один
-  конец, извлекаются из другого. Подинтерфейс Deque<E> моделирует очереди,
+  конец, извлекаются из другого. Подинтерфейс Deque\<E> моделирует очереди,
   с котором можно работать с двух концов. Реализации включают PriorityQueue,
   ArrayDeque и LinkedList.
-- **Set\<E>** - множество, моделирует математическое множество. Повторяющиеся
-  элементы не допустимы. Часто используемые реализации: HashSet, LinkedHashSet.
-  Подинтерфейс SortedSet<E> моделирует отсортированное упорядоченное множество
-  элементов, реализованное TreeSet.
+- **Map<K,V>** - не наследуется от Collection, но является неотъемлемой частью
+  JCF. Map хранит элементы в форме пар ключ-значение и не может содержать
+  дубликаты ключей. Примеры реализации Map включают HashMap, TreeMap и
+  LinkedHashMap.
 
 **_Основные методы Collection:_**
 
+_ДОБАВЛЕНИЕ:_
+
 - **boolean add(E element)** - добавляет и возвращает true, если данная
   коллекция содержит заданный элемент и false, если такой элемент уже есть
-  в коллекции;
-- **boolean remove(Object element)** - Удаляет заданный элемент, если он имеется
-  в коллекции;
-- **int size()** - возвращает количество элементов данной коллекции
-- **void clear()** - удаляет все элементы данной коллекции
-- **boolean isEmpty()** - возвращает true, если коллекция не пуста
+  в коллекции. Для List и Queue элементы добавляются в конец списка, для Set
+  порядок не гарантируется, для Map добавление происходит в виде ключ-значение.
+- put(E el) - для Map
+
+```java
+public static void main(String[] args) {
+    List<String> list = new ArrayList<>();
+    list.add("Java");
+
+    Set<String> set = new HashSet<>();
+    set.add("Java");
+
+    Queue<String> queue = new LinkedList<>();
+    queue.add("Java");
+
+    Map<String, String> map = new HashMap<>();
+    map.put("Key", "Java");
+}
+```
+
+_УДАЛЕНИЕ:_
+
+- **boolean remove(Object element)** - удаляет первый найденный элемент, если
+  он имеется в коллекции. Для Map элемент удаляется по ключу.
+
+```java
+public static void main(String[] args) {
+    List<String> list = new ArrayList<>();
+    Set<String> set = new HashSet<>();
+    Queue<String> queue = new LinkedList<>();
+    Map<String, String> map = new HashMap<>();
+    list.remove("Java");
+    set.remove("Java");
+    queue.remove("Java");
+    map.remove("Key");
+}
+```
+
+_ПОИСК ЭЛЕМЕНТОВ:_
+
 - **boolean contains(Object element)** - возвращает true, если коллекция
   содержит заданный элемент;
+- **boolean containsKey/containsValue(Object element)** - для Map
+
+```java
+public class Code {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        Set<String> set = new HashSet<>();
+        Queue<String> queue = new LinkedList<>();
+        Map<String, String> map = new HashMap<>();
+
+        boolean existList = list.contains("Java");
+        boolean existSet = set.contains("Java");
+        boolean existQueue = queue.contains("Java");
+        boolean existMap = map.containsKey("Key");
+    }
+}
+```
+
+_РАЗМЕР КОЛЛЕКЦИИ:_
+
+- **int size()** - возвращает количество элементов данной коллекции
+
+```java
+public class Code {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<>();
+        Set<String> set = new HashSet<>();
+        Queue<String> queue = new LinkedList<>();
+        Map<String, String> map = new HashMap<>();
+
+        int sizeOfList = list.size(); // Получаем размер списка
+        int sizeOfSet = set.size(); // Получаем размер множества
+        int sizeOfMap = map.size(); // Получаем размер map
+    }
+}
+
+
+```
+
+- **void clear()** - удаляет все элементы данной коллекции
+- **boolean isEmpty()** - возвращает true, если коллекция не пуста
 - **default boolean removeIf(Predicate<? super E> filter)** — удаляет все эле-
   менты коллекции в зависимости от условия.
 
