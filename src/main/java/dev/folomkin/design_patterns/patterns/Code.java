@@ -1,85 +1,81 @@
 package dev.folomkin.design_patterns.patterns;
 
+class Robot {
+    private double x = 0;
+    private double y = 0;
+    protected double course = 0;
+    // Робот управляется оператором
+    private Operator operator;
 
-// Общий вид класса "Кофе"
-
-class Coffee {
-    public void grindCoffee() {
-        // перемалываем кофе
+    public Robot(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public void makeCoffee() {
-        // делаем кофе
+    // Можно узнать какой оператор управляет роботом
+    public Operator getOperator() {
+        return operator;
     }
 
-    public void pourIntoCup() {
-        // наливаем в чашку
-    }
-}
-
-// Виды Кофе
-class Americano extends Coffee {
-}
-
-class Cappuccino extends Coffee {
-}
-
-class CaffeLatte extends Coffee {
-}
-
-class Espresso extends Coffee {
-}
-
-
-// Типы Кофе, на которые принимаются заказы
-enum CoffeeType {
-    ESPRESSO,
-    CAPPUCCINO,
-    AMERICANO,
-    CAFFE_LATTE
-}
-
-
-//Кофейня
-class CoffeeShop {
-    private final SimpleCoffeeFactory coffeeFactory;
-
-    public CoffeeShop(SimpleCoffeeFactory coffeeFactory) {
-        this.coffeeFactory = coffeeFactory;
+    // Можно установить оператора для робота
+    public void setOperator(Operator operator) {
+        this.operator = operator;
     }
 
-    public Coffee orderCoffee(CoffeeType type) {
-        Coffee coffee = coffeeFactory.createCoffee(type);
-        coffee.grindCoffee();
-        coffee.makeCoffee();
-        coffee.pourIntoCup();
-        System.out.println("Ваш кофе!");
-        return coffee;
+    public void forward(int distance) {
+        x = x + distance * Math.cos(course / 180 * Math.PI);
+        y = y + distance * Math.sin(course / 180 * Math.PI);
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getCourse() {
+        return course;
+    }
+
+    public void setCourse(double course) {
+        this.course = course;
+    }
+
+    public void printCoordinates() {
+        System.out.println(x + "," + y);
     }
 }
 
 
-// Фабрика
-class SimpleCoffeeFactory {
-    public Coffee createCoffee(CoffeeType type) {
-        Coffee coffee = null;
+class Operator {
+    private String firstName;
+    private String lastName;
+    // Оператор управляет конкретным роботом
+    private Robot robot;
 
-        switch (type) {
-            case AMERICANO:
-                coffee = new Americano();
-                break;
-            case ESPRESSO:
-                coffee = new Espresso();
-                break;
-            case CAPPUCCINO:
-                coffee = new Cappuccino();
-                break;
-            case CAFFE_LATTE:
-                coffee = new CaffeLatte();
-                break;
-        }
+    public Operator(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
-        return coffee;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    // У оператора можно спросить каким роботом он управляет
+    public Robot getRobot() {
+        return robot;
+    }
+
+    // Оператору можно поручить управлять роботом
+    public void setRobot(Robot robot) {
+        this.robot = robot;
     }
 }
 
