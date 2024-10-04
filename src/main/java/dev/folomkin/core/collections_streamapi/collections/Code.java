@@ -5,16 +5,21 @@ import java.util.*;
 public class Code {
     public static void main(String[] args) {
         final List<String> names = new ArrayList<>(List.of("Java", "Kotlin", "PHP"));
-        final ListIterator<String> iterator = names.listIterator();
 
-        while (iterator.hasNext()) {
-            final String name = iterator.next();
-            if ("Java".equals(name)) {
-                iterator.set("JS");
-            }
 
-        }
+        Map<String, Integer> map = new HashMap<>();
+        map.put("Java", 1);
+        map.put("Kotlin", 2);
+        map.put("PHP", 3);
 
-        System.out.println(names);
+        System.out.println(map.keySet());
+
+
+        String res =toUpperCase("Методы");
+        System.out.println(res);
+    }
+
+    public static String toUpperCase(String string) {
+        return string.toUpperCase();
     }
 }

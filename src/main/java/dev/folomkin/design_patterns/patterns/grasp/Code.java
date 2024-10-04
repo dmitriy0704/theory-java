@@ -1,4 +1,4 @@
-package dev.folomkin.design_patterns.patterns;
+package dev.folomkin.design_patterns.patterns.grasp;
 
 class Robot {
     private double x = 0;
