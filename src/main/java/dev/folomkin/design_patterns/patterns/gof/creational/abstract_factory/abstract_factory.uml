@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>dev.folomkin.design_patterns.patterns.gof.creational.abstract_factory.PhpDeveloper</OriginalElement>
+  <nodes>
+    <node x="-109.16666666666669" y="-74.66666666666669">dev.folomkin.design_patterns.patterns.gof.creational.abstract_factory.AuctionSiteFactory</node>
+    <node x="102.00000000000006" y="45.33333333333333">dev.folomkin.design_patterns.patterns.gof.creational.abstract_factory.Developer</node>
+    <node x="-237.0" y="156.66666666666669">dev.folomkin.design_patterns.patterns.gof.creational.abstract_factory.WebSIteTeamFactory</node>
+    <node x="87.00000000000006" y="165.33333333333331">dev.folomkin.design_patterns.patterns.gof.creational.abstract_factory.PhpDeveloper</node>
+    <node x="-232.5" y="36.66666666666667">dev.folomkin.design_patterns.patterns.gof.creational.abstract_factory.ProjectTeamFactory</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.creational.abstract_factory.WebSIteTeamFactory" target="dev.folomkin.design_patterns.patterns.gof.creational.abstract_factory.ProjectTeamFactory" relationship="REALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.creational.abstract_factory.PhpDeveloper" target="dev.folomkin.design_patterns.patterns.gof.creational.abstract_factory.Developer" relationship="REALIZATION">
+      <point x="0.0" y="-14.0" />
+      <point x="0.0" y="14.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="1.5" showDependencies="false" x="24.0" y="190.0" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
