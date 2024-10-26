@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CodeTest {
+class WebSiteProjectTest {
     @Test
     public void givenNonNull_whenCreatesNonNullable_thenCorrect() {
         String name = null;
