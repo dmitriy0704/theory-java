@@ -19,7 +19,10 @@
   это клиенту;
 
 ![bridge.png](/img/design_pattern/design_patterns/bridge.png)
-На картинке:
 
-**Client** - DataBaseRunner_Client  
-**Interface Adapter** - AdapterJavaToDataBase  
+К схеме:
+
+- **Abstraction** -
+- **Interface Implementor** -
+- **ConcreteImplementorA** -
+- **ConcreteImplementorB** - 
