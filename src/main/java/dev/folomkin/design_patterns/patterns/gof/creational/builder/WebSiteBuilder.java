@@ -1,13 +1,19 @@
 package dev.folomkin.design_patterns.patterns.gof.creational.builder;
 
-public class WebSiteBuilder {
-    public static void main(String[] args) {
+public abstract class WebSiteBuilder {
+    WebSite webSite;
 
-        WebSite webSite = new WebSite();
-        webSite.setName("Visit Card");
-        webSite.setCms("WordPress");
-        webSite.setPrice(500);
+    void createWebSite() {
+        webSite = new WebSite();
+    }
 
-        System.out.println(webSite);
+    abstract void buildName();
+
+    abstract void buildCms();
+
+    abstract void buildPrice();
+
+    WebSite getWebSite() {
+        return webSite;
     }
 }

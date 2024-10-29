@@ -20,9 +20,8 @@
 ![singleton.png](/img/design_pattern/design_patterns/builder.png)
 На картинке:
 
-**interface Product** - в примере это интерфейс Developer  
-**ConcreteProduct** - в примере это класс конкретной реализации(JavaDeveloper)  
-**Creator** - в примере это интерфейс DeveloperFactory  
-**ConcreteCreator** - в примере это класс реализующий этот интерфейс -
-JavaDeveloperFactory
-
+**interface Builder** - в примере это интерфейс WebSiteBuilder  
+**ConcreteBuilder** - в примере это класс конкретной реализации(
+VisitWebSiteBuilder)  
+**Director** - помогает строить сайт. Строит между классом-клиентом и классами
+описывающими построение сайтов.
