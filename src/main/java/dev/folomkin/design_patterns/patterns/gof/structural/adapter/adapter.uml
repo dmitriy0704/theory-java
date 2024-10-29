@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>dev.folomkin.design_patterns.patterns.gof.structural.adapter</OriginalElement>
+  <nodes>
+    <node x="21.0" y="-13.5">dev.folomkin.design_patterns.patterns.gof.structural.adapter.DataBase</node>
+    <node x="-89.0" y="650.0">dev.folomkin.design_patterns.patterns.gof.structural.adapter.DataBaseRunner_Client</node>
+    <node x="-94.5" y="394.0">dev.folomkin.design_patterns.patterns.gof.structural.adapter.AdapterJavaToDataBase</node>
+    <node x="-120.5" y="154.0">dev.folomkin.design_patterns.patterns.gof.structural.adapter.JavaApplication</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.structural.adapter.AdapterJavaToDataBase" target="dev.folomkin.design_patterns.patterns.gof.structural.adapter.DataBase" relationship="REALIZATION">
+      <point x="60.75" y="-80.0" />
+      <point x="87.75" y="374.0" />
+      <point x="87.0" y="374.0" />
+      <point x="0.0" y="67.5" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.structural.adapter.AdapterJavaToDataBase" target="dev.folomkin.design_patterns.patterns.gof.structural.adapter.JavaApplication" relationship="GENERALIZATION">
+      <point x="-60.75" y="-80.0" />
+      <point x="-33.75" y="374.0" />
+      <point x="-33.0" y="374.0" />
+      <point x="0.0" y="80.0" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.structural.adapter.DataBaseRunner_Client" target="dev.folomkin.design_patterns.patterns.gof.structural.adapter.AdapterJavaToDataBase" relationship="CREATE">
+      <point x="0.0" y="-44.0" />
+      <point x="0.0" y="80.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="1.1645077720207253" showDependencies="true" x="26.000000000000114" y="372.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
