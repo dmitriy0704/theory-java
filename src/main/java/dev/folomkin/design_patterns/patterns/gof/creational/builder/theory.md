@@ -17,7 +17,7 @@
 - процесс конструирования объекта должен предоставлять различные представления
   объекта, который мы конструируем.
 
-![singleton.png](/img/design_pattern/design_patterns/builder.png)
+![builder.png](/img/design_pattern/design_patterns/builder.png)
 На картинке:
 
 **interface Builder** - в примере это интерфейс WebSiteBuilder  
