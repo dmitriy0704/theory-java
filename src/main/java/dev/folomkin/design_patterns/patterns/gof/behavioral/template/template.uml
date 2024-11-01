@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>dev.folomkin.design_patterns.patterns.gof.behavioral.template</OriginalElement>
+  <nodes>
+    <node x="-83.5" y="518.0">dev.folomkin.design_patterns.patterns.gof.behavioral.template.WebSiteRunner</node>
+    <node x="112.80923248053386" y="198.0">dev.folomkin.design_patterns.patterns.gof.behavioral.template.NewsPage</node>
+    <node x="-157.40211345939935" y="212.63848720800885">dev.folomkin.design_patterns.patterns.gof.behavioral.template.WelcomePage</node>
+    <node x="-92.0" y="-14.0">dev.folomkin.design_patterns.patterns.gof.behavioral.template.WebSiteTemplate</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.template.NewsPage" target="dev.folomkin.design_patterns.patterns.gof.behavioral.template.WebSiteTemplate" relationship="GENERALIZATION">
+      <point x="0.0" y="-44.0" />
+      <point x="199.30923248053386" y="162.0" />
+      <point x="1.0" y="162.0" />
+      <point x="0.0" y="56.0" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.template.WebSiteRunner" target="dev.folomkin.design_patterns.patterns.gof.behavioral.template.WelcomePage" relationship="CREATE">
+      <point x="0.0" y="-44.0" />
+      <point x="1.0" y="462.0" />
+      <point x="-70.90211345939935" y="462.0" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.template.WebSiteRunner" target="dev.folomkin.design_patterns.patterns.gof.behavioral.template.NewsPage" relationship="CREATE">
+      <point x="0.0" y="-44.0" />
+      <point x="1.0" y="482.0" />
+      <point x="199.30923248053386" y="482.0" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.template.WelcomePage" target="dev.folomkin.design_patterns.patterns.gof.behavioral.template.WebSiteTemplate" relationship="GENERALIZATION">
+      <point x="0.0" y="-44.0" />
+      <point x="-70.90211345939935" y="208.0" />
+      <point x="1.0" y="208.0" />
+      <point x="0.0" y="56.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="1.4046875" showDependencies="true" x="68.0" y="306.0" />
+  <SelectedNodes>
+    <node>dev.folomkin.design_patterns.patterns.gof.behavioral.template.WelcomePage</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
