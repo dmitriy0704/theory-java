@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter</OriginalElement>
+  <nodes>
+    <node x="-286.5" y="416.5">dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.InterpreterRunner</node>
+    <node x="-137.5" y="101.0">dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.OrExpression</node>
+    <node x="117.5" y="221.0">dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.AndExpression</node>
+    <node x="-282.0" y="221.0">dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.TerminalExpression</node>
+    <node x="-112.5" y="-66.5">dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.Expression</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.TerminalExpression" target="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.Expression" relationship="REALIZATION">
+      <point x="0.0" y="-45.0" />
+      <point x="-168.0" y="66.0" />
+      <point x="-68.0" y="66.0" />
+      <point x="-68.0" y="26.0" />
+      <point x="-60.25" y="26.0" />
+      <point x="-52.25" y="32.5" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.InterpreterRunner" target="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.TerminalExpression" relationship="CREATE">
+      <point x="0.0" y="-69.5" />
+      <point x="0.0" y="45.0" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.OrExpression" target="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.Expression" relationship="TO_ONE">
+      <point x="74.75" y="-45.0" />
+      <point x="86.75" y="46.0" />
+      <point x="92.0" y="46.0" />
+      <point x="92.0" y="26.0" />
+      <point x="44.25" y="26.0" />
+      <point x="52.25" y="32.5" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.OrExpression" target="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.Expression" relationship="REALIZATION">
+      <point x="-74.75" y="-45.0" />
+      <point x="-62.75" y="66.0" />
+      <point x="-68.0" y="66.0" />
+      <point x="-68.0" y="26.0" />
+      <point x="-60.25" y="26.0" />
+      <point x="-52.25" y="32.5" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.AndExpression" target="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.Expression" relationship="REALIZATION">
+      <point x="-77.25" y="-45.0" />
+      <point x="194.75" y="66.0" />
+      <point x="-68.0" y="66.0" />
+      <point x="-68.0" y="26.0" />
+      <point x="-60.25" y="26.0" />
+      <point x="-52.25" y="32.5" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.InterpreterRunner" target="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.AndExpression" relationship="CREATE">
+      <point x="0.0" y="-69.5" />
+      <point x="-168.0" y="386.0" />
+      <point x="272.0" y="386.0" />
+      <point x="0.0" y="45.0" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.AndExpression" target="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.Expression" relationship="TO_ONE">
+      <point x="77.25" y="-45.0" />
+      <point x="349.25" y="46.0" />
+      <point x="92.0" y="46.0" />
+      <point x="92.0" y="26.0" />
+      <point x="44.25" y="26.0" />
+      <point x="52.25" y="32.5" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.InterpreterRunner" target="dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.OrExpression" relationship="CREATE">
+      <point x="0.0" y="-69.5" />
+      <point x="-168.0" y="386.0" />
+      <point x="12.0" y="386.0" />
+      <point x="0.0" y="45.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="1.3903576982892691" showDependencies="true" x="80.0" y="254.5" />
+  <SelectedNodes>
+    <node>dev.folomkin.design_patterns.patterns.gof.behavioral.interpreter.InterpreterRunner</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
