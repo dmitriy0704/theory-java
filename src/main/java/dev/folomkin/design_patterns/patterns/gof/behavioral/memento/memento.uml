@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>dev.folomkin.design_patterns.patterns.gof.behavioral.memento</OriginalElement>
+  <nodes>
+    <node x="-81.5" y="663.0">dev.folomkin.design_patterns.patterns.gof.behavioral.memento.SaveProjectRunner</node>
+    <node x="126.0" y="250.5">dev.folomkin.design_patterns.patterns.gof.behavioral.memento.GithubRepo</node>
+    <node x="-30.5" y="-13.5">dev.folomkin.design_patterns.patterns.gof.behavioral.memento.Save</node>
+    <node x="-97.5" y="386.5">dev.folomkin.design_patterns.patterns.gof.behavioral.memento.Project</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.memento.Project" target="dev.folomkin.design_patterns.patterns.gof.behavioral.memento.Save" relationship="CREATE">
+      <point x="0.0" y="-80.5" />
+      <point x="-3.0" y="327.0" />
+      <point x="3.25" y="327.0" />
+      <point x="-33.75" y="80.5" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.memento.GithubRepo" target="dev.folomkin.design_patterns.patterns.gof.behavioral.memento.Save" relationship="TO_ONE">
+      <point x="0.0" y="-56.5" />
+      <point x="197.0" y="227.0" />
+      <point x="70.75" y="227.0" />
+      <point x="33.75" y="80.5" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.memento.SaveProjectRunner" target="dev.folomkin.design_patterns.patterns.gof.behavioral.memento.Project" relationship="CREATE">
+      <point x="0.0" y="-44.0" />
+      <point x="17.0" y="567.0" />
+      <point x="-123.0" y="567.0" />
+      <point x="-123.0" y="347.0" />
+      <point x="-3.0" y="347.0" />
+      <point x="0.0" y="-80.5" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.memento.SaveProjectRunner" target="dev.folomkin.design_patterns.patterns.gof.behavioral.memento.GithubRepo" relationship="CREATE">
+      <point x="0.0" y="-44.0" />
+      <point x="17.0" y="567.0" />
+      <point x="197.0" y="567.0" />
+      <point x="0.0" y="56.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.8254777070063695" showDependencies="true" x="82.5" y="536.5902777777777" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

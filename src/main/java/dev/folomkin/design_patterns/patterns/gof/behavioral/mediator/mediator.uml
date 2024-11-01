@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>dev.folomkin.design_patterns.patterns.gof.behavioral.mediator</OriginalElement>
+  <nodes>
+    <node x="265.5" y="389.0">dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.SimpleTextChat</node>
+    <node x="84.5" y="189.0">dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.Admin</node>
+    <node x="-14.5" y="-1.5">dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.Chat</node>
+    <node x="284.5" y="-13.5">dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.User</node>
+    <node x="-95.5" y="389.0">dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.SimpleUser</node>
+    <node x="-86.0" y="666.0">dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.SimpleChatRunner</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.SimpleUser" target="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.User" relationship="REALIZATION">
+      <point x="53.25" y="-81.0" />
+      <point x="64.25" y="130.0" />
+      <point x="251.0" y="130.0" />
+      <point x="251.0" y="110.0" />
+      <point x="337.75" y="110.0" />
+      <point x="-53.25" y="43.5" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.SimpleTextChat" target="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.User" relationship="TO_MANY">
+      <point x="62.75" y="-81.0" />
+      <point x="453.75" y="350.0" />
+      <point x="444.25" y="350.0" />
+      <point x="53.25" y="43.5" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.SimpleChatRunner" target="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.SimpleUser" relationship="CREATE">
+      <point x="0.0" y="-44.0" />
+      <point x="0.0" y="81.0" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.SimpleUser" target="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.Chat" relationship="TO_ONE">
+      <point x="-53.25" y="-81.0" />
+      <point x="-42.25" y="150.0" />
+      <point x="51.0" y="150.0" />
+      <point x="51.0" y="90.0" />
+      <point x="48.25" y="90.0" />
+      <point x="-62.75" y="31.5" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.SimpleTextChat" target="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.Chat" relationship="REALIZATION">
+      <point x="-62.75" y="-81.0" />
+      <point x="328.25" y="170.0" />
+      <point x="173.75" y="170.0" />
+      <point x="62.75" y="31.5" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.SimpleChatRunner" target="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.SimpleTextChat" relationship="CREATE">
+      <point x="0.0" y="-44.0" />
+      <point x="11.0" y="630.0" />
+      <point x="391.0" y="630.0" />
+      <point x="0.0" y="81.0" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.Admin" target="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.User" relationship="REALIZATION">
+      <point x="53.25" y="-81.0" />
+      <point x="244.25" y="130.0" />
+      <point x="251.0" y="130.0" />
+      <point x="251.0" y="110.0" />
+      <point x="337.75" y="110.0" />
+      <point x="-53.25" y="43.5" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.SimpleChatRunner" target="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.Admin" relationship="CREATE">
+      <point x="0.0" y="-44.0" />
+      <point x="11.0" y="630.0" />
+      <point x="191.0" y="630.0" />
+      <point x="0.0" y="81.0" />
+    </edge>
+    <edge source="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.Admin" target="dev.folomkin.design_patterns.patterns.gof.behavioral.mediator.Chat" relationship="TO_ONE">
+      <point x="-53.25" y="-81.0" />
+      <point x="137.75" y="150.0" />
+      <point x="51.0" y="150.0" />
+      <point x="51.0" y="90.0" />
+      <point x="48.25" y="90.0" />
+      <point x="-62.75" y="31.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Compact" zoom="0.7880710659898477" showDependencies="true" x="220.5" y="556.3800322061193" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
