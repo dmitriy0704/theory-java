@@ -1,6 +1,5 @@
 # Записи (record)
 
-
 Ключевое слово record представляет еще один способ создать класс с неизменяемыми
 экземплярами. Этот класс является подклассом класса java.lang.Record и,
 естественно, не может наследовать другой класс, а также сам не может выступать в
@@ -13,20 +12,18 @@
 
 ```java
 record ImmutableRec(String name, int id) {
-  void method() {
-  }
+    void method() {
+    }
 }
+
 public class Example {
-  public static void main(String[] args) {
-    ImmutableRec immutableRec = new ImmutableRec("immutable", 1);
-    System.out.println(immutableRec.id());
-    System.out.println(immutableRec.name());
-  }
+    public static void main(String[] args) {
+        ImmutableRec immutableRec = new ImmutableRec("immutable", 1);
+        System.out.println(immutableRec.id());
+        System.out.println(immutableRec.name());
+    }
 }
 ```
-
-
-
 
 Как уже упоминалось, запись это узконаправленный, специализированный класс.
 Запись объявляется с помощью контекстночувствительного ключевого слова record,
@@ -117,7 +114,7 @@ class Code {
         // для отображения списка товаров ,
         for (Item i : items) {
             System.out.println(i.name() + "; Идентификационный номер: "
-                    + i.itemNum() + "; Цена: " + i.price());
+                               + i.itemNum() + "; Цена: " + i.price());
         }
     }
 }
@@ -250,7 +247,7 @@ class Code {
         items[3] = new Item("Saw", 27, "34.59");
         for (Item i : items) {
             System.out.println(i.name() + "; Идентификационный номер: "
-                    + i.itemNum() + "; Цена: " + i.price());
+                               + i.itemNum() + "; Цена: " + i.price());
         }
     }
 }

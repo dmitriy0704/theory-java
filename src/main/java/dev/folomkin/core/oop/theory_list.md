@@ -1,19 +1,41 @@
 # Основы ООП
 
-[Базовые концепции](basic.md)
+## [Базовые концепции](basic.md)
 
-**Принципы ООП:**
+## Принципы ООП:
 
+### [Абстракция](principles/abstraction.md)
 
+- Абстрактные классы и интерфейсы
 
-[Абстракция](principles/abstraction.md)  
-[Инкапсуляция](principles/Incapsulation.md)  
-[Наследование](principles/inheritance.md)  
-[Полиморфизм](principles/polymorphism.md)  
+### [Инкапсуляция](principles/Incapsulation.md)
 
-  
-[Интерфейсы и аннотации](interfaces_annotations.md)  
-[Immutable Class](immutable.md)  
-[Внутренние классы](inner_class.md)  
-[Перечисления](enums.md)
+### [Наследование](principles/inheritance.md)
+
+- Доступ к членам и наследование
+- Конструкторы и наследование
+- Модификатор Final
+- this и super
+
+### [Полиморфизм](principles/polymorphism.md)
+
+- Связывание. Позднее и раннее.
+- Переопределение методов
+- Перегрузка методов
+- Переопределение статических методов
+
+==============================================================================
+
+### [Перечисления](enums.md)
+
+### [Immutable Class](immutable.md)
+
+### [Внутренние классы](inner_class.md)
+
+### [Интерфейсы и аннотации](interfaces_annotations.md)
+
+### [Записи](records.md)
+
+==============================================================================
+
 
