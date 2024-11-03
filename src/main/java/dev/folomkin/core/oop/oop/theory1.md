@@ -791,7 +791,7 @@ clone() класса Object возвратит точную копию вызв�
 часть памяти.
 
 ```java
-package dev.folomkin.core.oop_classType.code;
+package dev.folomkin.core.oop.code;
 
 class Student implements Cloneable {
     private int id;

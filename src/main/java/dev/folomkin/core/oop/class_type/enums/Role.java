@@ -1,4 +1,4 @@
-package dev.folomkin.core.oop_classType.class_type.enums;
+package dev.folomkin.core.oop.class_type.enums;
 
 enum Role {
     GUEST("guest"), CLIENT("client"), MODERATOR("moderator"), ADMIN("admin");

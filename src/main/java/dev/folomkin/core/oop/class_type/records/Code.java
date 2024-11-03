@@ -1,4 +1,4 @@
-package dev.folomkin.core.oop_classType.class_type.records;
+package dev.folomkin.core.oop.class_type.records;
 
 public class Code {
     // Использование традиционного оператора switch для получения способа

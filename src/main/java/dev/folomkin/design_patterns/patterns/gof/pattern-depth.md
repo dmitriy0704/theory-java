@@ -79,7 +79,7 @@ Passenger[] passengers менее строгая. Она называется _*
 не менее.
 
 ```java
-package dev.folomkin.core.oop_classType.oop;
+package dev.folomkin.core.oop.oop;
 
 class Robot {
     private double x = 0;

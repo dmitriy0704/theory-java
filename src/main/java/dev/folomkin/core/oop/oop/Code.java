@@ -1,4 +1,4 @@
-package dev.folomkin.core.oop_classType.oop;
+package dev.folomkin.core.oop.oop;
 
 
 interface Book {

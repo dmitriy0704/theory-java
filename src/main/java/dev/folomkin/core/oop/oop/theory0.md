@@ -219,9 +219,8 @@ Passenger[] passengers менее строгая. Она называется _*
 входить и в другие группы тоже. Такие описания всегда несколько условны, но тем
 не менее.
 
-
 ```java
-package dev.folomkin.core.oop_classType.oop;
+package dev.folomkin.core.oop.oop;
 
 class Robot {
     private double x = 0;
@@ -271,8 +270,7 @@ class Robot {
     }
 }
 
-class Operator
-{
+class Operator {
     private String firstName;
     private String lastName;
     // Оператор управляет конкретным роботом
