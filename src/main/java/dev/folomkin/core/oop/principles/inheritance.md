@@ -84,6 +84,91 @@ CardAction и, соответственно, при вызове метода do
 даже если подкласс включает в себя все члены своего суперкласса, он не может
 получить доступ к тем членам суперкласса, которые были объявлены закрытыми.
 
+### Переменная типа суперкласса может ссылаться на объект подкласса
+
+Ссылочной переменной типа суперкласса можно присваивать ссылку на
+объект любого подкласса, производного от данного суперкласса.
+
+```java
+public class Box {
+    double width;
+    double height;
+    double depth;
+
+    // Конструктор применяемый для клонирования объекта
+    Box(Box ob) {
+        width = ob.width;
+        height = ob.height;
+        depth = ob.depth;
+    }
+
+    // Конструктор, используемый в случае указания всех размеров
+    Box(double w, double h, double d) {
+        width = w;
+        height = h;
+        depth = d;
+    }
+
+    public Box() {
+    }
+
+    double volume() {
+        return width * height * depth;
+    }
+}
+
+public class BoxWeight extends Box {
+    double weight;
+
+    BoxWeight(double w, double h, double d, double m) {
+        weight = w;
+        height = h;
+        depth = d;
+        width = m;
+    }
+}
+
+
+public class RefDemo {
+    public static void main(String[] args) {
+        BoxWeight weightBox = new BoxWeight(3, 5, 7, 8);
+        Box plainBox = new Box();
+        double vol;
+
+        vol = plainBox.volume();
+        System.out.println("weightBox: " + vol);
+        System.out.println("weightBox: " + weightBox.weight);
+        System.out.println();
+
+        plainBox = weightBox;
+
+        vol = plainBox.volume();
+        System.out.println("plainBox: " + vol);
+        
+        /* Следующий оператор ошибочен, потому что член weight в plainbox
+        не определен. */
+
+        // System.out.println("Bec plainbox равен " + plainbox.weight);
+    }
+}
+
+```
+
+Здесь weightbox является ссылкой на объекты BoxWeight, а plainbox -
+ссылкой на объекты Вох. Поскольку BoxWeight - подкласс Вох, переменной
+plainЬox разрешено присваивать ссылку на объект weightbox.
+
+Важно понимать, что именно тип ссылочной переменной, а не тип объекта,
+на который она ссылается, определяет, к каким членам можно получать
+доступ. Другими словами, когда ссылочной переменной типа суперкласса
+присваивается ссылка на объект подкласса, то доступ имеется только к тем
+частям объекта, которые определены в суперклассе. Вот почему перем енная
+plainbox не может получить доступ к weight, даже есл и она ссылается на
+объект BoxWeight. Если подумать, то в этом есть смысл, потому что суперклассу
+ничего не известно о том, что к нему добавляет подкласс. Поэтому
+последняя строка кода в предыдущем фрагменте закомментирована. Ссылка
+Вох не может получить доступ к полю weight, т.к. в классе Вох оно не определено.
+
 ## Конструкторы и наследование
 
 Конструктор — особого вида метод, который по имени автоматически вызывается при
@@ -152,6 +237,174 @@ class AutenticationService {
         //appeal to the database
     }
 }
+```
+
+## Использование ключевого слова super
+
+Ключевое слово super имеет две основные формы. Первая вызывает конструктор
+суперкласса, а вторая служит для доступа к члену суперкласса, который
+был сокрыт членом подкласса.
+
+### Использование ключевого слова super для вызова конструкторов суперкласса
+
+Подкласс может вызывать конструктор, определенный в его суперклассе, с
+применением следующей форм ы super:
+
+    suреr(список-аргументов);
+
+Здесь список-аргументов предназначен для указания любых аргументов,
+необходимых конструктору в суперклассе. Вызов super() всегда должен
+быть первым оператором, выполняемым внутри конструктора подкласса.
+
+```java
+public class BoxWeight extends Box {
+    double weight;
+
+    BoxWeight(double w, double h, double d, double m) {
+        super(w, h, d);
+        width = m;
+    }
+}
+
+```
+
+Конструктор BoxWeight() вызывает super() с аргументами w, h и d, что
+приводит к вызову конструктора Вох, который инициализирует поля width,
+height и depth с применением этих значений. Класс BoxWeight больше не
+инициализирует указанные поля самостоятельно.
+Ему нужно инициализировать только уникальное для него поле: weight. Таким
+образом, появляется возможность при желании сделать поля width, height и depth в
+классе Вох закрытыми.
+
+```java
+public class Box {
+    private double width;
+    private double height;
+    private double depth;
+
+    // Конструктор применяемый для клонирования объекта
+    Box(Box ob) {
+        width = ob.width;
+        height = ob.height;
+        depth = ob.depth;
+    }
+
+    // Конструктор, используемый в случае указания всех размеров
+    Box(double w, double h, double d) {
+        width = w;
+        height = h;
+        depth = d;
+    }
+
+    // Если размеры не указаны
+    public Box() {
+        width = -1;
+        height = -1;
+        depth = -1;
+    }
+
+    // Для кубической коробки
+    Box(double len) {
+        width = height = depth = len;
+    }
+
+    // Объем
+    double volume() {
+        return width * height * depth;
+    }
+}
+
+public class BoxWeight extends Box {
+    double weight; // вес коробки
+
+    // Конструктор для клонирования объекта
+    BoxWeight(BoxWeight ob) {
+        super(ob);
+        this.weight = ob.weight;
+    }
+
+    // Конструктор для всех параметров
+    BoxWeight(double w, double h, double d, double m) {
+        super(w, h, d);
+        weight = m;
+    }
+
+    // Стандартный конструктор
+    BoxWeight() {
+        super();
+        weight = -1;
+    }
+
+    // Для кубической коробки
+    BoxWeight(double len, double m) {
+        super(len);
+        weight = m;
+    }
+}
+
+public class DemoSuper {
+    public static void main(String[] args) {
+        BoxWeight boxWeight1 = new BoxWeight(10, 20, 15, 34);
+        double vol;
+        vol = boxWeight1.volume();
+        System.out.println(vol);
+
+    }
+}
+
+```
+
+Здесь вызову super() передается объект типа BoxWeight, а не Вох.
+Попрежнему вызывается конструктор Вох(Вох оЬ). Как упоминалось ранее,
+переменная типа суперкласса может использоваться для ссылки на любой
+объект, производный от этого класса, т.е. мы можем передавать конструктору
+Вох объект BoxWeight. Конечно же, классу Вох известны только свои члены.
+
+Когда подкласс вызывает super(), он вызывает конструктор своего 
+непосредственного суперкласса. Таким образом, super() всегда 
+ссылается на суперкласс непосредственно над вызывающим классом. 
+Это справедливо даже для многоуровневой иерархии. Кроме того, вызов 
+super() всегда должен быть первым оператором, выполняемым внутри 
+конструктора подкласса.
+
+### Использование второй формы ключевого слова super
+
+Вторая форма ключевого слова super действует примерно так же, за исключением
+того, что всегда относится к суперклассу подкласса, в котором
+задействована.
+
+    suреr.член
+
+Здесь член может быть либо методом, либо переменной экземпляра.
+Вторая форма super наиболее применима в ситуациях, когда имена членов
+подкласса скрывают члены с тем же именем в суперклассе. 
+
+```java
+public class A {
+    int i;
+}
+
+public class B extends A {
+    int i;
+
+    B(int a, int b) {
+        super.i = a;
+        i = b;
+    }
+
+    void show() {
+        System.out.println("суперкласс: " + super.i);
+        System.out.println("подкласс: " + i);
+    }
+}
+
+public class DemoSuper {
+    public static void main(String[] args) {
+        B sub = new B(1, 2);
+        sub.show();
+    }
+}
+
 ```
 
 ## this и super
