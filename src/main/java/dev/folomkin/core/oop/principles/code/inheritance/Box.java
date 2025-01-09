@@ -1,4 +1,4 @@
-package dev.folomkin.core.oop.principles.code;
+package dev.folomkin.core.oop.principles.code.inheritance;
 
 public class Box {
     private double width;
