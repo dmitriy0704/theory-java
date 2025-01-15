@@ -3,17 +3,19 @@
 [//]: # (Список заголовков для оглавления: 
         #titile0: Класс Thread и интерфейс Runnable
         #titile1: Жизненный цикл потока
-        #titile2:
-        #titile3:
+        #titile2: Приоритеты потоков
+        #titile3: Синхронизация
         #titile4:
 )
 
 **_<a id="titlelist">ОГЛАВЛЕНИЕ:</a>_**
 
-1. [Класс Thread и интерфейс Runnable](#title0)
-2. [Жизненный цикл потока](#title1)
-3. [Приоритеты потоков](#title2)
-3. [Синхронизация](#title3)
+1. [Жизненный цикл потока](#title0)
+2. [Приоритеты потоков](#title1)
+3. [Синхронизация](#title2)
+4. [Обмен сообщениями](#title3)
+5. [Класс Thread и интерфейс Runnable](#title4)
+5. [Главный поток](#title5)
 
 ## <a id="title0">ЖИЗНЕННЫЙ ЦИКЛ ПОТОКА</a>
 
@@ -438,7 +440,7 @@ public static void main(String[] args) throws InterruptedException {
         System.out.println("Главный поток прерван");
     }
     // ->
-    // Текущий пото к : Thread [ mai n , 5 , ma i п ]
+    // Текущий поток : Thread [ main , 5 , ma i п ]
     // После изменения имени : Thread [ My Thread , 5 , maiп ]
     // 5
     // 4
@@ -529,8 +531,8 @@ class NewThread implements Runnable { //-> Создание второго по�
 
 public class Code {
     public static void main(String[] args) throws InterruptedException {
-        NewThread nt = new NewThread(); // Создание нового потока
-        nt.t.start();                   // Запуск нового потока
+        NewThread nt = new NewThread(); //-> Создание нового потока
+        nt.t.start();                   //-> Запуск нового потока
         try {
             for (int i = 5; i > 0; i--) {
                 System.out.println("Главный поток: " + i);
@@ -543,6 +545,13 @@ public class Code {
     }
 }
 ```
+Передача this в качестве первого аргумента указывает на то, что новый
+поток должен вызвать метод run() для данного объекта. Внутри main() вызывается
+start(), который запускает поток выполнения, начиная с метода
+run(). Это приводит к тому, что цикл for дочернего потока начинает свою
+работу. Затем главный поток входит в цикл for. Оба потока продолжают работать,
+совместно используя ЦП в одноядерных системах, пока их цикл не
+завершится. 
 
 ### Расширение класса Thread
 
@@ -590,51 +599,49 @@ public class Code {
 [Наверх](#titlelist)
 
 ```java
-package dev.folomkin.core.multithrading;
-
 class NewThread implements Runnable {
-    String name; // Имя потока
-    Thread thread;
+  String name; // Имя потока
+  Thread t;
 
-    NewThread(String threadName) {
-        name = threadName;
-        t = new Thread(this, name);
-        System.out.println("Новый поток: " + t);
-    }
+  NewThread(String threadName) {
+    name = threadName;
+    t = new Thread(this, name);
+    System.out.println("Новый поток: " + t);
+  }
 
-    public void run() { // -> Точка входа для потока
-        try {
-            for (int i = 5; i > 0; i--) {
-                System.out.println(name + " : " + i);
-                Thread.sleep(1000);
-            }
-        } catch (InterruptedException e) {
-            System.out.println(name + " прерван");
-        }
-        System.out.println(name + " завершен");
+  public void run() { // -> Точка входа для потока
+    try {
+      for (int i = 5; i > 0; i--) {
+        System.out.println(name + " : " + i);
+        Thread.sleep(1000);
+      }
+    } catch (InterruptedException e) {
+      System.out.println(name + " прерван");
     }
+    System.out.println(name + " завершен");
+  }
 }
 
 public class Code {
-    public static void main(String[] args) {
-        NewThread nt1 = new NewThread("One");
-        NewThread nt2 = new NewThread("Two");
-        NewThread nt3 = new NewThread("Three");
+  public static void main(String[] args) {
+    NewThread nt1 = new NewThread("One");
+    NewThread nt2 = new NewThread("Two");
+    NewThread nt3 = new NewThread("Three");
 
-        nt1.t.start();
-        nt2.t.start();
-        nt3.t.start();
+    nt1.t.start();
+    nt2.t.start();
+    nt3.t.start();
 
-        // Ожидаем окончания остальных потоков
-        try {
-            Thread.sleep(10000);
-            // -> Засыпание на 10с гарантирует, 
-            // что главный поток завершится последним 
-        } catch (Exception e) {
-            System.out.println("Главный поток прерван");
-        }
-        System.out.println("Main thread exiting");
+    // Ожидаем окончания остальных потоков
+    try {
+      Thread.sleep(10000);
+      // -> Засыпание на 10с гарантирует, 
+      // что главный поток завершится последним 
+    } catch (Exception e) {
+      System.out.println("Главный поток прерван");
     }
+    System.out.println("Main thread exiting");
+  }
 }
 
 ```
@@ -1085,7 +1092,7 @@ public class Code {
   (То есть взаимоблокировка может возникнуть из-за более запутанной
   последовательности событий, чем только что описанная.)
 
-## <a id="title12">ПРИОСТАНОВКА, ВОЗОБНОВЛЕНИ И ОСТАНОВ ПОТОКОВ</a>
+## <a id="title12">ПРИОСТАНОВКА, ВОЗОБНОВЛЕНИЕ И ОСТАНОВ ПОТОКОВ</a>
 
 [Наверх](#titlelist)
 
@@ -1276,49 +1283,49 @@ package dev.folomkin.core.multithrading;
 
 // Создание потока
 class NewThread implements Runnable {
-    Thread t;
+  Thread t;
 
-    NewThread() {
-        // Создание потока
-        t = new Thread(this, "Demo thread");
-        System.out.println("Дочерний поток: " + t);
-    }
+  NewThread() {
+    // Создание потока
+    t = new Thread(this, "Demo thread");
+    System.out.println("Дочерний поток: " + t);
+  }
 
-    public static NewThread createNewThread() {
-        NewThread thread = new NewThread();
-        thread.t.start();
-        return thread;
-    }
+  public static dev.folomkin.core.multithrading.code.NewThread createNewThread() {
+    dev.folomkin.core.multithrading.code.NewThread thread = new dev.folomkin.core.multithrading.code.NewThread();
+    thread.t.start();
+    return thread;
+  }
 
-    // Это точка входа для потока.
-    public void run() {
-        try {
-            for (int i = 15; i > 0; i--) {
-                System.out.println("Дочерний поток" + " · " + i);
-                Thread.sleep(500);
-            }
-        } catch (InterruptedException е) {
-            System.out.println("Дочерний поток" + " прерван.");
-        }
-        System.out.println("Дочерний поток" + " завершается. ");
+  // Это точка входа для потока.
+  public void run() {
+    try {
+      for (int i = 15; i > 0; i--) {
+        System.out.println("Дочерний поток" + " · " + i);
+        Thread.sleep(500);
+      }
+    } catch (InterruptedException е) {
+      System.out.println("Дочерний поток" + " прерван.");
     }
+    System.out.println("Дочерний поток" + " завершается. ");
+  }
 }
 
 public class Code {
-    public static void main(String[] args) {
-        NewThread nt = NewThread.createNewThread();
+  public static void main(String[] args) {
+    dev.folomkin.core.multithrading.code.NewThread nt = dev.folomkin.core.multithrading.code.NewThread.createNewThread();
 
-        // Или new NewThread().t.start();
-        
-        try {
-            for (int i = 5; i > 0; i--) {
-                System.out.println("Главный поток: " + i);
-                Thread.sleep(1000);
-            }
-        } catch (InterruptedException e) {
-            System.out.println("Главный поток прерван");
-            e.printStackTrace();
-        }
+    // Или new NewThread().t.start();
+
+    try {
+      for (int i = 5; i > 0; i--) {
+        System.out.println("Главный поток: " + i);
+        Thread.sleep(1000);
+      }
+    } catch (InterruptedException e) {
+      System.out.println("Главный поток прерван");
+      e.printStackTrace();
     }
+  }
 }
 ```
