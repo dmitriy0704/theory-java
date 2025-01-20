@@ -2,26 +2,34 @@ package dev.folomkin.core.generics;
 
 
 // Обобщения и массивы
-class Gen<T extends Number> {
-    T ob;
-    T[] vals; // нормально
-    Gen(T o, T[] nums) {
+class Gen<T> {
+    T ob; // <-- объявлен объект типа Т;
+
+    // Передаем конструктору ссылку на объект типа Т
+    Gen(T o) {
         ob = o;
-        // Этот оператор не допустим.
-        // vals = new T[10]; // Невозможно создать массив элементов типа Т
-        // Но следующий оператор законен
-        vals = nums; // Присваивать ссылку на существующий массив разрешено
+    }
+
+    // Возвратить ob
+    T getOb() {
+        return ob;
+    }
+
+    // Отобразить тип Т
+    void showType() {
+        System.out.println("Тип T: " + ob.getClass().getName());
     }
 }
 
 class Code {
     public static void main(String[] args) {
-        Integer[] n = {1, 2, 3, 4, 5};
-        Gen<Integer> iOb = new Gen<>(50, n);
+        Gen<Integer> iOb;
+        iOb = new Gen<Integer>(88);
+        iOb.showType();
+        int ob = iOb.getOb();
+        System.out.println(ob);
 
-        // невозможно создать массив обобщенных ссылок для конкретного типа
-        // Gen<Integer>[] gens = new Gen<Integer>[10]; // Ошибка!
-        // Все нормально.
-        Gen<?>[] gens = new Gen<?>[10]; // нормально
+        Gen<String> sOb = new Gen<>("Текст");
+        sOb.showType();
     }
 }
