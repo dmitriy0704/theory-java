@@ -46,7 +46,6 @@
 
     n -> (n % 2) == 0
 
-
 ```java
 interface MyNumber {
     double getValue();
@@ -126,7 +125,118 @@ public class Code {
 }
 ```
 
+## Передача лямбда-выражений в качестве аргументов
 
+Чтобы лямбда-выражение можно было передавать как аргумент, тип параметра,
+получающего аргумент в форме лямбда-выражения, должен относиться
+к типу функционального интерфейса, который совместим с лямбда-выражением.
+
+```java
+package dev.folomkin.core.functional_interfaces;
+
+import java.io.IOException;
+import java.util.Objects;
+import java.util.function.Consumer;
+
+interface StringFunc {
+    String func(String n);
+}
+
+class Code {
+    //Типом первого параметра этого метода является функциональный интерфейс.
+    // Таким образом, ему можно передавать ссыпку на любой экземпляр реализации
+    // данного интерфейса, в том числе экземпляр, созданный лямбда-выражением.
+    // Во втором параметре указывается строка, с которой нужно работать.
+
+    static String stringOp(StringFunc sf, String s) {
+        return sf.func(s);
+    }
+
+    public static void main(String[] args) {
+        String inString = "Hello World!";
+        String outString;
+
+        System.out.println("Исходная строка: " + inString);
+
+        // Простое одиночное лямбда-выражение, которое переводит
+        // в верхний регистр строку, переданную методу stringOp().
+        outString = stringOp((str) -> str.toUpperCase(), inString);
+        System.out.println("Строка в верхнем регистре" + outString);
+
+        // Блочное выражение, удаляет пробелы
+        outString = stringOp((str) -> {
+            String result = "";
+            for (int i = 0; i < str.length(); i++) {
+                if (str.charAt(i) != ' ') {
+                    result += str.charAt(i);
+                }
+            }
+            return result;
+        }, inString);
+        System.out.println("result: " + outString);
+
+        // Можно также передавать экземпляр StringFunc, заблаговременно
+        // созданный лямбда-выражением. Например, после выполнения следующего
+        // объявления reverse будет ссылаться на экземпляр StringFunc.
+        StringFunc reverse = (str) -> {
+            String result = " ";
+            int i;
+            for (i = str.length() - 1; i >= 0; i--)
+                result += str.charAt(i);
+            return result;
+        };
+
+        // Теперь reverse можно передать в первом параметре методу stringOp(),
+        // поскольку этот параметр является ссылкой на объект StringFunc.
+        System.out.println("Строка с противоположным порядком следования " +
+                "символов: " + stringOp(reverse, inString));
+    }
+}
+```
+
+Первым делом обратите внимание в программе на метод stringOp (),
+который принимает два параметра. Первый объявлен с типом StringFunc,
+который является функциональным интерфейсом. Таким образом, данный
+параметр может получать ссылку на любой экземпляр StringFunc, в том
+числе созданный лямбда-выражением. Второй параметр stringOp () имеет
+тип String и представляет собой строку, в отношении которой выполняется
+операция.
+
+## Генерация исключений в лямбда-выражениях
+
+Лямбда-выражение может генерировать исключение. Тем не менее, если инициируется
+проверяемое исключение, то оно должно быть совместимым с исключением или
+исключениями, которые перечислены в конструкции throws абстрактного метода в
+функциональном интерфейсе. Например, если лямбда-выражение генерирует исключение
+IOException, то в конструкции throws абстрактного метода в функциональном
+интерфейсе должно быть указано IOException.
+
+```java
+interface MyIOAction {
+    boolean ioAction(Reader rdr) throws IOException;
+}
+
+class Code {
+    public static void main(String[] args) {
+
+        // Это блочное лямбда-выражение может сгенерировать исключение IOException.
+        // Следовательно, IOException должно быть указано в конструкции throws
+        // метода ioAction() в MyAction.
+        MyIOAction myIOAction = (rdr) -> {  // <-- Это лямбда выражение
+            // может сгенерировать исключение
+            int ch = rdr.read();
+            // throw new IOException;
+            // ...  
+            return true;
+        };
+    }
+}
+```
+
+Поскольку вызов read() может привести к генерации исключения IOException,
+конструкция throws метода ioAction() в функциональном интерфейсе MylOAction
+должна включать IOException. В противном случае программа не скомпилируется,
+потому что лямбда - выражение больше не будет совместимым с ioAction().
 
 ## Лямбда-выражения и захват переменных. Замыкания
 
@@ -183,7 +293,7 @@ class Code {
 В комментариях указано, что переменная num является фактически финальной и
 потому может применяться внутри myLambda. Именно по этой причине оператор
 printlnO выводит число 18. Когда метод func() вызывается с аргументом 8,
-значение v внутри лямбда- выражения устанавливается путем сложения переменной
+значение v внутри лямбда-выражения устанавливается путем сложения переменной
 num (равной 10)и значения , переданного в п (равного 8). В итоге func()
 возвращает 18. Такая работа объясняется тем, что num не изменяется после
 инициализации. Однако если значение num будет изменено внутри лямбда-выражения
@@ -238,6 +348,7 @@ class Code {
     }
 }
 ```
+
 Эти переменные должны иметь константные значения, как если бы они были
 объявлены как final. Отсюда и название — замыкание.
 Замыкания не запрещают использования полей класса как статических, так
@@ -253,38 +364,243 @@ public class FunctionBuilder<T> {
     }
 }
 ```
-### Генерация исключений в лямбда-выражениях
 
-Лямбда-выражение может генерировать исключение. Тем не менее, если инициируется
-проверяемое исключение, то оно должно быть совместимым с исключением или
-исключениями, которые перечислены в конструкции throws абстрактного метода в
-функциональном интерфейсе. Например, если лямбда-выражение генерирует исключение
-IOException, то в конструкции throws абстрактного метода в функциональном
-интерфейсе должно быть указано IOException.
+## Ссылки на методы
+
+С лямбда-выражениями связана одна важная возможность, которая называется
+ссылкой на метод. Ссылка на метод предлагает способ обращения к
+методу, не инициируя его выполнение. Она имеет отношение к лямбда-выражениям,
+поскольку тоже требует контекста целевого типа, состоящего из совместимого
+функционального интерфейса. При вычислении ссылки на метод
+также создается экземпляр функционального интерфейса.
+Существуют различные виды ссылок на методы. Мы начнем со ссылок на
+статические методы.
+
+### Ссылки на статические методы
+
+Для ссылки на статический метод применяется следующий общий синтаксис:
+        
+    имя-класса: :имя-метода
 
 ```java
-interface MyIOAction {
-    boolean ioAction(Reader rdr) throws IOException;
+package dev.folomkin.core.functional_interfaces;
+
+import java.io.IOException;
+import java.util.Objects;
+import java.util.function.Consumer;
+
+interface StringFunc {
+    String func(String n);
+}
+
+// В этом классе определен статический метод по имени strReverse().
+
+class MyStringOps {
+    // Статический метод, который изменяет порядок следования
+    // символов на противоположный.
+    static String StringReverse(String str) {
+        String result = "";
+        int i;
+        for (i = str.length() - 1; i >= 0; i--) {
+            result += str.charAt(i);
+        }
+        return result;
+    }
 }
 
 class Code {
+
+    // Первый параметр этого метода имеет тип функционального интерфейса.
+    // Таким образом, ему можно передать любой экземпляр реализации
+    // интерфейса StringFunc, включая ссылку на метод.
+    static String stringOps(StringFunc sf, String s) {
+        return sf.func(s);
+    }
+
     public static void main(String[] args) {
 
-        // Это блочное лямбда-выражение может сгенерировать исключение IOException.
-        // Следовательно, IOException должно быть указано в конструкции throws
-        // метода ioAction() в MyAction.
-        MyIOAction myIOAction = (rdr) -> {  // <-- Это лямбда выражение
-            // может сгенерировать исключение
+        String inStr = "Hello World!";
+        String outStr;
 
-            int ch = rdr.read();            // может сгенерировать исключение
-            // IOException;
-            // ...
-            return true;
-        };
+        // Передать в stringOp() ссылку на статический метод strReverse().
+        outStr = stringOps(MyStringOps::StringReverse, inStr);
+
+        System.out.println("Иcxoдная строка: " + inStr);
+        System.out.println("Cтpoкa с противоположным порядком следования символов: " + outStr);
     }
 }
 ```
-Поскольку вызов read() может привести к генерации исключения IOException,
-конструкция throws метода ioAction() в функциональном интерфейсе MylOAction
-должна включать IOException. В противном случае программа не скомпилируется,
-потому что лямбда - выражение больше не будет совместимым с ioAction().
+
+### Ссылки на методы экземпляра
+
+    объектная-ссылка::имя-метода
+
+```java
+package dev.folomkin.core.functional_interfaces;
+
+import java.io.IOException;
+import java.util.Objects;
+import java.util.function.Consumer;
+
+interface StringFunc {
+    String func(String n);
+}
+
+// В этом классе определен статический метод по имени strReverse().
+
+class MyStringOps {
+    // Статический метод, который изменяет порядок следования
+    // символов на противоположный.
+    String stringReverse(String str) {
+        String result = "";
+        int i;
+        for (i = str.length() - 1; i >= 0; i--) {
+            result += str.charAt(i);
+        }
+        return result;
+    }
+}
+
+class Code {
+
+    // Первый параметр этого метода имеет тип функционального интерфейса.
+    // Таким образом, ему можно передать любой экземпляр реализации
+    // интерфейса StringFunc, включая ссылку на метод.
+    static String stringOps(StringFunc sf, String s) {
+        return sf.func(s);
+    }
+
+    public static void main(String[] args) {
+
+        String inStr = "Hello World!";
+        String outStr;
+
+        // Создать объект MyStringOps.
+        MyStringOps stringOps = new MyStringOps();
+        // Передать в stringOp() ссылку на метод экземпляра strReverse().
+        outStr = stringOps(stringOps::stringReverse, inStr);
+
+        System.out.println("Иcxoдная строка: " + inStr);
+        System.out.println("Cтpoкa с противоположным порядком следования символов: " + outStr);
+    }
+}
+```
+
+### Ссылки на методы и обобщения
+
+
+```java
+package dev.folomkin.core.functional_interfaces;
+
+import java.io.IOException;
+import java.util.Objects;
+import java.util.function.Consumer;
+
+
+// Демонстрация использования ссыпки на обобщенный метод,
+// объявленный внутри необобщенного кла сса .
+
+// Функциональный интерфейс, который работает с массивом
+// и значением и возвращает результат int.
+
+interface MyFunc<T> {
+    int func(T[] vals, T v);
+}
+
+
+// В этом классе определен метод по имени countMatching() , который
+// возвращает количество элементов в массиве, равных указанному значению.
+// Обратите внимание, что метод countMatching() является обобщенным,
+// но класс MyArrayOps - нет.
+class MyArrayOps {
+
+    static <T> int countMatching(T[] vals, T v) {
+        int count = 0;
+        for (int i = 0; i < vals.length; i++) {
+            if (vals[i] == v) {
+                count++;
+            }
+        }
+        return count;
+    }
+}
+
+class Code {
+
+    // Первый параметр этого метода имеет тип функционального интерфейса MyFunc.
+    // в остальных двух параметрах он принимает массив и значение, оба типа Т.
+
+    static <T> int myOp(MyFunc<T> func, T[] vals, T v) {
+        return func.func(vals, v);
+    }
+
+    public static void main(String[] args) {
+        Integer[] vals = {1, 2, 3, 4, 2, 3, 4, 4, 5};
+        String[] strs = {"0ne", "Two", "Three", "Two"};
+        int count;
+        count = myOp(MyArrayOps::<Integer>countMatching, vals, 4);
+        System.out.println("Koличecтвo элементов 4, содержащихся в vals: "
+                + count);
+        count = myOp(MyArrayOps::<String>countMatching, strs, "Two");
+        System.out.println("Количество элементов Two, содержащихся в strs: "
+                + count);
+    }
+}
+```
+
+### Ссылки на конструкторы
+
+Подобно ссылкам на методы можно создавать ссылки на конструкторы.
+Ниже приведена общая форма синтаксиса, предназначенного для создания
+ссылки на конструктор:
+
+    имя-класса::new
+
+```java
+package dev.folomkin.core.functional_interfaces;
+
+import java.io.IOException;
+import java.util.Objects;
+import java.util.function.Consumer;
+
+// Демонстрация использования ссыпки на конструктор .
+// MyFunc - функциональный интерфейс, метод которого
+// возвращает ссыпку на конструктор MyClass.
+interface MyFunc<T> {
+    MyClass func(int n);
+}
+
+class MyClass {
+    private int val;
+
+    // Конструктор, принимающий аргумент.
+    MyClass(int v) {
+        val = v;
+    }
+
+    // Стандартный конструктор.
+    MyClass() {
+        val = 0;
+    }
+
+    //...
+    int getVal() {
+        return val;
+    }
+}
+
+class Code {
+
+    public static void main(String[] args) {
+
+        // Создать ссылку на конструктор MyClass.
+        // Поскольку метод func ( ) в MyFunc принимает аргумент, new ссыпается
+        // на параметризованный конструктор MyClass, а не на стандартный .
+        MyFunc myClassCons = MyClass::new;
+        // Создать экземпляр MyClass через эту ссыпку на конструктор .
+        MyClass mc = myClassCons.func(100);
+        // Использовать только что созданный экземпляр MyClass.
+        System.out.println("val в mc равно " + mc.getVal());
+    }
+}
+```
