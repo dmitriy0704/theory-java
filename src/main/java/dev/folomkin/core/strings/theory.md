@@ -5,7 +5,7 @@
 в пакете java.lang, подключаемом к приложению автоматически. Эти классы
 объявлены как final, что означает невозможность создания собственных
 порожденных классов со свойствами строки. Для форматирования и обработки
-трок применяются также классы Formatter, Pattern, Matcher, StringJoiner и
+строк применяются также классы Formatter, Pattern, Matcher, StringJoiner и
 другие.
 
 ## Класс String
@@ -114,13 +114,11 @@ String._
 
     for (int j = 0; j < arrString.length; j++) {
         for (int i = j + 1; i < arrString.length; i++) {
-
             if (arrString[i].compareToIgnoreCase(arrString[j]) < 0) {
                 String temp = arrString[j];
                 arrString[j] = arrString[i];
                 arrString[i] = temp;
             }
-
         }
     }
 

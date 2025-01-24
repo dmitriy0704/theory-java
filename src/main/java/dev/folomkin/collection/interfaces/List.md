@@ -184,7 +184,6 @@ java.util.AbstractCollection<E>
 public class ExampleStart {
     public static void main(String[] args) {
         List<String> list = new ArrayList<>();
-        р
         list.add("A");
         list.add("B");
         list.add("C");
