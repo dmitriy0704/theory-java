@@ -4,16 +4,12 @@
 Arrays и java.util.Collections, которые содержат часто используемые
 алгоритмы, такие как сортировка и поиск на массивах и коллекциях.
 
-
-
 ## Класс утилит java.util.Arrays
 
 Массив – это ссылочный тип в Java. Он может содержать как пе-
 ременные базовых типов, так и объекты. В Java определены девять
 типов массивов – по одному на каждый из базовых типов (byte,
 short, int, long, float, double, char, boolean) и один для Object.
-
-
 
 ## Алгоритмы класса Collection
 
@@ -52,7 +48,7 @@ short, int, long, float, double, char, boolean) и один для Object.
 
 ```java
 public static void main(String[] args) {
-    ArrayList<Integer> list = new ArrayList();
+    List<Integer> list = new ArrayList();
     Collections.addAll(list, 1, 2, 3, 4, 5);
     Collections.shuffle(list);
     System.out.println(list);
@@ -79,19 +75,19 @@ public static void main(String[] args) {
 
 ```java
 public class ExampleStart {
-  public static void main(String[] args) {
-    int[] numbers = {1, 3, 2, 45, 67, 8, 9, 10};
-    // Отсортировать массив
-    // Arrays.sort(numbers);
-    System.out.println(Arrays.toString(numbers));
-    List<Integer> numbersList = new ArrayList<>();
-    for (int i = 0; i < numbers.length; i++) {
-      numbersList.add(numbers[i]);
+    public static void main(String[] args) {
+        int[] numbers = {1, 3, 2, 45, 67, 8, 9, 10};
+        // Отсортировать массив
+        // Arrays.sort(numbers);
+        System.out.println(Arrays.toString(numbers));
+        List<Integer> numbersList = new ArrayList<>();
+        for (int i = 0; i < numbers.length; i++) {
+            numbersList.add(numbers[i]);
+        }
+        // Или коллекцию
+        Collections.sort(numbersList);
+        System.out.println(numbersList);
     }
-    // Или коллекцию
-    Collections.sort(numbersList);
-    System.out.println(numbersList);
-  }
 }
 ```
 
@@ -128,26 +124,26 @@ __Пример Comparable<T>__
 
 ```java
 public class ExampleStart {
-  public static void main(String[] args) {
-    // Сортировка и поиск "массива" строк Strings
-    String[] array = {"Hello", "hello", "hi", "HI"};
-    // Используем Comparable из String
-    Arrays.sort(array);
-    System.out.println(Arrays.toString(array));
-    //Используем бинарный поиск,
-    // для этого массив должен быть отсортирован.
-    System.out.println(Arrays.binarySearch(array, "Hello"));
-    System.out.println(Arrays.binarySearch(array, "HELLO"));
-    // Сортировка и поиск в списке List из целых чисел
-    List<Integer> list = new ArrayList<>();
-    list.add(2);
-    list.add(1);
-    list.add(4);
-    list.add(3);
-    Collections.sort(list); //Используем Comparable для класса Integer
-    System.out.println(list);
-    System.out.println(binarySearch(list, 2));
-  }
+    public static void main(String[] args) {
+        // Сортировка и поиск "массива" строк Strings
+        String[] array = {"Hello", "hello", "hi", "HI"};
+        // Используем Comparable из String
+        Arrays.sort(array);
+        System.out.println(Arrays.toString(array));
+        //Используем бинарный поиск,
+        // для этого массив должен быть отсортирован.
+        System.out.println(Arrays.binarySearch(array, "Hello"));
+        System.out.println(Arrays.binarySearch(array, "HELLO"));
+        // Сортировка и поиск в списке List из целых чисел
+        List<Integer> list = new ArrayList<>();
+        list.add(2);
+        list.add(1);
+        list.add(4);
+        list.add(3);
+        Collections.sort(list); //Используем Comparable для класса Integer
+        System.out.println(list);
+        System.out.println(binarySearch(list, 2));
+    }
 }
 ```
 
@@ -160,33 +156,30 @@ public class ExampleStart {
 
 ```java
 public class ExampleStart {
-  public static class StringComparator implements Comparator<String> {
-    @Override
-    public int compare(String s1, String s2) {
-      return s1.compareToIgnoreCase(s2);
+    public static class StringComparator implements Comparator<String> {
+        @Override
+        public int compare(String s1, String s2) {
+            return s1.compareToIgnoreCase(s2);
+        }
     }
-  }
 
-  public static class IntegerComparator implements Comparator<Integer> {
-    @Override
-    public int compare(Integer s1, Integer s2) {
-      return s1 % 10 - s2 % 10;
+    public static class IntegerComparator implements Comparator<Integer> {
+        @Override
+        public int compare(Integer s1, Integer s2) {
+            return s1 % 10 - s2 % 10;
+        }
     }
-  }
 
-  public static void main(String[] args) {
-    Comparator<String> compStr = new StringComparator();
-    Comparator<Integer> compInt = new IntegerComparator();
-    // Сортировка и поиск в массиве строк String
-    String[] array = {"Hello", "Hi", "HI", "hello"};
-    Arrays.sort(array, compStr);
-    System.out.println(Arrays.toString(array));
-  }
+    public static void main(String[] args) {
+        Comparator<String> compStr = new StringComparator();
+        Comparator<Integer> compInt = new IntegerComparator();
+        // Сортировка и поиск в массиве строк String
+        String[] array = {"Hello", "Hi", "HI", "hello"};
+        Arrays.sort(array, compStr);
+        System.out.println(Arrays.toString(array));
+    }
 }
 ```
-
-
-
 
 # Алгоритмы коллекций.
 

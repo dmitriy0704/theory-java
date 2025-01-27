@@ -1,4 +1,313 @@
-### _Comparable_
+# Компараторы
+
+Comparator представляет собой обобщенный интерфейс, объявленный
+следующим образом:
+
+`interface Comparator<T>`
+
+## **Методы:**
+
+- int compare(T obj1, Т obj2) - Здесь obj1 и obj2 - сравниваемые объекты. Обычно
+  метод compare()
+  возвращает ноль, если объекты равны, положительное значение, если obj1
+  больше obj2, и отрицательное значение, если obj1 меньше obj2. Метод может
+  сгенерировать исключение ClassCastException, если типы объектов
+  несовместимы для сравнения. Реализация compare() позволяете изменить
+  способ упорядочения объектов.
+- equals() проверяет, равен ли объект вызываемому компаратору:
+  `boolean equals(object obj)`
+  В obj указывается объект, подлежащий проверке на равенство. Метод возвращает
+  true, если obj и вызывающий объект являются экземплярами реализации
+  Comparator и используют одно и то же упорядочение, или false в
+  противном случае.
+- reversed() - можно получить компаратор, изменяющий упорядочение компаратора,
+  для которого он вызывается, на противоположное:
+  `default Comparator<T> reversed()`. Метод reversed ( ) возвращает компаратор с
+  обратным порядком.
+- `static <Т extends Comparable<? super Т>> Comparator<T> reverseOrder()` - Он
+  возвращает компаратор, который изменяет естественный порядок
+  элементов на противоположный.
+- И наоборот, вызвав статический метод
+  naturalOrder() можно получить компаратор, использующий естественный порядок:
+  `static <Т extends Comparable<? super Т>> Comparator<T> naturalOrder()`
+- Если необходим компаратор, способный обрабатывать значения null, тогда
+  подойдут методы nullsFirst() и nullsLast():
+  `static <Т> Comparator< T> nullsFirst (Comparator<? super Т> comp)`
+  `static <Т> Comparator< T> nullsLast(Comparator<? super Т> comp)`
+  Метод nullsFirst() возвращает компаратор, который трактует значения
+  null как меньшие, чем другие значения. Метод nullsLast() возвращает
+  компаратор, который трактует значения null как большие, чем другие значения.
+  В том и другом случае, если два сравниваемых значения не равны null,
+  то сравнение выполняет сотр. Если в сотр передается null, тогда все значения,
+  отличающиеся от null, считаются эквивалентными.
+- Другим стандартным методом является thenComparing ( ) . Он возвращает
+  компаратор, который выполняет второе сравнение, когда результат первого
+  сравнения указывает, что сравниваемые объекты равны. Таким образом, его
+  можно применять для создания последовательности вида "сравнить по Х, затем
+  сравнить по У': Скажем, при сравнении городов первое сравнение может
+  иметь дело с их названиями, а второе - с их штатами. Метод thenComparing()
+  имеет три формы.  
+  Первая позволяет указывать второй компаратор, передавая экземпляр реализации
+  Comparator:
+  `default Comparator<T> thenComparing (Comparator<? super Т> thenByComp)`
+  В thenByComp указывается компаратор, который вызывается, если первое
+  сравнение возвращает признак равенства.    
+  Следующие версии thenComparing() позволяют указывать стандартный
+  функциональный интерфейс Function:
+
+      default <U extends Comparable<? super U> Comparator<T> 
+           thenComparing(Function< ? super T, ? extends U> getKey)
+
+      default <U> Comparator<T> 
+          thenComparing(Function< ? super Т, ? extends О> getKey, 
+          Comparator< ? super О> keyComp)
+
+  В обоих случаях getKey ссылается на функцию, получающую следующий
+  ключ сравнения, который используется, если первое сравнение возвращает
+  признак равенства. Во второй версии в keyComp указывается компаратор,
+  применяемый для сравнения ключей.
+- comparing() - возвращает компаратор, который получает свой ключ для сравнения
+  из функции, передаваемой методу.
+
+      static <Т, О extends Comparable<? super О>> Comparator<T>
+      comparing(Function< ? super т, ? extends О> getKey)
+
+      static <Т, О> Comparator<T>
+      comparing(Function< ? super Т, ? extends О> getKey,
+      Comparator<? super О> keyComp)
+
+  В обеих версиях getKey ссылается на функцию, которая получает следующий
+  ключ для сравнения. Во второй версии в keyComp указывается компаратор,
+  используемый для сравнения ключей. Во всех методах getKey ссылается на
+  функцию, получающую следующий ключ для сравнения.
+
+## Использование компаратора
+
+```java
+// Сортировка в обратном порядке, compare:
+
+class MyComparator implements Comparator<String> {
+    @Override
+    public int compare(String aStr, String bStr) {
+        return bStr.compareTo(aStr);
+    }
+}
+
+
+public class Code {
+    public static void main(String[] args) {
+        // Создать древовидный набор
+        TreeSet<String> ts = new TreeSet<String>(new MyComparator());
+        ts.add("C");
+        ts.add("A");
+        ts.add("B");
+        ts.add("E");
+        ts.add("D");
+        ts.add("F");
+
+        for (String s : ts) {
+            System.out.println("el: " + s);
+        }
+        System.out.println();
+    }
+}
+
+
+// reversed
+
+class MyComparator implements Comparator<String> {
+    @Override
+    public int compare(String aStr, String bStr) {
+        return aStr.compareTo(bStr);
+    }
+}
+
+public class Code {
+    public static void main(String[] args) {
+
+        // Создать компаратор
+        MyComparator comparator = new MyComparator();
+
+        // Или
+        Comparator<String> c = (s1, s2) -> s2.compareTo(s1);
+
+        // Или
+        TreeSet<String> ts = new TreeSet<String>((as1, as2) -> as2.compareTo(as1));
+
+        TreeSet<String> ts = new TreeSet<String>(comparator.reversed());
+        ts.add("C");
+        ts.add("A");
+        ts.add("B");
+        ts.add("E");
+        ts.add("D");
+        ts.add("F");
+
+        for (String s : ts) {
+            System.out.println("el: " + s);
+        }
+        System.out.println();
+    }
+}
+
+```
+
+Внутри compare() метод compareTo() класса String сравнивает две
+строки. Тем не менее, метод compareTo() вызывается на экземпляре bStr, а
+не на aStr, приводя к обратному результату сравнения.
+
+**Сортировка объектов**
+
+```java
+// Использование компаратора для сортировки счетов по фамилии владельца
+class MyComparator implements Comparator<String> {
+    @Override
+    public int compare(String aStr, String bStr) {
+        int i, j, k;
+
+        // Найти индекс, начинающийся с фамилии.
+        i = aStr.lastIndexOf(' ');
+        j = bStr.lastIndexOf(' ');
+        k = aStr.substring(i).compareToIgnoreCase(bStr.substring(j));
+        if (k == 0) // Фамилии совпадают, проверить полное имя
+            return aStr.compareToIgnoreCase(bStr);
+        else
+            return k;
+    }
+}
+
+
+public class Code {
+    public static void main(String[] args) {
+
+        // Создать древовидную карту.
+        TreeMap<String, Double> map = new TreeMap<>(new MyComparator());
+
+        // Поместить элементы в карту.
+        map.put("John Doe", 3434.34);
+        map.put("Tom Smith", 123.22);
+        map.put("Jane Baker", 1378.00);
+        map.put("Tod Hall", 99.22);
+        map.put("Ralph Smith", -19.08);
+
+        //  Получить набор элементов
+
+        Set<Map.Entry<String, Double>> entries = map.entrySet();
+        for (Map.Entry<String, Double> entry : entries) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+        System.out.println();
+
+        // Пополнить счет клиента John Doe на 1000.
+        double balance = map.get("John Doe");
+        map.put("John Smith", balance + 1000);
+        System.out.println("Hoвый баланс клиента John Doe : " + map.get("John Doe"));
+
+    }
+}
+
+```
+
+Класс компаратора TComp обеспечивает сравнение двух строк, содержащих
+имена и фамилии. Сначала сравниваются фамилии, для чего в каждой
+строке ищется индекс последнего пробела, а затем сравниваются подстроки
+каждого элемента, начинающиеся в этой точке. В случаях, когда фамилии
+эквивалентны, сравниваются имена. В итоге получается древовидная карта,
+отсортированная по фамилии и в пределах фамилии по имени. Результат легко
+заметить, потому что в выводе клиент Ralph Smith находится перед клиентом Тот
+Smith.
+
+Предыдущую программу можно переписать так, чтобы карта сортировалась
+по фамилии и затем по имени. Такой подход предусматривает применение
+метода thenComparing ( } . Вспомните, что метод thenComparing ()
+позволяет указать второй компаратор, который будет использоваться, если
+вызывающий компаратор возвращает признак равенства. Ниже показано, как
+выглядит переделанная программа:
+
+```java
+// thenComparing
+
+// Использование компаратора для сортировки счетов по фамилии владельца
+class CompLastName implements Comparator<String> {
+    @Override
+    public int compare(String aStr, String bStr) {
+        int i, j;
+
+        // Найти индекс, начала фамилии.
+        i = aStr.lastIndexOf(' ');
+        j = bStr.lastIndexOf(' ');
+        return aStr.substring(i).compareToIgnoreCase(bStr.substring(j));
+    }
+}
+
+// Сортировать no полному имени, когда фамилии одинаковы.
+class CompThenByFirstName implements Comparator<String> {
+    @Override
+    public int compare(String aStr, String bStr) {
+        return aStr.compareToIgnoreCase(bStr);
+    }
+}
+
+
+public class Code {
+    public static void main(String[] args) {
+
+        // Использовать thenComparing() для создания компаратора, который
+        // сравнивает фамилии и затем полные имена, когда фамилии совпадают.
+        CompLastName compLN = new CompLastName();
+        Comparator<String> compLastThenFirst =
+                compLN.thenComparing(new CompThenByFirstName());
+
+        // Создать древовидную карту.
+        TreeMap<String, Double> map = new TreeMap<>(compLastThenFirst);
+
+        // Поместить элементы в карту.
+        map.put("John Doe", 3434.34);
+        map.put("Tom Smith", 123.22);
+        map.put("Jane Baker", 1378.00);
+        map.put("Tod Hall", 99.22);
+        map.put("Ralph Smith", -19.08);
+
+        //  Получить набор элементов
+        Set<Map.Entry<String, Double>> entries = map.entrySet();
+        for (Map.Entry<String, Double> entry : entries) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+        System.out.println();
+
+        // Пополнить счет клиента John Doe на 1000.
+        double balance = map.get("John Doe");
+        map.put("John Smith", balance + 1000);
+        System.out.println("Hoвый баланс клиента John Doe : " + map.get("John Doe"));
+
+    }
+}
+
+```
+
+CompLastNames, сравнивает только фамилии. Второй компаратор,
+CompThenByFirstName, сравнивает полное имя, которое включает имя и фамилию,
+начиная с имени.
+
+Далее создается объект TreeMap:
+
+        CompLastName compLN = new CompLastName();
+        Comparator<String> compLastThenFirst =
+        compLN.thenComparing(new CompThenByFirstName());
+
+Основным компаратором является compLN, который представляет собой
+экземпляр CompLastNames. Для него вызывается метод thenComparing () с
+передачей экземпляра CompThenByFirstName. Результат присваивается компаратору
+по имени compLastThenFirst, который применяется для конструирования
+объекта TreeMap:
+
+        TreeMap<String, Double> map = new TreeMap<>(compLastThenFirst);
+
+Теперь всякий раз, когда фамилии сравниваемых элементов одинаковы,
+для их упорядочивания используется полное имя, начиная с просто имени,
+т.е. имена упорядочиваются по фамилии, а внутри фамилий - по имени.
+
+
+## _Comparable_
 
 ```java
 class AddressBookEntry implements Comparable<AddressBookEntry> {
@@ -100,3 +409,5 @@ public class ExampleStart {
 }
 
 ```
+
+
