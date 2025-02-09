@@ -1,4 +1,4 @@
-package dev.folomkin.tdd;
+package dev.folomkin.testing.tdd;
 
 import dev.folomkin.testing.tdd.TicketRevenue;
 import org.junit.jupiter.api.BeforeEach;
