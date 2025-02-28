@@ -9,6 +9,7 @@ public class DataProcessor {
     }
 
     public double processData() {
-        return dataService.retrieveData() * 2;
+//        return dataService.retrieveData() * 2;
+        return 2.9;
     }
 }

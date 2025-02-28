@@ -17,6 +17,67 @@
 5. [Класс Thread и интерфейс Runnable](#title4)
 5. [Главный поток](#title5)
 
+
+## Создание потока
+
+### Расширение класса Thread:
+
+```java
+package dev.folomkin.core.multithrading.code;
+
+public class Code {
+    public static void main(String[] args) {
+        WalkThread t = new WalkThread();
+        t.start();
+    }
+}
+
+class WalkThread extends Thread {
+    public void run() {
+        try {
+            for (int i = 0; i < 10; i++) {
+                System.out.println("Walking " + i);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } finally {
+            System.out.println("Finished: " + Thread.currentThread().getName());
+        }
+
+    }
+}
+```
+
+```java
+public class Code {
+  public static void main(String[] args) {
+    Thread t = new Thread(new TalkThread());
+    t.start();
+  }
+}
+
+class TalkThread implements Runnable {
+    @Override
+    public void run() {
+        try {
+            for (int i = 0; i < 10; i++) {
+                System.out.println("Talking " + i);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        } finally {
+            System.out.println("Talking " + Thread.currentThread().getName());
+        }
+    }
+```
+
+
 ## <a id="title0">ЖИЗНЕННЫЙ ЦИКЛ ПОТОКА</a>
 
 [Наверх](#titlelist)

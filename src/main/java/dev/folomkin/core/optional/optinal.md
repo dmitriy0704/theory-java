@@ -46,7 +46,8 @@ public class ExampleStart {
     }
 
     public static Optional<Order> findById(List<Order> orders, long id) {
-// Без Optional:      Order order = null;
+    
+        // Без Optional:      Order order = null;
 
         List<Order> result = orders
                 .stream().filter(o -> id == o.getId())
