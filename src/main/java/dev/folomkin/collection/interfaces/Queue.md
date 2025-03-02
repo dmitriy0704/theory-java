@@ -30,7 +30,7 @@ public class ExampleStart {
             queue.add("Пятница");
             queue.add("Воскресенье");
         } catch (IllegalStateException e) {
-            e.printStackTrace();
+            e.printStackTrace();1
         }
         System.out.println("Удаляем начало очереди: " + queue.peek()); // <- Тут просто выводим начало очереди.
         String head = null;

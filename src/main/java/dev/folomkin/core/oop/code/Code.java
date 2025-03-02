@@ -1,9 +1,19 @@
 package dev.folomkin.core.oop.code;
 
 
+import java.util.Arrays;
+
 class Code {
     public static void main(String[] args) {
-        Callback c = new Client();
-        c.call(42);
+        Color color = Color.GREEN;
+        Color color2 = Color.BLUE;
+        System.out.println(color == color2);
+        System.out.println(
+                Color.GREEN.ordinal()==color2.ordinal()
+        );
     }
+}
+
+enum Color {
+    RED, BLACK, WHITE, BLUE, GREEN, YELLOW, ORANGE;
 }
