@@ -169,45 +169,21 @@ java.util при попытке использовать итератор поз
 способа: агрегация коллекции в качестве поля класса или отношение HAS-A
 и наследование от класса, представляющего коллекцию, или отношение IS-A.
 
-HAS-A:
-
 ```java
-public class OrderType implements Iterable<String> {
-    private int orderId;
-    private List<String> currencyNames = new ArrayList<>();
+public class Code {
+    public static void main(String[] args) {
 
-    /* SEK, DKK, NOK, CZK,  GBP, EUR, PLN */
-    public OrderType(int orderId) {
-        this.orderId = orderId;
-    }
-
-    public List<String> getCurrencyNames() {
-        return List.copyOf(currencyNames);
-    }
-
-    // delegated method
-    public boolean add(String e) {
-        return currencyNames.add(e);
-    }
-
-    @Override
-    public Iterator<String> iterator() {
-        return currencyNames.iterator();
+        List<String> list = Arrays.asList("a", "b", "c");
+        ListIterator<String> iterator = list.listIterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+        while (iterator.hasPrevious()) {
+            System.out.println(iterator.previous());
+        }
     }
 }
-```
 
-Отношение IS-A записывается еще проще, но теряется имя currencyNames.
-Класс OrderType теперь сам является списком
-
-```java
-public class OrderType extends ArrayList<String> {
-    private int orderId;
-
-    public OrderType(int orderId) {
-        this.orderId = orderId;
-    }
-}
 ```
 
 ## Интерфейс Collection\<E>
@@ -373,62 +349,33 @@ public class Code {
 ListIterator<E>, Map.Entry<K, V> — для перебора коллекции и доступа к объектам
 коллекции.
 
+## Fail-fast и Fail-safe итераторы
+
+Это характеристики разных реализаций интерфейса Iterator
+Они определяют, как поведет себя итератор при изменении перебираемой
+последовательности элементов.
+
+Fail-fast – быстрый итератор
+Это итераторы коллекций пакета java.util
+Если после его создания коллекция изменилась – он бросит исключение
+ConcurrentModificationException
+
+Коллекции поддерживают внутренний счетчик под названием modCount.
+Каждый раз, когда элемент добавляется или удаляется из коллекции, этот счетчик
+увеличивается. При итерации при каждом вызове next() текущее значение modCount
+сравнивается с начальным значением.
+
+Если во время итерации по коллекции элемент удаляется с помощью метода итератора
+remove() – это полностью безопасно и не вызывает исключения.
+
+Fail-safe – умный итератор
+Это итераторы коллекций пакета java.util.concurrent
+Итератор работает с копией данных – он не бросит исключение при изменении
+коллекции, но и не увидит обновленных данных.
+
+Другим недостатком являются накладные расходы на создание копии коллекции, как в
+отношении времени, так и в отношении памяти.
+
 ## Временная сложность коллекций
 
-![collections_time.png](../../../../../../../img/collection/collections_time.png)
-
-
-## Полезные методы Collections
-
-```java
-package dev.folomkin.collection.code;
-
-import java.util.*;
-
-class MyComparator implements Comparator<String> {
-
-    @Override
-    public int compare(String o1, String o2) {
-        return o1.compareToIgnoreCase(o2);
-    }
-}
-
-public class Code {
-    public static void main(String[] args) {
-
-        MyComparator comparator = new MyComparator();
-
-        List<Integer> list = new LinkedList<>();
-        list.add(-8);
-        list.add(20);
-        list.add(-20);
-        list.add(8);
-
-        // Создать компаратор с обратным порядком.
-        Comparator<Integer> r = Collections.reverseOrder();
-
-        // Сортировать список с использованием созданного компаратора.
-        Collections.sort(list, r);
-
-        System.out.print("Список отсортирован в обратном порядке: ");
-        for (int i : list) {
-            System.out.print(i + " ");
-        }
-
-        // Тасовать список.
-        Collections.shuffle(list);
-
-        // Отобразить рандомизированный список.
-        System.out.print("Список перетасован: ");
-        for (int i : list) {
-            System.out.print(i + " ");
-        }
-        System.out.println();
-        System.out.println(" Haимeньшee значение: " + Collections.min(list));
-        System.out.println("Haибoльшee значение: " + Collections.max(list));
-
-
-    }
-}
-
-```
+![collections_time.png](/img/collection/collections_time.png)
