@@ -379,3 +379,83 @@ Fail-safe – умный итератор
 ## Временная сложность коллекций
 
 ![collections_time.png](/img/collection/collections_time.png)
+
+## Синхронизированные Collection, List, Set и Map.
+
+Несинхронизированные:
+
+- ArrayList;
+- HashSet;
+- HashMap;
+
+Синхронизированные:
+
+- Vector;
+- HashTable;
+
+Для создания синхронизированного Collection, List, Set, SortedSet, Map,
+SortedMap используется статический метод Collection.synchronizedXxx:
+
+- public static <T> Collection<T> synchronizedCollection(Collection<T> c);
+- public static <T> List<T> synchronizedList(List<T> list);
+- ....
+
+В соответствии со спецификацией JDK API, «чтобы гарантиро- вать последовательный
+доступ, критичным является то, что всякий доступ к исходному списку
+осуществляется через возвращенный список и что пользователь вручную
+синхронизирует возвращенный список, проходя по нему».
+
+```java
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+
+public class ExampleCode {
+    public static void main(String[] args) {
+        List list = Collections.synchronizedList(new ArrayList<>());
+        synchronized (list) { // следует организовать синхронизированный блок
+            Iterator iterator = list.iterator();
+            while (iterator.hasNext()) {
+                iterator.next();
+            }
+        }
+    }
+}
+```
+
+## Concurrent
+
+### Потокобезопасные Concurrent коллекции
+
+Concurrent Collections – это набор коллекций, более эффективно работающих в
+многопоточной среде чем стандартные коллекции из пакета java.util
+
+Вместо базового враппера (обертки) Collections.synchronizedCollection с
+блокированием доступа ко всей коллекции используются блокировки по сегментам
+данных или же оптимизируется работа для параллельного чтения данных по wait-free
+алгоритмам.
+
+Пакет java.util.concurrent предоставляет реализации Конкурентных коллекций:
+
+- ConcurrentHashMap – вместо HashMap
+- ConcurrentSkipListMap – вместо TreeMap
+- ConcurrentSkipListSet
+- CopyOnWriteArrayList – вместо ArrayList
+- CopyOnWriteArraySet
+
+### Блокирующие очереди пакета concurrent
+
+Блокирующие очереди реализуют интерфейсы
+BlockingQueue, BlockingDeque, TransferQueue
+
+- ArrayBlockingQueue — очередь, реализующая классический кольцевой буфер;
+- LinkedBlockingQueue — односторонняя очередь на связанных узлах;
+- LinkedBlockingDeque — двунаправленная очередь на связанных узлах;
+- SynchronousQueue — блокирующую очередь без емкости (операция добавления одного
+  потока находится в ожидании соответствующей операции удаления в другом
+  потоке);
+- LinkedTransferQueue — реализация очереди на основе интерфейса TransferQueue;
+- DelayQueue — неограниченная блокирующая очередь, реализующая интерфейс
+  Delayed;
+- PriorityBlockingQueue — реализация очереди на основе интерфейса PriorityQueue.
+

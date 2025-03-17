@@ -1,11 +1,247 @@
 # Компараторы
 
+Чтобы сортировать объекты в коллекции – нужно прописать правила их сравнения.
+Для этого в классе, чьи объекты будут сортированы, должен быть интерфейс
+Comparable или Comparator.
+
+Comparable – естественная сортировка класса.  
+Comparator – используется, когда в классе не реализован Comparable, либо
+реализован, но с неподходящей нам логикой сравнения объектов.
+
+Три важных свойства сравнивающей функции
+Если сравнивающая функция не удовлетворяет этим свойствам, алгоритм может выдать
+совершенно непредсказуемый результат.
+
+- Рефлексивность – сравнение элемента с самим собой всегда возвращает 0
+- Антисимметричность – сравнение A с B, и B с A должны дать разный знак.
+- Транзитивность – если сравнение A с B, и B с C выдает одинаковый знак, то и
+  сравнение A с C должно выдать такой же знак.
+
+## _Comparable_
+
+Интерфейс Comparable накладывает полный порядок на объекты каждого класса,
+который его реализует.
+Этот порядок называется естественный порядок класса, а метод compareTo() класса
+называется его естественным методом сравнения.
+
+Списки и массивы объектов, реализующих этот интерфейс, могут быть автоматически
+отсортированы методами Collections.sort() и Arrays.sort().
+
+Объекты, реализующие этот интерфейс, могут использоваться в качестве ключей в
+SortedMap или как элементы в SortedSet без необходимости указания Компаратора.
+
+Интерфейс java.lang.Comparable\<T> указывает, как два объекта должны
+сравниваться в смысле упорядочения. Чтобы задать свой способ сравнения объектов,
+нужно переопределить метод compareTo(), где прописать логику сравнения.
+Этот интерфейс определяет один абстрактный
+метод:
+
+- int compareTo(T o) - возвращает отрицательное целое, ноль или положительное
+  целое число, если данный объект меньше, равен или больше заданного.
+
+```java
+class Person implements Comparable<Person> {
+    private String fullName;
+    private Integer uuid;
+
+    @Override
+    public int compareTo(Person person) {
+        return uuid - person.uuid;
+    }
+}
+```
+
+Метод compareTo(Object o) сравнивает этот объект с указанным объектом.
+Возвращает отрицательное целое число, ноль или положительное целое число, если
+этот объект меньше, равен или больше указанного объекта.
+В предопределенном методе вместо выражения можно использовать его:
+
+    @Override
+    public int compareTo(Person person) {     
+        return uuid.compareTo(person.uuid);
+    }
+
+Рекомендуется чтобы (x.compareTo(y)==0) был равен (x.equals(y))
+
+Можно сравнивать по нескольким полям класса.
+Например, если fullName совпадают – тогда сравнить по uuid
+
+    @Override
+    public int compareTo(Person person) {
+        int fullNameComparator = fullName.compareTo(person.fullName);
+        int uuidComparator = uuid.compareTo(person.uuid);
+        return (fullNameComparator != 0 ? fullNameComparator : uuidComparator);
+    }
+
+Строго рекомендуется, чтобы метод compareTo() был совместимым с equals() и
+hashCode() (наследуемых из java.lang.Object):
+
+1. Если compareTo() возвращает ноль, то equals() должен воз вращать true.
+2. Если equals() возвращает true, то hashCode() будет создавать то же int.
+
+Все восемь классов-оболочек базовых типов (Byte, Short, Integer, Long, Float,
+Double, Character и Boolean) реализуют интерфейс Comparable с методом
+compareTo(), использующим порядок номеров.
+
+__Пример Comparable<T>__
+
+```java
+public class ExampleStart {
+    public static void main(String[] args) {
+        // Сортировка и поиск "массива" строк Strings
+        String[] array = {"Hello", "hello", "hi", "HI"};
+        // Используем Comparable из String
+        Arrays.sort(array);
+        System.out.println(Arrays.toString(array));
+        //Используем бинарный поиск,
+        // для этого массив должен быть отсортирован.
+        System.out.println(Arrays.binarySearch(array, "Hello"));
+        System.out.println(Arrays.binarySearch(array, "HELLO"));
+        // Сортировка и поиск в списке List из целых чисел
+        List<Integer> list = new ArrayList<>();
+        list.add(2);
+        list.add(1);
+        list.add(4);
+        list.add(3);
+        Collections.sort(list); //Используем Comparable для класса Integer
+        System.out.println(list);
+        System.out.println(binarySearch(list, 2));
+    }
+}
+```
+
+### Сортировка объектов
+
+```java
+class AddressBookEntry implements Comparable<AddressBookEntry> {
+    private String name, address, phone;
+
+    public AddressBookEntry(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public int compareTo(AddressBookEntry another) {
+        return this.name.compareToIgnoreCase(another.name);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof AddressBookEntry)) {
+            return false;
+        }
+        return this.name.equalsIgnoreCase(((AddressBookEntry) obj).name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.length();
+    }
+}
+
+public class ExampleStart {
+    public static void main(String[] args) {
+        AddressBookEntry addr1 = new AddressBookEntry("петр");
+        AddressBookEntry addr2 = new AddressBookEntry("ПАВЕЛ");
+        AddressBookEntry addr3 = new AddressBookEntry("Сергей");
+        AddressBookEntry addr4 = new AddressBookEntry("Олег");
+        AddressBookEntry addr5 = new AddressBookEntry("Алексей");
+        TreeSet<AddressBookEntry> set = new TreeSet<>();
+        set.add(addr1);
+        set.add(addr2);
+        set.add(addr3);
+        set.add(addr4);
+        set.add(addr5);
+        System.out.println(set);
+        System.out.println(set.floor(addr2));
+        System.out.println(set.lower(addr2));
+        System.out.println(set.headSet(addr2));
+        System.out.println(set.tailSet(addr2));
+    }
+}
+```
+
+## interface Comparator\<T>
+
+Comparator используется, когда в классе не реализован, либо реализован с
+неподходящей логикой интерфейс Comparable, от чего нельзя сравнить объекты
+нужным образом.
+
 Comparator представляет собой обобщенный интерфейс, объявленный
-следующим образом:
+следующим образом: `interface Comparator\<T>`
 
-`interface Comparator<T>`
+Можно создать отдельный класс компаратор, реализовав в нем Comparator.
+Такой класс будет содержать нужную логику сравнения и его можно будет
+использовать в аргументах методов, которые требуют Компаратор.
 
-## **Методы:**
+Сравнение чисел делаем через Integer.compare
+Или метод Comparator.comparingInt
+
+```java
+public class PersonUuidComparator implements Comparator<Person> {
+
+    @Override
+    public int compare(Person p1, Person p2) {
+        return Integer.compare(p1.uuid - p2.uuid);
+    }
+}
+```
+
+Можно создать несколько Компараторов для класса и использовать нужный.
+
+```java
+public class PersonNameComparator implements Comparator<Person> {
+
+    @Override
+    public int compare(Person p1, Person p2) {
+        return p1.name.compareTo(p2.uuid);
+    }
+}
+```
+
+Можно применять сразу несколько компараторов по принципу приоритета thenComparing()
+
+```java
+var comparator = Comparator.comparing(Person::getName)
+        .thenComparingInt(Person::getUuid);
+
+Comparator<Person> personComparator = new PersonNameComparator()
+        .thenComparing(new PersonUuidComparator());
+
+```
+
+Comparator – функциональный интерфейс, его можно задать лямбда выражением.
+Статический метод Comparator.comparing принимает функцию ключа сортировки и возвращает компаратор для типа, содержащего ключ сортировки.
+
+```java
+class Demo {
+    void demo
+
+    {
+        Comparator<Person> personUuidComparator = Comparator.comparing(Person::getUuid);
+        List<Person> people = new ArrayList<Person>();
+
+        people.sort((person1, person2) -> person1.uuid - person2.uuid());
+        people.sort((person1, person2) -> person1.uuid.compareTo(person2.uuid()));
+    }
+}
+```
+Для сортировки в обратном порядке reversed()
+
+```java
+Comparator<Person> uuidComparator = 
+  (person1, person2) -> person1.getUuid().compareTo(person2.getUuid());
+
+people.sort(uuidComparator.reversed());
+```
+
+
+### **Методы:**
 
 - int compare(T obj1, Т obj2) - Здесь obj1 и obj2 - сравниваемые объекты. Обычно
   метод compare()
@@ -81,7 +317,7 @@ Comparator представляет собой обобщенный интерф
   используемый для сравнения ключей. Во всех методах getKey ссылается на
   функцию, получающую следующий ключ для сравнения.
 
-## Использование компаратора
+### Использование компаратора
 
 ```java
 // Сортировка в обратном порядке, compare:
@@ -155,7 +391,7 @@ public class Code {
 строки. Тем не менее, метод compareTo() вызывается на экземпляре bStr, а
 не на aStr, приводя к обратному результату сравнения.
 
-**Сортировка объектов**
+### Сортировка объектов
 
 ```java
 // Использование компаратора для сортировки счетов по фамилии владельца
@@ -202,6 +438,53 @@ public class Code {
         map.put("John Smith", balance + 1000);
         System.out.println("Hoвый баланс клиента John Doe : " + map.get("John Doe"));
 
+    }
+}
+
+// ========
+
+
+```java
+
+class PhoneBookEntry {
+    public String name, address, phone;
+
+    public PhoneBookEntry(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+}
+
+public class ExampleStart {
+    public static class PhoneBookComparator
+            implements Comparator<PhoneBookEntry> {
+        @Override
+        public int compare(PhoneBookEntry p1, PhoneBookEntry p2) {
+            return p2.name.compareToIgnoreCase(p1.name); //по убыванию от name;
+        }
+    }
+
+    public static void main(String[] args) {
+        PhoneBookEntry addr1 = new PhoneBookEntry("петр");
+        PhoneBookEntry addr2 = new PhoneBookEntry("ПАВЕЛ");
+        PhoneBookEntry addr3 = new PhoneBookEntry("Сергей");
+        PhoneBookEntry addr4 = new PhoneBookEntry("Олег");
+        PhoneBookEntry addr5 = new PhoneBookEntry("Алексей");
+
+        Comparator<PhoneBookEntry> comp = new PhoneBookComparator();
+        TreeSet<PhoneBookEntry> set = new TreeSet<>(comp);
+        set.add(addr1);
+        set.add(addr2);
+        set.add(addr3);
+        set.add(addr4);
+        set.add(addr5);
+        System.out.println(set);
+        Set<PhoneBookEntry> newSet = set.descendingSet();
+        System.out.println(newSet);
     }
 }
 
@@ -305,109 +588,3 @@ CompThenByFirstName, сравнивает полное имя, которое в
 Теперь всякий раз, когда фамилии сравниваемых элементов одинаковы,
 для их упорядочивания используется полное имя, начиная с просто имени,
 т.е. имена упорядочиваются по фамилии, а внутри фамилий - по имени.
-
-
-## _Comparable_
-
-```java
-class AddressBookEntry implements Comparable<AddressBookEntry> {
-    private String name, address, phone;
-
-    public AddressBookEntry(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    @Override
-    public int compareTo(AddressBookEntry another) {
-        return this.name.compareToIgnoreCase(another.name);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof AddressBookEntry)) {
-            return false;
-        }
-        return this.name.equalsIgnoreCase(((AddressBookEntry) obj).name);
-    }
-
-    @Override
-    public int hashCode() {
-        return name.length();
-    }
-}
-
-public class ExampleStart {
-    public static void main(String[] args) {
-        AddressBookEntry addr1 = new AddressBookEntry("петр");
-        AddressBookEntry addr2 = new AddressBookEntry("ПАВЕЛ");
-        AddressBookEntry addr3 = new AddressBookEntry("Сергей");
-        AddressBookEntry addr4 = new AddressBookEntry("Олег");
-        AddressBookEntry addr5 = new AddressBookEntry("Алексей");
-        TreeSet<AddressBookEntry> set = new TreeSet<>();
-        set.add(addr1);
-        set.add(addr2);
-        set.add(addr3);
-        set.add(addr4);
-        set.add(addr5);
-        System.out.println(set);
-        System.out.println(set.floor(addr2));
-        System.out.println(set.lower(addr2));
-        System.out.println(set.headSet(addr2));
-        System.out.println(set.tailSet(addr2));
-    }
-}
-```
-
-### Comparator
-
-```java
-class PhoneBookEntry {
-    public String name, address, phone;
-
-    public PhoneBookEntry(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
-}
-
-public class ExampleStart {
-    public static class PhoneBookComparator
-            implements Comparator<PhoneBookEntry> {
-        @Override
-        public int compare(PhoneBookEntry p1, PhoneBookEntry p2) {
-            return p2.name.compareToIgnoreCase(p1.name); //по убыванию от name;
-        }
-    }
-
-    public static void main(String[] args) {
-        PhoneBookEntry addr1 = new PhoneBookEntry("петр");
-        PhoneBookEntry addr2 = new PhoneBookEntry("ПАВЕЛ");
-        PhoneBookEntry addr3 = new PhoneBookEntry("Сергей");
-        PhoneBookEntry addr4 = new PhoneBookEntry("Олег");
-        PhoneBookEntry addr5 = new PhoneBookEntry("Алексей");
-
-        Comparator<PhoneBookEntry> comp = new PhoneBookComparator();
-        TreeSet<PhoneBookEntry> set = new TreeSet<>(comp);
-        set.add(addr1);
-        set.add(addr2);
-        set.add(addr3);
-        set.add(addr4);
-        set.add(addr5);
-        System.out.println(set);
-        Set<PhoneBookEntry> newSet = set.descendingSet();
-        System.out.println(newSet);
-    }
-}
-
-```
-
-
