@@ -8,7 +8,7 @@
   инстанцировать.
 
 Общая структура:
-![factory_method_2.png](/img/design_pattern/design_patterns/factory_method_2.png)
+![factory_method_2.png](/img/design_pattern/design_patterns/factory_method_structure.png)
 
 1. Продукт определяет общий интерфейс объектов, которые может произвести
    создатель и его подклассы.
