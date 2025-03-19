@@ -49,12 +49,17 @@
  * продукта.
  */
 public interface Builder {
-   void setCarType(CarType type);
-   void setSeats(int seats);
-   void setEngine(Engine engine);
-   void setTransmission(Transmission transmission);
-   void setTripComputer(TripComputer tripComputer);
-   void setGPSNavigator(GPSNavigator gpsNavigator);
+    void setCarType(CarType type);
+
+    void setSeats(int seats);
+
+    void setEngine(Engine engine);
+
+    void setTransmission(Transmission transmission);
+
+    void setTripComputer(TripComputer tripComputer);
+
+    void setGPSNavigator(GPSNavigator gpsNavigator);
 }
 
 // -> builders/CarBuilder.java: Строитель автомобилей
@@ -63,45 +68,45 @@ public interface Builder {
  * Конкретные строители реализуют шаги, объявленные в общем интерфейсе.
  */
 public class CarBuilder implements Builder {
-   private CarType type;
-   private int seats;
-   private Engine engine;
-   private Transmission transmission;
-   private TripComputer tripComputer;
-   private GPSNavigator gpsNavigator;
+    private CarType type;
+    private int seats;
+    private Engine engine;
+    private Transmission transmission;
+    private TripComputer tripComputer;
+    private GPSNavigator gpsNavigator;
 
-   public void setCarType(CarType type) {
-      this.type = type;
-   }
+    public void setCarType(CarType type) {
+        this.type = type;
+    }
 
-   @Override
-   public void setSeats(int seats) {
-      this.seats = seats;
-   }
+    @Override
+    public void setSeats(int seats) {
+        this.seats = seats;
+    }
 
-   @Override
-   public void setEngine(Engine engine) {
-      this.engine = engine;
-   }
+    @Override
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
 
-   @Override
-   public void setTransmission(Transmission transmission) {
-      this.transmission = transmission;
-   }
+    @Override
+    public void setTransmission(Transmission transmission) {
+        this.transmission = transmission;
+    }
 
-   @Override
-   public void setTripComputer(TripComputer tripComputer) {
-      this.tripComputer = tripComputer;
-   }
+    @Override
+    public void setTripComputer(TripComputer tripComputer) {
+        this.tripComputer = tripComputer;
+    }
 
-   @Override
-   public void setGPSNavigator(GPSNavigator gpsNavigator) {
-      this.gpsNavigator = gpsNavigator;
-   }
+    @Override
+    public void setGPSNavigator(GPSNavigator gpsNavigator) {
+        this.gpsNavigator = gpsNavigator;
+    }
 
-   public Car getResult() {
-      return new Car(type, seats, engine, transmission, tripComputer, gpsNavigator);
-   }
+    public Car getResult() {
+        return new Car(type, seats, engine, transmission, tripComputer, gpsNavigator);
+    }
 }
 
 // -> builders/CarManualBuilder.java: Строитель руководств пользователя
@@ -116,46 +121,47 @@ public class CarBuilder implements Builder {
  */
 
 
-public class CarManualBuilder implements Builder{
-   private CarType type;
-   private int seats;
-   private Engine engine;
-   private Transmission transmission;
-   private TripComputer tripComputer;
-   private GPSNavigator gpsNavigator;
+public class CarManualBuilder implements Builder {
+    private CarType type;
+    private int seats;
+    private Engine engine;
+    private Transmission transmission;
+    private TripComputer tripComputer;
+    private GPSNavigator gpsNavigator;
 
-   @Override
-   public void setCarType(CarType type) {
-      this.type = type;
-   }
+    @Override
+    public void setCarType(CarType type) {
+        this.type = type;
+    }
 
-   @Override
-   public void setSeats(int seats) {
-      this.seats = seats;
-   }
+    @Override
+    public void setSeats(int seats) {
+        this.seats = seats;
+    }
 
-   @Override
-   public void setEngine(Engine engine) {
-      this.engine = engine;
-   }
-   @Override
-   public void setTransmission(Transmission transmission) {
-      this.transmission = transmission;
-   }
+    @Override
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
 
-   @Override
-   public void setTripComputer(TripComputer tripComputer) {
-      this.tripComputer = tripComputer;
-   }
+    @Override
+    public void setTransmission(Transmission transmission) {
+        this.transmission = transmission;
+    }
 
-   @Override
-   public void setGPSNavigator(GPSNavigator gpsNavigator) {
-      this.gpsNavigator = gpsNavigator;
-   }
+    @Override
+    public void setTripComputer(TripComputer tripComputer) {
+        this.tripComputer = tripComputer;
+    }
 
-   public Manual getResult() {
-      return new Manual(type, seats, engine, transmission, tripComputer, gpsNavigator);
-   }
+    @Override
+    public void setGPSNavigator(GPSNavigator gpsNavigator) {
+        this.gpsNavigator = gpsNavigator;
+    }
+
+    public Manual getResult() {
+        return new Manual(type, seats, engine, transmission, tripComputer, gpsNavigator);
+    }
 }
 
 // -> cars
@@ -167,58 +173,58 @@ public class CarManualBuilder implements Builder{
  */
 
 public class Car {
-   private final CarType carType;
-   private final int seats;
-   private final Engine engine;
-   private final Transmission transmission;
-   private final TripComputer tripComputer;
-   private final GPSNavigator gpsNavigator;
-   private double fuel = 0;
+    private final CarType carType;
+    private final int seats;
+    private final Engine engine;
+    private final Transmission transmission;
+    private final TripComputer tripComputer;
+    private final GPSNavigator gpsNavigator;
+    private double fuel = 0;
 
-   public Car(CarType carType, int seats, Engine engine, Transmission transmission,
-              TripComputer tripComputer, GPSNavigator gpsNavigator) {
-      this.carType = carType;
-      this.seats = seats;
-      this.engine = engine;
-      this.transmission = transmission;
-      this.tripComputer = tripComputer;
-      if (this.tripComputer != null) {
-         this.tripComputer.setCar(this);
-      }
-      this.gpsNavigator = gpsNavigator;
-   }
+    public Car(CarType carType, int seats, Engine engine, Transmission transmission,
+               TripComputer tripComputer, GPSNavigator gpsNavigator) {
+        this.carType = carType;
+        this.seats = seats;
+        this.engine = engine;
+        this.transmission = transmission;
+        this.tripComputer = tripComputer;
+        if (this.tripComputer != null) {
+            this.tripComputer.setCar(this);
+        }
+        this.gpsNavigator = gpsNavigator;
+    }
 
-   public CarType getCarType() {
-      return carType;
-   }
+    public CarType getCarType() {
+        return carType;
+    }
 
-   public double getFuel() {
-      return fuel;
-   }
+    public double getFuel() {
+        return fuel;
+    }
 
-   public void setFuel(double fuel) {
-      this.fuel = fuel;
-   }
+    public void setFuel(double fuel) {
+        this.fuel = fuel;
+    }
 
-   public int getSeats() {
-      return seats;
-   }
+    public int getSeats() {
+        return seats;
+    }
 
-   public Engine getEngine() {
-      return engine;
-   }
+    public Engine getEngine() {
+        return engine;
+    }
 
-   public Transmission getTransmission() {
-      return transmission;
-   }
+    public Transmission getTransmission() {
+        return transmission;
+    }
 
-   public TripComputer getTripComputer() {
-      return tripComputer;
-   }
+    public TripComputer getTripComputer() {
+        return tripComputer;
+    }
 
-   public GPSNavigator getGpsNavigator() {
-      return gpsNavigator;
-   }
+    public GPSNavigator getGpsNavigator() {
+        return gpsNavigator;
+    }
 }
 
 // -> cars/Manual.java: Продукт-руководство
@@ -229,92 +235,93 @@ public class Car {
  */
 
 public class Manual {
-   private final CarType carType;
-   private final int seats;
-   private final Engine engine;
-   private final Transmission transmission;
-   private final TripComputer tripComputer;
-   private final GPSNavigator gpsNavigator;
+    private final CarType carType;
+    private final int seats;
+    private final Engine engine;
+    private final Transmission transmission;
+    private final TripComputer tripComputer;
+    private final GPSNavigator gpsNavigator;
 
-   public Manual(CarType carType, int seats, Engine engine, Transmission transmission,
-                 TripComputer tripComputer, GPSNavigator gpsNavigator) {
-      this.carType = carType;
-      this.seats = seats;
-      this.engine = engine;
-      this.transmission = transmission;
-      this.tripComputer = tripComputer;
-      this.gpsNavigator = gpsNavigator;
-   }
+    public Manual(CarType carType, int seats, Engine engine, Transmission transmission,
+                  TripComputer tripComputer, GPSNavigator gpsNavigator) {
+        this.carType = carType;
+        this.seats = seats;
+        this.engine = engine;
+        this.transmission = transmission;
+        this.tripComputer = tripComputer;
+        this.gpsNavigator = gpsNavigator;
+    }
 
-   public String print() {
-      String info = "";
-      info += "Type of car: " + carType + "\n";
-      info += "Count of seats: " + seats + "\n";
-      info += "Engine: volume - " + engine.getVolume() + "; mileage - " + engine.getMileage() + "\n";
-      info += "Transmission: " + transmission + "\n";
-      if (this.tripComputer != null) {
-         info += "Trip Computer: Functional" + "\n";
-      } else {
-         info += "Trip Computer: N/A" + "\n";
-      }
-      if (this.gpsNavigator != null) {
-         info += "GPS Navigator: Functional" + "\n";
-      } else {
-         info += "GPS Navigator: N/A" + "\n";
-      }
-      return info;
-   }
+    public String print() {
+        String info = "";
+        info += "Type of car: " + carType + "\n";
+        info += "Count of seats: " + seats + "\n";
+        info += "Engine: volume - " + engine.getVolume() + "; mileage - " + engine.getMileage() + "\n";
+        info += "Transmission: " + transmission + "\n";
+        if (this.tripComputer != null) {
+            info += "Trip Computer: Functional" + "\n";
+        } else {
+            info += "Trip Computer: N/A" + "\n";
+        }
+        if (this.gpsNavigator != null) {
+            info += "GPS Navigator: Functional" + "\n";
+        } else {
+            info += "GPS Navigator: N/A" + "\n";
+        }
+        return info;
+    }
 }
 
 // -> cars/CarType.java
 
 public enum CarType {
-   CITY_CAR, SPORTS_CAR, SUV
+    CITY_CAR, SPORTS_CAR, SUV
 }
 
 
 // -> components
 // -> components/Engine.java: Разные фичи продуктов
+
 /**
  * Одна из фишек автомобиля.
  */
 public class Engine {
-   private final double volume;
-   private double mileage;
-   private boolean started;
+    private final double volume;
+    private double mileage;
+    private boolean started;
 
-   public Engine(double volume, double mileage) {
-      this.volume = volume;
-      this.mileage = mileage;
-   }
+    public Engine(double volume, double mileage) {
+        this.volume = volume;
+        this.mileage = mileage;
+    }
 
-   public void on() {
-      started = true;
-   }
+    public void on() {
+        started = true;
+    }
 
-   public void off() {
-      started = false;
-   }
+    public void off() {
+        started = false;
+    }
 
-   public boolean isStarted() {
-      return started;
-   }
+    public boolean isStarted() {
+        return started;
+    }
 
-   public void go(double mileage) {
-      if (started) {
-         this.mileage += mileage;
-      } else {
-         System.err.println("Cannot go(), you must start engine first!");
-      }
-   }
+    public void go(double mileage) {
+        if (started) {
+            this.mileage += mileage;
+        } else {
+            System.err.println("Cannot go(), you must start engine first!");
+        }
+    }
 
-   public double getVolume() {
-      return volume;
-   }
+    public double getVolume() {
+        return volume;
+    }
 
-   public double getMileage() {
-      return mileage;
-   }
+    public double getMileage() {
+        return mileage;
+    }
 }
 
 // -> components/GPSNavigator.java: Разные фичи продуктов
@@ -323,19 +330,19 @@ public class Engine {
  * Одна из фишек автомобиля.
  */
 public class GPSNavigator {
-   private String route;
+    private String route;
 
-   public GPSNavigator() {
-      this.route = "221b, Baker Street, London  to Scotland Yard, 8-10 Broadway, London";
-   }
+    public GPSNavigator() {
+        this.route = "221b, Baker Street, London  to Scotland Yard, 8-10 Broadway, London";
+    }
 
-   public GPSNavigator(String manualRoute) {
-      this.route = manualRoute;
-   }
+    public GPSNavigator(String manualRoute) {
+        this.route = manualRoute;
+    }
 
-   public String getRoute() {
-      return route;
-   }
+    public String getRoute() {
+        return route;
+    }
 }
 
 
@@ -345,7 +352,7 @@ public class GPSNavigator {
  * Одна из фишек автомобиля.
  */
 public enum Transmission {
-   SINGLE_SPEED, MANUAL, AUTOMATIC, SEMI_AUTOMATIC
+    SINGLE_SPEED, MANUAL, AUTOMATIC, SEMI_AUTOMATIC
 }
 
 // -> components/TripComputer.java: Разные фичи продуктов
@@ -355,23 +362,23 @@ public enum Transmission {
  */
 public class TripComputer {
 
-   private Car car;
+    private Car car;
 
-   public void setCar(Car car) {
-      this.car = car;
-   }
+    public void setCar(Car car) {
+        this.car = car;
+    }
 
-   public void showFuelLevel() {
-      System.out.println("Fuel level: " + car.getFuel());
-   }
+    public void showFuelLevel() {
+        System.out.println("Fuel level: " + car.getFuel());
+    }
 
-   public void showStatus() {
-      if (this.car.getEngine().isStarted()) {
-         System.out.println("Car is started");
-      } else {
-         System.out.println("Car isn't started");
-      }
-   }
+    public void showStatus() {
+        if (this.car.getEngine().isStarted()) {
+            System.out.println("Car is started");
+        } else {
+            System.out.println("Car isn't started");
+        }
+    }
 }
 
 
@@ -385,31 +392,31 @@ public class TripComputer {
  */
 public class Director {
 
-   public void constructSportsCar(Builder builder) {
-      builder.setCarType(CarType.SPORTS_CAR);
-      builder.setSeats(2);
-      builder.setEngine(new Engine(3.0, 0));
-      builder.setTransmission(Transmission.SEMI_AUTOMATIC);
-      builder.setTripComputer(new TripComputer());
-      builder.setGPSNavigator(new GPSNavigator());
-   }
+    public void constructSportsCar(Builder builder) {
+        builder.setCarType(CarType.SPORTS_CAR);
+        builder.setSeats(2);
+        builder.setEngine(new Engine(3.0, 0));
+        builder.setTransmission(Transmission.SEMI_AUTOMATIC);
+        builder.setTripComputer(new TripComputer());
+        builder.setGPSNavigator(new GPSNavigator());
+    }
 
-   public void constructCityCar(Builder builder) {
-      builder.setCarType(CarType.CITY_CAR);
-      builder.setSeats(2);
-      builder.setEngine(new Engine(1.2, 0));
-      builder.setTransmission(Transmission.AUTOMATIC);
-      builder.setTripComputer(new TripComputer());
-      builder.setGPSNavigator(new GPSNavigator());
-   }
+    public void constructCityCar(Builder builder) {
+        builder.setCarType(CarType.CITY_CAR);
+        builder.setSeats(2);
+        builder.setEngine(new Engine(1.2, 0));
+        builder.setTransmission(Transmission.AUTOMATIC);
+        builder.setTripComputer(new TripComputer());
+        builder.setGPSNavigator(new GPSNavigator());
+    }
 
-   public void constructSUV(Builder builder) {
-      builder.setCarType(CarType.SUV);
-      builder.setSeats(4);
-      builder.setEngine(new Engine(2.5, 0));
-      builder.setTransmission(Transmission.MANUAL);
-      builder.setGPSNavigator(new GPSNavigator());
-   }
+    public void constructSUV(Builder builder) {
+        builder.setCarType(CarType.SUV);
+        builder.setSeats(4);
+        builder.setEngine(new Engine(2.5, 0));
+        builder.setTransmission(Transmission.MANUAL);
+        builder.setGPSNavigator(new GPSNavigator());
+    }
 }
 
 // ->  Demo.java: Клиентский код
@@ -419,29 +426,54 @@ public class Director {
  */
 public class Demo {
 
-   public static void main(String[] args) {
-      Director director = new Director();
+    public static void main(String[] args) {
+        Director director = new Director();
 
-      // Директор получает объект конкретного строителя от клиента
-      // (приложения). Приложение само знает какой строитель использовать,
-      // чтобы получить нужный продукт.
-      CarBuilder builder = new CarBuilder();
-      director.constructSportsCar(builder);
+        // Директор получает объект конкретного строителя от клиента
+        // (приложения). Приложение само знает какой строитель использовать,
+        // чтобы получить нужный продукт.
+        CarBuilder builder = new CarBuilder();
+        director.constructSportsCar(builder);
 
-      // Готовый продукт возвращает строитель, так как Директор чаще всего не
-      // знает и не зависит от конкретных классов строителей и продуктов.
-      Car car = builder.getResult();
-      System.out.println("Car built:\n" + car.getCarType());
+        // Готовый продукт возвращает строитель, так как Директор чаще всего не
+        // знает и не зависит от конкретных классов строителей и продуктов.
+        Car car = builder.getResult();
+        System.out.println("Car built:\n" + car.getCarType());
 
 
-      CarManualBuilder manualBuilder = new CarManualBuilder();
+        CarManualBuilder manualBuilder = new CarManualBuilder();
 
-      // Директор может знать больше одного рецепта строительства.
-      director.constructSportsCar(manualBuilder);
-      Manual carManual = manualBuilder.getResult();
-      System.out.println("\nCar manual built:\n" + carManual.print());
-   }
+        // Директор может знать больше одного рецепта строительства.
+        director.constructSportsCar(manualBuilder);
+        Manual carManual = manualBuilder.getResult();
+        System.out.println("\nCar manual built:\n" + carManual.print());
+    }
 
 }
 
 ```
+
+## Шаги реализации
+
+1. Убедитесь в том, что создание разных представлений объекта можно свести к
+   общим шагам.
+2. Опишите эти шаги в общем интерфейсе строителей.
+3. Для каждого из представлений объекта-продукта создайте
+   по одному классу-строителю и реализуйте их методы строительства.
+   Не забудьте про метод получения результата. Обычно конкретные строители
+   определяют собственные методы получения результата строительства. Вы не
+   можете описать эти методы в интерфейсе строителей, поскольку продукты не
+   обязательно должны иметь общий базовый класс или интерфейс. Но вы всегда
+   сможете добавить метод получения результата в общий интерфейс, если ваши
+   строители производят однородные продукты с общим предком.
+4. Подумайте о создании класса директора. Его методы будут
+   создавать различные конфигурации продуктов, вызывая
+   разные шаги одного и того же строителя.
+5. Клиентский код должен будет создавать и объекты строителей, и объект
+   директора. Перед началом строительства клиент должен связать определённого
+   строителя с директором. Это можно сделать либо через конструктор, либо через
+   сеттер, либо подав строителя напрямую в строительный метод директора.
+6. Результат строительства можно вернуть из директора, но
+   только если метод возврата продукта удалось поместить в
+   общий интерфейс строителей. Иначе вы жёстко привяжете
+   директора к конкретным классам строителей.

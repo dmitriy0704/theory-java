@@ -147,6 +147,65 @@ public static int test(int[] x) {
 
 ## Дубликаты в массивах
 
+Для поиска дубликатов в массиве на Java можно использовать несколько подходов.
+Один из самых простых и эффективных способов — использовать HashSet, который
+позволяет хранить уникальные элементы и быстро проверять наличие дубликатов.
+
+Вот пример алгоритма поиска дубликатов в массиве с использованием HashSet:
+
+```java
+import java.util.HashSet;
+
+public class DuplicateFinder {
+    public static void main(String[] args) {
+        int[] array = {1, 2, 3, 4, 5, 2, 6, 7, 3, 8};
+
+        findDuplicates(array);
+    }
+
+    public static void findDuplicates(int[] array) {
+        HashSet<Integer> seen = new HashSet<>();
+        HashSet<Integer> duplicates = new HashSet<>();
+
+        for (int num : array) {
+            // Если элемент уже был добавлен в seen, добавляем его в duplicates
+            if (!seen.add(num)) {
+                duplicates.add(num);
+            }
+        }
+
+        // Выводим найденные дубликаты
+        if (duplicates.isEmpty()) {
+            System.out.println("Дубликатов не найдено.");
+        } else {
+            System.out.println("Найденные дубликаты: " + duplicates);
+        }
+    }
+}
+```
+
+Объяснение кода:
+
+1. Импортируем HashSet: Мы используем HashSet для хранения уникальных элементов
+   и дубликатов.
+    2. Метод findDuplicates: Этот метод принимает массив целых чисел и ищет
+       дубликаты.
+        1. Создаем два HashSet: seen для хранения уникальных элементов и
+           duplicates
+           для хранения найденных дубликатов.
+        2. Проходим по каждому элементу массива. Если элемент уже существует в
+           seen,
+           добавляем его в duplicates.
+3. Вывод результатов: Если duplicates пуст, выводим сообщение о том, что
+   дубликатов не найдено. В противном случае выводим найденные дубликаты.
+
+Пример вывода:
+Для массива {1, 2, 3, 4, 5, 2, 6, 7, 3, 8} программа выведет:
+
+Найденные дубликаты: [2, 3]
+Этот алгоритм имеет временную сложность O(n) и пространственную сложность O(n),
+что делает его эффективным для поиска дубликатов в массиве.
+
 **Проверить наличие**
 
 ```java
@@ -212,10 +271,22 @@ public class Main {
     }
 }
 
+//  или на js
+const sumContiguousArray =
 
+function(ary) {
+    //get the last item
+	const lastItem = ary[ary.length - 1];
+    //Gauss's trick
+    return lastItem * (lastItem + 1) / 2;
+}
+const nums =[1,2,3,4,5];
+        const sumOfArray =
+
+sumContiguousArray(nums);
 ```
 
-## Доступ к элементу массива по индексу
+## Нахождение элемента по индексу
 
 ```java
 class GetIntegerArrayElementByIndex {
@@ -249,6 +320,31 @@ public class Main {
     }
 }
 
+
+```
+
+## Нахождение индекса элемента(Линейный поиск)
+
+```java
+package dev.folomkin.algos_datastructure;
+
+public class Code {
+    public static void main(String[] args) {
+
+        int[] arr = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+        int index = getIndex(arr, 5);
+        System.out.println(index);
+    }
+
+    static int getIndex(int[] arr, int target) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == target) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
 
 ```
 
