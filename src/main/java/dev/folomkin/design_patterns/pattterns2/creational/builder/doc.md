@@ -4,6 +4,25 @@
   объекты пошагово. Строитель даёт возможность использовать один и тот же код
   строительства для получения разных представлений объектов.
 
+В отличие от других порождающих паттернов, Строитель позволяет производить
+различные продукты, используя один и тот же процесс строительства.
+
+**Применимость**: Паттерн можно часто встретить в Java-коде, особенно там, где
+требуется пошаговое создание продуктов или конфигурация сложных объектов.
+
+Паттерн широко используется в стандартных библиотеках Java:
+
+java.lang.StringBuilder#append() (unsynchronized)
+java.lang.StringBuffer#append() (synchronized)
+java.nio.ByteBuffer#put() (также в CharBuffer, ShortBuffer, IntBuffer,
+LongBuffer, FloatBuffer и DoubleBuffer)
+javax.swing.GroupLayout.Group#addComponent()
+Все реализации java.lang.Appendable
+Признаки применения паттерна: Строителя можно узнать в классе, который имеет
+один создающий метод и несколько методов настройки создаваемого продукта.
+Обычно, методы настройки вызывают для удобства цепочкой (например,
+someBuilder.setValueA(1).setValueB(2).create()).
+
 ## Структура
 
 ![builder_structure.png](/img/design_pattern/design_patterns/builder_structure.png)
