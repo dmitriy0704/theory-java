@@ -66,7 +66,7 @@ javax.xml.bind.annotation.adapters.XmlAdapter#marshal() и #unmarshal()
 5. Работая с адаптером через интерфейс, клиент не привязывается к конкретному
    классу адаптера. Благодаря этому, вы можете добавлять в программу новые виды
    адаптеров, независимо от клиентского кода. Это может пригодиться, если
-   интерфейс сервиса вдруг изменится, например, после выхода новой версии
+   интерфейс сервиса вдруг изменwится, например, после выхода новой версии
    сторонней библиотеки.
 
 Адаптер классов
@@ -80,3 +80,174 @@ javax.xml.bind.annotation.adapters.XmlAdapter#marshal() и #unmarshal()
 Адаптер классов не нуждается во вложенном объекте, так
 как он может одновременно наследовать и часть существующего класса, и часть
 сервиса.
+
+## Примеры кода
+
+В этом примере Адаптер преобразует один интерфейс в другой, позволяя совместить
+квадратные колышки и круглые отверстия.
+
+Адаптер вычисляет наименьший радиус окружности, в которую можно вписать
+квадратный колышек, и представляет его как круглый колышек с этим радиусом.
+
+![adapter_example.png](/img/design_pattern/design_patterns/adapter_example.png)
+
+```java
+
+// -> round
+// -> round/RoundHole.java: Круглое отверстие
+
+package refactoring_guru.adapter.example.round;
+
+/**
+ * КруглоеОтверстие совместимо с КруглымиКолышками.
+ */
+public class RoundHole {
+    private double radius;
+
+    public RoundHole(double radius) {
+        this.radius = radius;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public boolean fits(RoundPeg peg) {
+        boolean result;
+        result = (this.getRadius() >= peg.getRadius());
+        return result;
+    }
+}
+
+// -> round/RoundPeg.java: Круглый колышек
+package refactoring_guru.adapter.example.round;
+
+/**
+ * КруглыеКолышки совместимы с КруглымиОтверстиями.
+ */
+public class RoundPeg {
+    private double radius;
+
+    public RoundPeg() {
+    }
+
+    public RoundPeg(double radius) {
+        this.radius = radius;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+}
+
+// -> square
+// -> square/SquarePeg.java: Квадратный колышек
+package refactoring_guru.adapter.example.square;
+
+/**
+ * КвадратныеКолышки несовместимы с КруглымиОтверстиями (они остались в проекте
+ * после бывших разработчиков). Но мы должны как-то интегрировать их в нашу
+ * систему.
+ */
+public class SquarePeg {
+    private double width;
+
+    public SquarePeg(double width) {
+        this.width = width;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getSquare() {
+        double result;
+        result = Math.pow(this.width, 2);
+        return result;
+    }
+}
+
+
+// -> adapters
+// -> adapters/SquarePegAdapter.java: Адаптер квадратных колышков к круглым отверстиям
+package refactoring_guru.adapter.example.adapters;
+
+import refactoring_guru.adapter.example.round.RoundPeg;
+import refactoring_guru.adapter.example.square.SquarePeg;
+
+/**
+ * Адаптер позволяет использовать КвадратныеКолышки и КруглыеОтверстия вместе.
+ */
+public class SquarePegAdapter extends RoundPeg {
+    private SquarePeg peg;
+
+    public SquarePegAdapter(SquarePeg peg) {
+        this.peg = peg;
+    }
+
+    @Override
+    public double getRadius() {
+        double result;
+        // Рассчитываем минимальный радиус, в который пролезет этот колышек.
+        result = (Math.sqrt(Math.pow((peg.getWidth() / 2), 2) * 2));
+        return result;
+    }
+}
+
+// -> Demo.java: Клиентский код
+package refactoring_guru.adapter.example;
+
+import refactoring_guru.adapter.example.adapters.SquarePegAdapter;
+import refactoring_guru.adapter.example.round.RoundHole;
+import refactoring_guru.adapter.example.round.RoundPeg;
+import refactoring_guru.adapter.example.square.SquarePeg;
+
+/**
+ * Где-то в клиентском коде...
+ */
+public class Demo {
+    public static void main(String[] args) {
+        // Круглое к круглому — всё работает.
+        RoundHole hole = new RoundHole(5);
+        RoundPeg rpeg = new RoundPeg(5);
+        if (hole.fits(rpeg)) {
+            System.out.println("Round peg r5 fits round hole r5.");
+        }
+
+        SquarePeg smallSqPeg = new SquarePeg(2);
+        SquarePeg largeSqPeg = new SquarePeg(20);
+        // hole.fits(smallSqPeg); // Не скомпилируется.
+
+        // Адаптер решит проблему.
+        SquarePegAdapter smallSqPegAdapter = new SquarePegAdapter(smallSqPeg);
+        SquarePegAdapter largeSqPegAdapter = new SquarePegAdapter(largeSqPeg);
+        if (hole.fits(smallSqPegAdapter)) {
+            System.out.println("Square peg w2 fits round hole r5.");
+        }
+        if (!hole.fits(largeSqPegAdapter)) {
+            System.out.println("Square peg w20 does not fit into round hole r5.");
+        }
+    }
+}
+
+```
+
+## Шаги реализации
+
+1. Убедитесь, что у вас есть два класса с несовместимыми
+   интерфейсами:
+    - полезный сервис — служебный класс, который вы не можете изменять (он либо
+      сторонний, либо от него зависит другой код);
+    - один или несколько клиентов — существующих классов приложения,
+      несовместимых с сервисом из-за неудобного или несовпадающего интерфейса.
+2. Опишите клиентский интерфейс, через который классы приложения смогли бы
+   использовать класс сервиса.
+3. Создайте класс адаптера, реализовав этот интерфейс.
+4. Поместите в адаптер поле, которое будет хранить ссылку на объект сервиса.
+   Обычно это поле заполняют объектом, переданным в конструктор адаптера. В
+   случае простой адаптации этот объект можно передавать через параметры методов
+   адаптера.
+5. Реализуйте все методы клиентского интерфейса в адаптере. Адаптер должен
+   делегировать основную работу сервису.
+6. Приложение должно использовать адаптер только через клиентский интерфейс. Это
+   позволит легко изменять и добавлять адаптеры в будущем.
