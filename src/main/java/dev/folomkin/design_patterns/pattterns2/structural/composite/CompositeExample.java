@@ -198,7 +198,7 @@ class Rectangle extends BaseShape {
 }
 
 // ->  shapes/CompoundShape.java: Составная фигура
- class CompoundShape extends BaseShape {
+class CompoundShape extends BaseShape {
     protected List<Shape> children = new ArrayList<>();
 
     public CompoundShape(Shape... components) {
@@ -335,7 +335,7 @@ class Rectangle extends BaseShape {
 // -> editor
 // ->  editor/ImageEditor.java: Редактор фигур
 
- class ImageEditor {
+class ImageEditor {
     private EditorCanvas canvas;
     private CompoundShape allShapes = new CompoundShape();
 
@@ -346,61 +346,61 @@ class Rectangle extends BaseShape {
     public void loadShapes(Shape... shapes) {
         allShapes.clear();
         allShapes.add(shapes);
-        canvas.refresh();
+//        canvas.refresh();
     }
 
     private class EditorCanvas extends Canvas {
-        JFrame frame;
+//        JFrame frame;
 
         private static final int PADDING = 10;
 
         EditorCanvas() {
             createFrame();
-            refresh();
-            addMouseListener(new MouseAdapter() {
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    allShapes.unSelect();
-                    allShapes.selectChildAt(e.getX(), e.getY());
-                    e.getComponent().repaint();
-                }
-            });
+//            refresh();
+//            addMouseListener(new MouseAdapter() {
+//                @Override
+//                public void mousePressed(MouseEvent e) {
+//                    allShapes.unSelect();
+//                    allShapes.selectChildAt(e.getX(), e.getY());
+//                    e.getComponent().repaint();
+//                }
+//            });
         }
 
         void createFrame() {
-            frame = new JFrame();
-            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            frame.setLocationRelativeTo(null);
-
-            JPanel contentPanel = new JPanel();
-            Border padding = BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING);
-            contentPanel.setBorder(padding);
-            frame.setContentPane(contentPanel);
-
-            frame.add(this);
-            frame.setVisible(true);
-            frame.getContentPane().setBackground(Color.LIGHT_GRAY);
-        }
-
-        public int getWidth() {
-            return allShapes.getX() + allShapes.getWidth() + PADDING;
-        }
-
-        public int getHeight() {
-            return allShapes.getY() + allShapes.getHeight() + PADDING;
-        }
-
-        void refresh() {
-            this.setSize(getWidth(), getHeight());
-            frame.pack();
-        }
-
-        public void paint(Graphics graphics) {
-            allShapes.paint(graphics);
+//            frame = new JFrame();
+//            frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//            frame.setLocationRelativeTo(null);
+//
+//            JPanel contentPanel = new JPanel();
+//            Border padding = BorderFactory.createEmptyBorder(PADDING, PADDING, PADDING, PADDING);
+//            contentPanel.setBorder(padding);
+//            frame.setContentPane(contentPanel);
+//
+//            frame.add(this);
+//            frame.setVisible(true);
+//            frame.getContentPane().setBackground(Color.LIGHT_GRAY);
+//        }
+//
+//        public int getWidth() {
+//            return allShapes.getX() + allShapes.getWidth() + PADDING;
+//        }
+//
+//        public int getHeight() {
+//            return allShapes.getY() + allShapes.getHeight() + PADDING;
+//        }
+//
+//        void refresh() {
+//            this.setSize(getWidth(), getHeight());
+//            frame.pack();
+//        }
+//
+//        public void paint(Graphics graphics) {
+//            allShapes.paint(graphics);
+//        }
         }
     }
 }
-
 
 public class CompositeExample {
     public static void main(String[] args) {
