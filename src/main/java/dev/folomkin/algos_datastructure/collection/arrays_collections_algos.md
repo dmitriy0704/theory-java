@@ -179,6 +179,41 @@ public class ExampleStart {
 
 ### Сортировка
 
+
+
+## Стандартные методы сортировки Java
+
+### Collections.sort()
+
+```java
+public class Demo {
+    void demo() {
+        List<ObjectName> list = new ArrayList<ObjectName>();
+        Collections.sort(list, new Comparator<ObjectName>() {
+            public int compare(ObjectName o1, ObjectName o2) {
+                return o1.toString().compareTo(o2.toString());
+            }
+        });
+    }
+}
+```
+
+### Arrays.sort()
+
+```java
+public class Demo {
+    void demo() {
+        ObjectName[] arr = new ObjectName[10];
+        Arrays.sort(arr, new Comparator<ObjectName>() {
+            public int compare(ObjectName o1, ObjectName o2) {
+                return o1.toString().compareTo(o2.toString());
+            }
+        });
+    }
+}
+```
+
+
 #### Arrays
 
 - static void sort(int[] arr) - сортировка заданного массива по возрастанию;
