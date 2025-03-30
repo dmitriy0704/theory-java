@@ -17,11 +17,11 @@
 4. Объединение: Объединение происходит неявно, так как элементы уже находятся на
    своих местах.
 
-Давайте посмотрим на работу алгоритма на следующем массиве:
+Пример массива:
 
     [3][7][4][4][6][5][8]
 
-Сначала мы случайным образом выбираем ключевой элемент 6:
+Случайным образом выбираем ключевой элемент 6:
 
     [3][7][4][4][6][5][8]
 
@@ -59,7 +59,7 @@
 остальное уже отсортировано, алгоритм завершает работу.
 
 ```java
-public static void quickSort(int[] sortArr, int low, int high) {
+public static vo    id quickSort(int[] sortArr, int low, int high) {
     //завершить,если массив пуст или уже нечего делить
     if (sortArr.length == 0 || low >= high) return;
 
@@ -94,67 +94,139 @@ public static void main(String args[]) {
     }
 }
 
-// === //
-
-
+// === AI - рекурсивно ===  //
 public class QuickSort {
-    // Метод для сортировки массива с использованием быстрой сортировки
+
     public static void quickSort(int[] array, int low, int high) {
         if (low < high) {
             // Находим индекс опорного элемента
             int pivotIndex = partition(array, low, high);
-
             // Рекурсивно сортируем элементы до и после опорного элемента
             quickSort(array, low, pivotIndex - 1);
             quickSort(array, pivotIndex + 1, high);
         }
     }
 
-    // Метод для разделения массива и нахождения индекса опорного элемента
     private static int partition(int[] array, int low, int high) {
-        int pivot = array[high]; // Выбираем последний элемент в качестве опорного
-        int i = low - 1; // Индекс меньшего элемента
+        // Выбираем опорный элемент (в данном случае последний элемент)
+        int pivot = array[high];
+        int i = (low - 1); // Индекс меньшего элемента
 
         for (int j = low; j < high; j++) {
             // Если текущий элемент меньше или равен опорному
             if (array[j] <= pivot) {
-                i++; // Увеличиваем индекс меньшего элемента
-                // Меняем местами элементы
-                swap(array, i, j);
+                i++;
+                // Меняем местами
+                int temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
             }
         }
-        // Меняем местами опорный элемент с элементом, который больше опорного
-        swap(array, i + 1, high);
+
+        // Меняем местами опорный элемент с элементом, следующим за последним меньшим элементом
+        int temp = array[i + 1];
+        array[i + 1] = array[high];
+        array[high] = temp;
+
         return i + 1; // Возвращаем индекс опорного элемента
     }
 
-    // Метод для обмена элементов массива
-    private static void swap(int[] array, int i, int j) {
-        int temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-
-    // Метод для вывода массива на экран
-    public static void printArray(int[] array) {
-        for (int value : array) {
-            System.out.print(value + " ");
-        }
-        System.out.println();
-    }
-
-    // Главный метод для тестирования быстрой сортировки
     public static void main(String[] args) {
-        int[] array = {38, 27, 43, 3, 9, 82, 10}; // Исходный массив
-        System.out.println("Исходный массив:");
-        printArray(array);
+        int[] array = {3, 6, 8, 10, 1, 2, 1};
+        System.out.println("Исходный массив: " + Arrays.toString(array));
 
-        quickSort(array, 0, array.length - 1); // Сортируем массив
+        quickSort(array, 0, array.length - 1);
 
-        System.out.println("Отсортированный массив:");
-        printArray(array); // Выводим отсортированный массив
+        System.out.println("Отсортированный массив: " + Arrays.toString(array));
     }
 }
+
+Объяснение кода:
+Метод quickSort: Это основной метод, который принимает массив и границы (индексы) для сортировки. Он проверяет, если low меньше high, и вызывает метод partition.
+
+Метод partition: Этот метод выбирает опорный элемент (в данном случае последний элемент массива) и переставляет элементы так, чтобы все элементы меньше опорного были слева от него, а все элементы больше — справа. Он возвращает индекс опорного элемента после перестановки.
+
+Метод main: Здесь создается массив, который нужно отсортировать, и вызывается метод quickSort. Результат выводится на экран.
+
+Вы можете запустить этот код в любой среде разработки Java, и он отсортирует массив, выводя исходный и отсортированный массивы.
+
+
+
+// === AI - итеративо === //
+
+
+public class IterativeQuickSort {
+
+    // Метод для итеративной быстрой сортировки
+    public static void quickSort(int[] array) {
+        // Создаем стек для хранения границ подмассивов
+        Stack<int[]> stack = new Stack<>();
+        stack.push(new int[]{0, array.length - 1});
+
+        while (!stack.isEmpty()) {
+            // Извлекаем границы подмассива
+            int[] range = stack.pop();
+            int low = range[0];
+            int high = range[1];
+
+            if (low < high) {
+                // Находим индекс опорного элемента
+                int pivotIndex = partition(array, low, high);
+
+                // Добавляем подмассивы в стек
+                stack.push(new int[]{low, pivotIndex - 1});
+                stack.push(new int[]{pivotIndex + 1, high});
+            }
+        }
+    }
+
+    // Метод для разделения массива и нахождения индекса опорного элемента
+    private static int partition(int[] array, int low, int high) {
+        int pivot = array[high]; // Опорный элемент
+        int i = (low - 1); // Индекс меньшего элемента
+
+        for (int j = low; j < high; j++) {
+            if (array[j] <= pivot) {
+                i++;
+                // Меняем местами
+                int temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+        }
+
+        // Меняем местами опорный элемент с элементом, следующим за последним меньшим элементом
+        int temp = array[i + 1];
+        array[i + 1] = array[high];
+        array[high] = temp;
+
+        return i + 1; // Возвращаем индекс опорного элемента
+    }
+
+    public static void main(String[] args) {
+        int[] array = {3, 6, 8, 10, 1, 2, 1};
+        System.out.println("Исходный массив: " + Arrays.toString(array));
+
+        quickSort(array);
+
+        System.out.println("Отсортированный массив: " + Arrays.toString(array));
+    }
+}
+
+Объяснение кода:
+Метод quickSort: Этот метод инициализирует стек и добавляет в него границы всего массива. Затем он использует цикл while, чтобы обрабатывать подмассивы, пока стек не станет пустым.
+
+Метод partition: Этот метод работает так же, как и в рекурсивной версии. Он выбирает опорный элемент, переставляет элементы массива и возвращает индекс опорного элемента.
+
+Метод main: Здесь создается массив, который нужно отсортировать, и вызывается метод quickSort. Результат выводится на экран.
+
+Эта итеративная реализация быстрой сортировки позволяет избежать проблем с переполнением стека, которые могут возникнуть при глубокой рекурсии.
+
+
+
+
+
+
 
 ```
 
