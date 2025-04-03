@@ -2,58 +2,66 @@ package dev.folomkin.algos_datastructure.algos.arrays.sorting;
 
 
 public class Code {
-
-    // Метод для выполнения быстрой сортировки
-    public static void quickSort(int[] arr, int low, int high) {
+    public static void quickSort(int[] array, int low, int high) {
         if (low < high) {
-            // Находим индекс разделителя
-            int pivotIndex = partition(arr, low, high);
-            // Рекурсивно сортируем элементы до и после разделителя
-            quickSort(arr, low, pivotIndex - 1);
-            quickSort(arr, pivotIndex + 1, high);
+            int pivotIndex = partition(array, low, high);
+            quickSort(array, low, pivotIndex - 1);  // Сортируем левую часть
+            quickSort(array, pivotIndex + 1, high); // Сортируем правую часть
         }
     }
 
-    // Метод для разделения массива и нахождения индекса разделителя
-    public static int partition(int[] arr, int low, int high) {
-        int pivot = arr[high]; // Выбираем последний элемент в качестве опорного
-        int i = (low - 1); // Индекс меньшего элемента
+    private static int partition(int[] array, int low, int high) {
+        // Выбор медианы трех
+        int mid = low + (high - low) / 2;
+        int pivot = medianOfThree(array[low], array[mid], array[high]);
+
+        // Перемещение опорного элемента в конец
+        if (pivot == array[low]) {
+            swap(array, low, high);
+        } else if (pivot == array[mid]) {
+            swap(array, mid, high);
+        }
+
+        pivot = array[high]; // Теперь опорный элемент в конце
+
+        int i = low - 1;
         for (int j = low; j < high; j++) {
-            // Если текущий элемент меньше или равен опорному
-            if (arr[j] <= pivot) {
+            if (array[j] < pivot) {
                 i++;
-                // Меняем местами элементы
-                swap(arr, i, j);
+                swap(array, i, j);
             }
         }
-        // Меняем местами опорный элемент с элементом на позиции i + 1
-        swap(arr, i + 1, high);
-        return i + 1; // Возвращаем индекс разделителя
+
+        // Перемещаем опорный элемент на его правильное место
+        swap(array, i + 1, high);
+        return i + 1;
     }
 
-    // Метод для обмена элементов массива
-    public static void swap(int[] arr, int i, int j) {
-        int temp = arr[i];
-        arr[i] = arr[j];
-        arr[j] = temp;
+    private static int medianOfThree(int a, int b, int c) {
+        if ((a > b) ^ (a > c)) return a; // a является медианой
+        else if ((b > a) ^ (b > c)) return b; // b является медианой
+        else return c; // c является медианой
+    }
+
+    private static void swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
 
     public static void main(String[] args) {
-        int[] array = {10, 7, 8, 9, 1, 5};
+        int[] array = {3, 6, 8, 10, 1, 2, 1};
+
         System.out.println("Исходный массив:");
-        printArray(array);
+        for (int num : array) {
+            System.out.print(num + " ");
+        }
 
         quickSort(array, 0, array.length - 1);
 
-        System.out.println("Отсортированный массив:");
-        printArray(array);
-    }
-
-    // Метод для вывода массива на экран
-    private static void printArray(int[] array) {
-        for (int value : array) {
-            System.out.print(value + " ");
+        System.out.println("\nОтсортированный массив:");
+        for (int num : array) {
+            System.out.print(num + " ");
         }
-        System.out.println();
     }
 }
