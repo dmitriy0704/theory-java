@@ -39,7 +39,7 @@ public class InsertionSort {
 
     //-> Главный метод для тестирования сортировки вставками
     public static void main(String[] args) {
-        int[] array = {12, 11, 13, 5, 6};
+        int[] array = {12, 11, 13, 5, 6, 4, 10, 7, 8};
         System.out.println("Исходный массив:");
         printArray(array);
 
