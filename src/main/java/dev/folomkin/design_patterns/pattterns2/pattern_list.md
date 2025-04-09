@@ -27,15 +27,15 @@
 
 - Цепочка обязанностей (chain of responsibility)
 - Команда (command)
+- Итератор (iterator)
+- Посредник (mediator)
 - Хранитель (memento)
 - Наблюдатель (observer)
 - Состояние (state)
-- Интерпретатор (interpreter)
 - Стратегия (strategy)
-- Итератор (iterator)
 - Шаблонный метод (template method) -
 - Посетитель (visitor)
-- Посредник (mediator)
+
 
 ## ПОРОЖДАЮЩИЕ ПАТТЕРНЫ
 
