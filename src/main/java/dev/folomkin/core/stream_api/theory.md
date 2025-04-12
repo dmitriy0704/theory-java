@@ -937,61 +937,32 @@ public static void main(String[] args) {
 
 ### Возвращать Stream<T> вместо коллекций
 
-```java
-import java.util.stream.Stream;
-
-class Group {
-    private User[] users;
-
-    public Stream<User> users() {
-        return Arrays.sream(users);
-    }
-}
-
-class Group {
-    private Map<String, User> nameToUser;
-
-    public Stream<User> users() {
-        return nameToUser.values().sream();
-    }
-}
-
-class Group {
-    private List<User> users;
-
-    public Stream<User> users() {
-        return users.sream();
-    }
-}
-```
-
-# Задачи
-
-## Посчитать сумму
+Одним из полезных подходов является возвращение потока Stream<T> вместо
+коллекции (List, Set и т.д.) в методах API. Это помогает защитить внутренние
+данные от модификации и предоставляет пользователю свободу выбора коллекции, в
+которую он хочет собрать данные.
 
 ```java
-public static void main(String[] args) {
-    int sum = list.stream().mapToInt(i -> i).sum();
-    int sum2 = list.stream().reduce(0, (x, y) -> x + y);
-    int sum3 = list.stream().reduce(0, Integer::sum);
-    System.out.println(sum);
-    System.out.println(sum2);
-    System.out.println(sum3);
+public Stream<Worker> getWorkers() {
+  return workers.stream();
 }
+
+List<Worker> workerList = service.getWorkers().collect(Collectors.toList());
+Set<Worker> workerSet = service.getWorkers().collect(Collectors.toSet());
 ```
+
 
 ## Группировка элементов
 
 Чтобы сгруппировать данные по какому-нибудь признаку, нам надо использовать
 метод collect() и метод Collectors.groupingBy().
-
-Группировка списка рабочих по их должности (деление на списки)
-    
+```java
+/// Группировка списка рабочих по их должности (деление на списки)
     Map<String, List<Worker>> map1 = workers.stream()
         .collect(Collectors.groupingBy(Worker::getPosition));
- 
-Группировка списка рабочих по их должности (деление на множества)
-    
+
+
+/// Группировка списка рабочих по их должности (деление на множества)
     Map<String, Set<Worker>> map2 = workers.stream()
                 .collect(
                         Collectors.groupingBy(
@@ -999,8 +970,7 @@ public static void main(String[] args) {
                         )
                 );
 
-Подсчет количества рабочих, занимаемых конкретную должность
-
+/// Подсчет количества рабочих, занимаемых конкретную должность
     Map<String, Long> map3 = workers.stream()
                 .collect(
                         Collectors.groupingBy(
@@ -1008,8 +978,7 @@ public static void main(String[] args) {
                         )
                 );
 
-Группировка списка рабочих по их должности, при этом нас интересуют только имена
-
+/// Группировка списка рабочих по их должности, при этом нас интересуют только имена
     Map<String, Set<String>> map4 = workers.stream()
                 .collect(
                         Collectors.groupingBy(
@@ -1021,8 +990,7 @@ public static void main(String[] args) {
                         )
                 );
 
-Расчет средней зарплаты для данной должности
-
+///Расчет средней зарплаты для данной должности
     Map<String, Double> map5 = workers.stream()
     .collect(
           Collectors.groupingBy(
@@ -1031,8 +999,7 @@ public static void main(String[] args) {
           )
     );
 
-Группировка списка рабочих по их должности, рабочие представлены только именами единой строкой
-
+/// Группировка списка рабочих по их должности, рабочие представлены только именами единой строкой
     Map<String, String> map6 = workers.stream()
           .collect(
               Collectors.groupingBy(
@@ -1044,8 +1011,7 @@ public static void main(String[] args) {
               )
           );
 
-Группировка списка рабочих по их должности и по возрасту.
-
+/// Группировка списка рабочих по их должности и по возрасту.
     Map<String, Map<Integer, List<Worker>>> collect = workers.stream()
         .collect(
           Collectors.groupingBy(
@@ -1053,3 +1019,4 @@ public static void main(String[] args) {
           Collectors.groupingBy(Worker::getAge)
         )
     );
+```
