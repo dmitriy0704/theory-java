@@ -1,4 +1,4 @@
-> SOLID
+> ## SOLID
 
 ### Single Responsibility Principle - Принцип единственной ответственности.
 

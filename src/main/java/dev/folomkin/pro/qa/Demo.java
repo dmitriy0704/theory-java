@@ -1,4 +1,4 @@
-package dev.folomkin.qa;
+package dev.folomkin.pro.qa;
 
 class MyObject {
 
