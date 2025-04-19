@@ -133,12 +133,14 @@ Number n = numbers.get(0); // OK
 нужно использовать `? super T`.
 
 ```java
-List<? super Integer> numbers = new ArrayList<Number>();
-numbers.
+public class Demo {
+    public static void main(String[] args) {
+        List<? super Integer> numbers2 = new ArrayList<Number>();
+        numbers2.add(42); // OK
+        Object obj = numbers2.get(0);
+    }
+}
 
-add(42); // OK
-
-Object obj = numbers.get(0); // Возвращает Object
 ```
 
 Пример: ты добавляешь `Integer` в список — подойдёт `? super Integer`.
