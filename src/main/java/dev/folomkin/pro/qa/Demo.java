@@ -1,52 +1,26 @@
 package dev.folomkin.pro.qa;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
-class Person {
-}
-
-class Employee extends Person {
-}
-
-class Manager extends Employee {
-}
 
 public class Demo {
     public static void main(String[] args) {
 
-        List<Person> persons = new ArrayList<>();
-        List<Employee> employees = new ArrayList<>();
-        List<Manager> managers = new ArrayList<>();
+        List<String> list = new ArrayList<>();
+        list.add("A");
+        list.add("B");
+        list.add("C");
+        list.add("D");
 
-        processUpperBounded(persons);
-        processUpperBounded(employees);
-        processUpperBounded(managers);
+        Stream<String> stream = list.stream();
+        stream.forEach(System.out::println);
 
-
-        processLowerBounded(persons);
-        processLowerBounded(employees);
-        processLowerBounded(managers);
-
-
-    }
-
-    public static void processUpperBounded(List<? extends Employee> employees) {
-        List<Employee> upperBoundedEmployees = new ArrayList<>();
-        Person person = upperBoundedEmployees.get(0);
-        Employee employee = upperBoundedEmployees.get(0);
-        Manager manager = upperBoundedEmployees.get(0);
-    }
-
-    public static void processLowerBounded(List<? super Employee> employees) {
-        employees.add(new Person()); //compilation error
-        employees.add(new Employee());
-        employees.add(new Manager());
-        Object employee = employees.getFirst();
-        if (employee instanceof Employee) {
-            Employee myEmployee = (Employee) employee;
-        }
-        Employee employee = employees.getFirst();//compilation error
+        Collection<String> collection = list;
+        collection.parallelStream().forEach(System.out::println);
     }
 }
 
