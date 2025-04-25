@@ -4904,6 +4904,209 @@ Kafka **гарантирует порядок сообщений только в
 Каждая партиция может иметь **реплики** на других брокерах (вторичные копии),
 что делает систему устойчивой к сбоям.
 
+---------
+
+> ## -  как работать с партициями из java
+
+Отличный вопрос! 🔧 Работа с **партициями Kafka из Java** позволяет контролировать, **в какую партицию отправляется сообщение**, а также **читать из конкретных партиций**. Это важно, когда нужно управлять параллелизмом, порядком или маршрутизацией сообщений.
+
+Разберём по частям:
+
+---
+
+## 📨 1. Producer: отправка в конкретную партицию
+
+### Пример: Java Kafka Producer с ручным указанием партиции
+
+```java
+import org.apache.kafka.clients.producer.*;
+
+import java.util.Properties;
+
+public class CustomPartitionProducer {
+
+    public static void main(String[] args) {
+        Properties props = new Properties();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, 
+                  "org.apache.kafka.common.serialization.StringSerializer");
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, 
+                  "org.apache.kafka.common.serialization.StringSerializer");
+
+        KafkaProducer<String, String> producer = new KafkaProducer<>(props);
+
+        String topic = "example-topic";
+        String key = "user-123";
+        String value = "Hello with partition!";
+        int partition = 1; // вручную указываем партицию
+
+        ProducerRecord<String, String> record = new ProducerRecord<>(topic, partition, key, value);
+        producer.send(record, (metadata, exception) -> {
+            if (exception == null) {
+                System.out.printf("Отправлено в partition %d с offset %d%n",
+                                  metadata.partition(), metadata.offset());
+            } else {
+                exception.printStackTrace();
+            }
+        });
+
+        producer.close();
+    }
+}
+```
+
+---
+
+## 🔄 2. Consumer: чтение из конкретных партиций
+
+### Используем `assign()` вместо `subscribe()`
+
+```java
+import org.apache.kafka.clients.consumer.*;
+import org.apache.kafka.common.TopicPartition;
+
+import java.time.Duration;
+import java.util.*;
+
+public class SpecificPartitionConsumer {
+
+    public static void main(String[] args) {
+        Properties props = new Properties();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "manual-partition-consumer");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, 
+                  "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, 
+                  "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
+
+        String topic = "example-topic";
+        int partition = 1;
+
+        TopicPartition topicPartition = new TopicPartition(topic, partition);
+        consumer.assign(List.of(topicPartition));
+
+        while (true) {
+            ConsumerRecords<String, String> records = consumer.poll(Duration.ofSeconds(1));
+            for (ConsumerRecord<String, String> record : records) {
+                System.out.printf("📥 Partition: %d | Offset: %d | Value: %s%n",
+                                  record.partition(), record.offset(), record.value());
+            }
+        }
+    }
+}
+```
+
+---
+
+## 📚 Дополнительно: узнать список партиций у топика
+
+```java
+List<PartitionInfo> partitions = producer.partitionsFor("example-topic");
+for (PartitionInfo p : partitions) {
+    System.out.println("🧩 Partition: " + p.partition());
+}
+```
+
+---
+
+## 🧠 Зачем это может быть нужно?
+
+| Сценарий                                | Применение партиций                          |
+|------------------------------------------|----------------------------------------------|
+| 🧾 Гарантированный порядок сообщений     | Все сообщения с одним ключом → 1 партиция    |
+| ⚖️ Балансировка нагрузки                 | Ручное распределение по партициям            |
+| 📦 Партиционирование по бизнес-логике   | Например, по userId, location, type и т.д.   |
+| 📤 Replay / offload                      | Читать вручную с offset'а конкретной партиции|
+
+---
+
+Хочешь:
+- Пример с **Spring Kafka и `@KafkaListener` на конкретную партицию**?
+- Реализацию **custom partitioner** (по бизнес-логике)?
+- Пример с **seekToBeginning() / seekToOffset()**?
+
+Я могу показать всё 🙌
+
+---- 
+
+- Пример с Spring Kafka и @KafkaListener на конкретную партицию?
+
+Конечно! 🙌 Вот как можно использовать `@KafkaListener` в **Spring Kafka** для прослушивания **конкретных партиций** топика — удобно, если хочешь контролировать распределение нагрузки или обрабатывать сообщения определённого типа отдельно.
+
+---
+
+## ✅ Пример: `@KafkaListener` с привязкой к партициям
+
+```java
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
+
+@Component
+public class PartitionedListener {
+
+    @KafkaListener(
+        topicPartitions = {
+            @org.springframework.kafka.annotation.TopicPartition(
+                topic = "example-topic",
+                partitions = {"0", "1"}  // слушаем только партиции 0 и 1
+            )
+        },
+        groupId = "partitioned-group"
+    )
+    public void listenToSpecificPartitions(ConsumerRecord<String, String> record) {
+        System.out.printf("🔊 Message from partition %d: %s%n",
+                          record.partition(), record.value());
+    }
+}
+```
+
+---
+
+## ⚙️ Как это работает
+
+| Аннотация                   | Описание                                   |
+|----------------------------|--------------------------------------------|
+| `@KafkaListener`           | Подписка на Kafka-сообщения                |
+| `topicPartitions`          | Привязка к **определённым партициям**     |
+| `partitions = {"0", "1"}`  | Слушает только указанные партиции         |
+| `ConsumerRecord<K, V>`     | Позволяет получить доступ к partition, offset, key и т.д. |
+
+---
+
+## 🧠 Полезно знать
+
+- Работает **только с `concurrency = 1`** (или ты сам обязан обеспечить корректную работу с несколькими потоками).
+- Для **динамического распределения** лучше использовать обычный `@KafkaListener(topic = "...")` — Spring сам распределит партиции.
+- Можно использовать `@KafkaListener` с `concurrency` и указанием `topicPartitions` одновременно (но нужно быть осторожным с разделением потоков).
+
+---
+
+## 🔄 Пример с `concurrency`
+
+```java
+@KafkaListener(
+    topicPartitions = {
+        @TopicPartition(topic = "example-topic", partitions = {"2", "3"})
+    },
+    groupId = "group-X",
+    concurrency = "2"
+)
+public void listenWithConcurrency(String message) {
+    System.out.println("⚙️ " + message);
+}
+```
+
+---
+
+Хочешь:
+- Пример с **динамическим выбором партиции на основе параметров**?
+- Пример с **обработкой offset вручную**?
+- Или, наоборот, чтобы **всё топик + все партиции** обрабатывались равномерно?
+
 
 
 ===============================================================================
