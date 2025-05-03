@@ -1,5 +1,4 @@
-
->## JAVA CORE. <br><br>Multitrading. <br>  ExecutorService
+## ExecutorService
 
 
 
