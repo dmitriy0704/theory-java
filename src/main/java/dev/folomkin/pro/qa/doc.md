@@ -3045,7 +3045,7 @@ _**Где применяются:**_
 
 > ## Multithreading
 > - Механизмы синхронизации: synchronized, volatile, atomic types
-> - Пробелемы race condition и deadlock, способы решения
-> - Многопоточные коллекции, пулы потоков, Future и CompletableFutute
+> - Проблемы race condition и deadlock, способы решения
+> - Многопоточные коллекции, пулы потоков, Future и CompletableFuture
 
 > - Collection Framework и внутренняя работа коллекций

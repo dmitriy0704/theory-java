@@ -62,8 +62,8 @@ public class BinarySearch {
     }
 
     public static void main(String[] args) {
-        int[] array = {2, 3, 4, 10, 40};
-        int target = 10;
+       int[] array = {2, 5, 8, 12, 16, 23, 38, 56, 72};
+        int target = 23;
 
         int result = binarySearch(array, target);
         if (result == -1) {

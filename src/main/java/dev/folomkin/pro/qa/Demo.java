@@ -3,46 +3,44 @@ package dev.folomkin.pro.qa;
 
 import java.util.Objects;
 
-class Demo1 {
-    int i;
-    int j;
 
-    Demo1(int i, int j) {
-        this.i = i;
-        this.j = j;
+class Programmer {
+    private final String position;
+    private final int salary;
+
+    protected Programmer(String position, int salary) {
+        this.position = position;
+        this.salary = salary;
     }
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Demo1 demo1 = (Demo1) o;
-        return i == demo1.i && j == demo1.j;
+
+        Programmer that = (Programmer) o;
+
+        if (salary != that.salary) return false;
+        return Objects.equals(position, that.position);
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(i, j);
-    }
 }
 
-class Demo2 {
-    int i;
-    int j;
+public class Demo extends Programmer {
 
-    Demo2(int i, int j) {
-        this.i = i;
-        this.j = j;
+    protected Demo(String position, int salary) {
+        super(position, salary);
     }
-}
 
-public class Demo {
     public static void main(String[] args) {
+        Programmer programmer1 = new Programmer("Junior", 300);
+        Programmer programmer2 = new Programmer("Junior", 300);
 
+        //false
+        System.out.println(programmer1 == programmer2);
+        //true
+        System.out.println(programmer1.equals(programmer2));
 
-        Demo1 demo1 = new Demo1(3, 4);
-        Demo1 demo2 = new Demo1(3, 4);
-
-        System.out.println(demo1.equals(demo2));
     }
 }
 
