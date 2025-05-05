@@ -1044,52 +1044,6 @@ public class Main {
 Deprecated. Устаревший класс
 На смену Vector пришел класс пакета java.util.concurrent СopyOnWriteArrayList
 
-**_Конструкторы:_**
-
-- *Vector()* – создает пустой вектор таким образом, что внутренний массив имеет
-  размер 10, а его стандартный инкремент объема равен нулю;
-- *Vector(Collection<? extends E> c)* – создает вектор, содержащий элементы
-  указанной коллекции в порядке, возвращенном итератором;
-- *Vector(int initialCapacity)* – создает пустой вектор с указанным начальным
-  объемом и со стандартным инкрементом объема, равным нулю;
-- *Vector(int initialCapacity, int capacityIncrement)* – создает пустой вектор с
-  указанными начальным объемом и инкрементом объема.
-
-**_Методы:_**
-
-- **void addElement(E obj)** – добавляет указанный компонент в конец вектора,
-  увеличивая его размер на 1;
-- **boolean removeElement(Object obj)** – удаляет первый, т.е. имеющий
-  минимальный индекс, встретившийся аргумент из вектора;
-- **void setElementAt(E obj, int index)** – вставляет элемент, представляющий
-  собой указанный объект, на определенное индексом место в векторе;
-- **public E elementAt(int index)** – возвращает элемент с указанным индексом;
-  этот метод идентичен методу get(int), являющемуся частью интерфейса List;
-- **public E firstElement()** – возвращает первый элемент (с индексом 0) данного
-  вектора;
-- **public E lastElement()** – возвращает последний элемент вектора;
-- **public void insertElementAt(E obj,int index)** – вставляет указанный объект
-  как элемент данного вектора на место, определенное индексом. Каждый элемент
-  данного вектора с индексом, большим или равным указанному индексу, получает
-  индекс, больший предыдущего на 1.
-
-```java
-public static void main(String[] args) {
-    Vector v = new Vector(3, 2);
-    System.out.println("Начальный размер " + v.size());
-    System.out.println("Начальный объем " + v.capacity());
-    v.addElement(1);
-    v.addElement(2);
-    v.addElement(3);
-    v.addElement(4);
-    System.out.println("Новый объем " + v.capacity());
-    // Enumeration - доступ к серии элементов одновременно;
-    Enumeration e = v.elements();
-    while (e.hasMoreElements()) {
-        System.out.println(e.nextElement());
-    }
-}
-```
 
 **Различия между классами ArrayList и Vector:**
 
