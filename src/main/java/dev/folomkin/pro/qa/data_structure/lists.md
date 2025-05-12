@@ -174,6 +174,286 @@ ArrayList создается с начальной емкостью capacity 10 
 В общем, операции вставки и удаления в середине `ArrayList` имеют линейную
 сложность из-за необходимости сдвига элементов.
 
+========= ### Реализация
+
+```java
+public class MyArrayList<T> {
+    private static final int DEFAULT_CAPACITY = 10;
+    private Object[] elements;
+    private int size;
+
+    // Конструктор по умолчанию
+    public MyArrayList() {
+        this.elements = new Object[DEFAULT_CAPACITY];
+        this.size = 0;
+    }
+
+    // Конструктор с начальной емкостью
+    public MyArrayList(int initialCapacity) {
+        if (initialCapacity < 0) {
+            throw new IllegalArgumentException("Initial capacity cannot be negative: " + initialCapacity);
+        }
+        this.elements = new Object[initialCapacity];
+        this.size = 0;
+    }
+
+    // Добавление элемента в конец списка
+    public void add(T element) {
+        ensureCapacity(size + 1);
+        elements[size++] = element;
+    }
+
+    // Добавление элемента по индексу
+    public void add(int index, T element) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        ensureCapacity(size + 1);
+        // Сдвигаем элементы вправо
+        for (int i = size; i > index; i--) {
+            elements[i] = elements[i - 1];
+        }
+        elements[index] = element;
+        size++;
+    }
+
+    // Получение элемента по индексу
+    @SuppressWarnings("unchecked")
+    public T get(int index) {
+        checkIndex(index);
+        return (T) elements[index];
+    }
+
+    // Удаление элемента по индексу
+    @SuppressWarnings("unchecked")
+    public T remove(int index) {
+        checkIndex(index);
+        T oldValue = (T) elements[index];
+        // Сдвигаем элементы влево
+        for (int i = index; i < size - 1; i++) {
+            elements[i] = elements[i + 1];
+        }
+        elements[size - 1] = null; // Очищаем последний элемент
+        size--;
+        return oldValue;
+    }
+
+    // Возвращает текущий размер списка
+    public int size() {
+        return size;
+    }
+
+    // Проверка, пуст ли список
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    // Вспомогательный метод для проверки индекса
+    private void checkIndex(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+    }
+
+    // Вспомогательный метод для увеличения емкости массива
+    private void ensureCapacity(int minCapacity) {
+        if (minCapacity > elements.length) {
+            int newCapacity = elements.length * 3 / 2 + 1; // Увеличиваем в 1.5 раза
+            if (newCapacity < minCapacity) {
+                newCapacity = minCapacity;
+            }
+            Object[] newElements = new Object[newCapacity];
+            for (int i = 0; i < size; i++) {
+                newElements[i] = elements[i];
+            }
+            elements = newElements;
+        }
+    }
+
+    // Тестовая программа
+    public static void main(String[] args) {
+        MyArrayList<String> list = new MyArrayList<>();
+        list.add("Apple");
+        list.add("Banana");
+        list.add(1, "Orange");
+        System.out.println("Size: " + list.size()); // Size: 3
+        System.out.println("Element at index 1: " + list.get(1)); // Orange
+        list.remove(0);
+        System.out.println("After removing index 0, size: " + list.size()); // Size: 2
+        System.out.println("Element at index 0: " + list.get(0)); // Orange
+    }
+}
+```
+
+Я реализую собственную версию `ArrayList` на Java, которая будет поддерживать
+основные операции, такие как добавление, удаление, получение элементов и
+изменение размера массива. Реализация будет использовать динамический массив под
+капотом, как и стандартный `ArrayList` в Java. Для упрощения я включу ключевые
+методы (`add`, `get`, `remove`, `size`) и реализую механизм автоматического
+расширения массива.
+
+### План реализации
+
+1. Создать класс `MyArrayList` с внутренним массивом для хранения элементов.
+2. Реализовать:
+    - Конструкторы (по умолчанию и с начальной емкостью).
+    - Метод `add` для добавления элемента в конец или по индексу.
+    - Метод `get` для получения элемента по индексу.
+    - Метод `remove` для удаления элемента по индексу.
+    - Метод `size` для возврата текущего числа элементов.
+    - Вспомогательный метод для расширения массива при необходимости.
+3. Добавить проверку границ и обработку исключений.
+4. Использовать обобщения (generics) для типобезопасности.
+
+### Реализация
+
+```java
+public class MyArrayList<T> {
+    private static final int DEFAULT_CAPACITY = 10;
+    private Object[] elements;
+    private int size;
+
+    // Конструктор по умолчанию
+    public MyArrayList() {
+        this.elements = new Object[DEFAULT_CAPACITY];
+        this.size = 0;
+    }
+
+    // Конструктор с начальной емкостью
+    public MyArrayList(int initialCapacity) {
+        if (initialCapacity < 0) {
+            throw new IllegalArgumentException("Initial capacity cannot be negative: " + initialCapacity);
+        }
+        this.elements = new Object[initialCapacity];
+        this.size = 0;
+    }
+
+    // Добавление элемента в конец списка
+    public void add(T element) {
+        ensureCapacity(size + 1);
+        elements[size++] = element;
+    }
+
+    // Добавление элемента по индексу
+    public void add(int index, T element) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        ensureCapacity(size + 1);
+        // Сдвигаем элементы вправо
+        for (int i = size; i > index; i--) {
+            elements[i] = elements[i - 1];
+        }
+        elements[index] = element;
+        size++;
+    }
+
+    // Получение элемента по индексу
+    @SuppressWarnings("unchecked")
+    public T get(int index) {
+        checkIndex(index);
+        return (T) elements[index];
+    }
+
+    // Удаление элемента по индексу
+    @SuppressWarnings("unchecked")
+    public T remove(int index) {
+        checkIndex(index);
+        T oldValue = (T) elements[index];
+        // Сдвигаем элементы влево
+        for (int i = index; i < size - 1; i++) {
+            elements[i] = elements[i + 1];
+        }
+        elements[size - 1] = null; // Очищаем последний элемент
+        size--;
+        return oldValue;
+    }
+
+    // Возвращает текущий размер списка
+    public int size() {
+        return size;
+    }
+
+    // Проверка, пуст ли список
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    // Вспомогательный метод для проверки индекса
+    private void checkIndex(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+    }
+
+    // Вспомогательный метод для увеличения емкости массива
+    private void ensureCapacity(int minCapacity) {
+        if (minCapacity > elements.length) {
+            int newCapacity = elements.length * 3 / 2 + 1; // Увеличиваем в 1.5 раза
+            if (newCapacity < minCapacity) {
+                newCapacity = minCapacity;
+            }
+            Object[] newElements = new Object[newCapacity];
+            for (int i = 0; i < size; i++) {
+                newElements[i] = elements[i];
+            }
+            elements = newElements;
+        }
+    }
+
+    // Тестовая программа
+    public static void main(String[] args) {
+        MyArrayList<String> list = new MyArrayList<>();
+        list.add("Apple");
+        list.add("Banana");
+        list.add(1, "Orange");
+        System.out.println("Size: " + list.size()); // Size: 3
+        System.out.println("Element at index 1: " + list.get(1)); // Orange
+        list.remove(0);
+        System.out.println("After removing index 0, size: " + list.size()); // Size: 2
+        System.out.println("Element at index 0: " + list.get(0)); // Orange
+    }
+}
+```
+
+### Объяснение кода
+
+- **Внутренний массив**: `elements` — массив типа `Object[]` для хранения
+  элементов. Используется `Object[]`, так как generics в Java стираются на этапе
+  компиляции.
+- **Размер**: Переменная `size` отслеживает количество элементов в списке.
+- **Автоматическое расширение**: Метод `ensureCapacity` увеличивает размер
+  массива в 1.5 раза, если текущая емкость недостаточна.
+- **Обобщения**: Класс использует generics (`T`) для типобезопасности.
+- **Проверка границ**: Метод `checkIndex` выбрасывает
+  `IndexOutOfBoundsException` при некорректных индексах.
+- **Основные операции**:
+    - `add(T element)`: Добавляет элемент в конец, O(1) в среднем.
+    - `add(int index, T element)`: Добавляет элемент по индексу, O(n) из-за
+      сдвига элементов.
+    - `get(int index)`: Возвращает элемент по индексу, O(1).
+    - `remove(int index)`: Удаляет элемент по индексу, O(n) из-за сдвига.
+    - `size()`: Возвращает количество элементов, O(1).
+- **Тест**: Метод `main` демонстрирует базовое использование.
+
+### Ограничения реализации
+
+- Для простоты не реализованы методы, такие как `contains`, `clear`, `iterator`,
+  или поддержка `List` интерфейса.
+- Нет оптимизаций, таких как уменьшение массива при удалении элементов.
+- Не реализована потокобезопасность (как и в стандартном `ArrayList`).
+
+### Инструкции по использованию
+
+1. Скомпилируйте и запустите код в среде Java.
+2. Используйте класс `MyArrayList` как замену стандартного `ArrayList` для
+   базовых операций.
+3. Для добавления новых функций (например, `contains` или `toArray`) расширьте
+   класс дополнительными методами.
+
+Если нужна более сложная реализация (например, с итератором или дополнительными
+методами), дайте знать, и я доработаю код!
+
 ### Преимущества `ArrayList`
 
 1. Быстрый доступ по индексу (O(1)).
@@ -218,8 +498,6 @@ LinkedList\<E> является реализацией двусвязного с
 | `remove(int index)` | Найти и удалить — переустановить ссылки       | O(n)      |
 | `add(int index, E)` | Найти место и вставить, поменять ссылки       | O(n)      |
 | `iterator.remove()` | Быстрое удаление по итератору                 | O(1)      |
-
------
 
 ### Основные характеристики LinkedList
 
@@ -304,8 +582,6 @@ _**Добавление элемента в середину списка**_
 - Итератор позволяет проходить по элементам без необходимости знать
   внутреннюю структуру списка.
 
--------------
-
 ### АЛГОРИТМИЧЕСКАЯ СЛОЖНОСТЬ
 
 Алгоритмическая сложность операций с `LinkedList` в Java зависит от конкретной
@@ -374,7 +650,368 @@ ListIterator. Операция удаления из начала и конца 
   удаляющие и извлекающие элемент, первый или последний раз встречаемый
   в списке.
 
-----------------
+### ========================= Реализация
+
+```java
+public class MyLinkedList<T> {
+    private class Node {
+        T data;
+        Node prev;
+        Node next;
+
+        Node(T data) {
+            this.data = data;
+            this.prev = null;
+            this.next = null;
+        }
+    }
+
+    private Node head;
+    private Node tail;
+    private int size;
+
+    // Конструктор по умолчанию
+    public MyLinkedList() {
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
+    }
+
+    // Добавление элемента в конец списка
+    public void add(T element) {
+        Node newNode = new Node(element);
+        if (isEmpty()) {
+            head = tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+        size++;
+    }
+
+    // Добавление элемента по индексу
+    public void add(int index, T element) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        if (index == size) {
+            add(element);
+            return;
+        }
+        Node newNode = new Node(element);
+        if (index == 0) {
+            newNode.next = head;
+            head.prev = newNode;
+            head = newNode;
+        } else {
+            Node current = getNode(index);
+            newNode.prev = current.prev;
+            newNode.next = current;
+            current.prev.next = newNode;
+            current.prev = newNode;
+        }
+        size++;
+    }
+
+    // Получение элемента по индексу
+    public T get(int index) {
+        checkIndex(index);
+        return getNode(index).data;
+    }
+
+    // Удаление элемента по индексу
+    public T remove(int index) {
+        checkIndex(index);
+        Node current = getNode(index);
+        T removedData = current.data;
+
+        if (size == 1) {
+            head = tail = null;
+        } else if (current == head) {
+            head = head.next;
+            head.prev = null;
+        } else if (current == tail) {
+            tail = tail.prev;
+            tail.next = null;
+        } else {
+            current.prev.next = current.next;
+            current.next.prev = current.prev;
+        }
+        size--;
+        return removedData;
+    }
+
+    // Возвращает текущий размер списка
+    public int size() {
+        return size;
+    }
+
+    // Проверка, пуст ли список
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    // Вспомогательный метод для проверки индекса
+    private void checkIndex(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+    }
+
+    // Вспомогательный метод для получения узла по индексу
+    private Node getNode(int index) {
+        checkIndex(index);
+        Node current;
+        // Оптимизация: начинаем с головы или хвоста в зависимости от индекса
+        if (index < size / 2) {
+            current = head;
+            for (int i = 0; i < index; i++) {
+                current = current.next;
+            }
+        } else {
+            current = tail;
+            for (int i = size - 1; i > index; i--) {
+                current = current.prev;
+            }
+        }
+        return current;
+    }
+
+    // Тестовая программа
+    public static void main(String[] args) {
+        MyLinkedList<String> list = new MyLinkedList<>();
+        list.add("Apple");
+        list.add("Banana");
+        list.add(1, "Orange");
+        System.out.println("Size: " + list.size()); // Size: 3
+        System.out.println("Element at index 1: " + list.get(1)); // Orange
+        list.remove(0);
+        System.out.println("After removing index 0, size: " + list.size()); // Size: 2
+        System.out.println("Element at index 0: " + list.get(0)); // Orange
+    }
+}
+```
+
+Я реализую собственную версию `LinkedList` на Java, которая будет поддерживать
+основные операции, такие как добавление, удаление, получение элементов и
+определение размера списка. Реализация будет использовать двусвязный список (
+doubly-linked list), как и стандартный `LinkedList` в Java, чтобы обеспечить
+эффективные операции вставки и удаления. Для простоты включу ключевые методы (
+`add`, `get`, `remove`, `size`) и использую обобщения для типобезопасности.
+
+### План реализации
+
+1. Создать класс `MyLinkedList` с внутренней структурой узлов для
+   двусвязногоリスト.
+2. Реализовать:
+    - Внутренний класс `Node` для представления узлов (содержит данные, ссылки
+      на предыдущий и следующий узлы).
+    - Конструктор по умолчанию.
+    - Метод `add` для добавления элемента в конец или по индексу.
+    - Метод `get` для получения элемента по индексу.
+    - Метод `remove` для удаления элемента по индексу.
+    - Метод `size` для возврата текущего числа элементов.
+    - Метод `isEmpty` для проверки, пуст ли список.
+3. Добавить проверку границ и обработку исключений.
+4. Использовать обобщения (generics) для типобезопасности.
+
+### Реализация
+
+```java
+public class MyLinkedList<T> {
+    private class Node {
+        T data;
+        Node prev;
+        Node next;
+
+        Node(T data) {
+            this.data = data;
+            this.prev = null;
+            this.next = null;
+        }
+    }
+
+    private Node head;
+    private Node tail;
+    private int size;
+
+    // Конструктор по умолчанию
+    public MyLinkedList() {
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
+    }
+
+    // Добавление элемента в конец списка
+    public void add(T element) {
+        Node newNode = new Node(element);
+        if (isEmpty()) {
+            head = tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+        size++;
+    }
+
+    // Добавление элемента по индексу
+    public void add(int index, T element) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        if (index == size) {
+            add(element);
+            return;
+        }
+        Node newNode = new Node(element);
+        if (index == 0) {
+            newNode.next = head;
+            head.prev = newNode;
+            head = newNode;
+        } else {
+            Node current = getNode(index);
+            newNode.prev = current.prev;
+            newNode.next = current;
+            current.prev.next = newNode;
+            current.prev = newNode;
+        }
+        size++;
+    }
+
+    // Получение элемента по индексу
+    public T get(int index) {
+        checkIndex(index);
+        return getNode(index).data;
+    }
+
+    // Удаление элемента по индексу
+    public T remove(int index) {
+        checkIndex(index);
+        Node current = getNode(index);
+        T removedData = current.data;
+
+        if (size == 1) {
+            head = tail = null;
+        } else if (current == head) {
+            head = head.next;
+            head.prev = null;
+        } else if (current == tail) {
+            tail = tail.prev;
+            tail.next = null;
+        } else {
+            current.prev.next = current.next;
+            current.next.prev = current.prev;
+        }
+        size--;
+        return removedData;
+    }
+
+    // Возвращает текущий размер списка
+    public int size() {
+        return size;
+    }
+
+    // Проверка, пуст ли список
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    // Вспомогательный метод для проверки индекса
+    private void checkIndex(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+    }
+
+    // Вспомогательный метод для получения узла по индексу
+    private Node getNode(int index) {
+        checkIndex(index);
+        Node current;
+        // Оптимизация: начинаем с головы или хвоста в зависимости от индекса
+        if (index < size / 2) {
+            current = head;
+            for (int i = 0; i < index; i++) {
+                current = current.next;
+            }
+        } else {
+            current = tail;
+            for (int i = size - 1; i > index; i--) {
+                current = current.prev;
+            }
+        }
+        return current;
+    }
+
+    // Тестовая программа
+    public static void main(String[] args) {
+        MyLinkedList<String> list = new MyLinkedList<>();
+        list.add("Apple");
+        list.add("Banana");
+        list.add(1, "Orange");
+        System.out.println("Size: " + list.size()); // Size: 3
+        System.out.println("Element at index 1: " + list.get(1)); // Orange
+        list.remove(0);
+        System.out.println("After removing index 0, size: " + list.size()); // Size: 2
+        System.out.println("Element at index 0: " + list.get(0)); // Orange
+    }
+}
+```
+
+### Объяснение кода
+
+- **Внутренняя структура**:
+    - Класс `Node` представляет узел двусвязного списка с полями `data` (
+      данные), `prev` (ссылка на предыдущий узел) и `next` (ссылка на следующий
+      узел).
+    - Поля `head` и `tail` указывают на начало и конец списка, `size`
+      отслеживает количество элементов.
+- **Обобщения**: Класс использует generics (`T`) для типобезопасности.
+- **Основные операции**:
+    - `add(T element)`: Добавляет элемент в конец списка, O(1).
+    - `add(int index, T element)`: Добавляет элемент по индексу, O(n) из-за
+      необходимости поиска узла.
+    - `get(int index)`: Возвращает элемент по индексу, O(n).
+    - `remove(int index)`: Удаляет элемент по индексу, O(n) из-за поиска.
+    - `size()`: Возвращает количество элементов, O(1).
+    - `isEmpty()`: Проверяет, пуст ли список, O(1).
+- **Оптимизация**:
+    - Метод `getNode` оптимизирован: для индексов ближе к началу начинается с
+      `head`, для индексов ближе к концу — с `tail`.
+- **Проверка границ**: Метод `checkIndex` выбрасывает
+  `IndexOutOfBoundsException` при некорректных индексах.
+- **Тест**: Метод `main` демонстрирует базовое использование.
+
+### Сложность операций
+
+| Операция      | Сложность |
+|---------------|-----------|
+| `add(T)`      | O(1)      |
+| `add(int, T)` | O(n)      |
+| `get(int)`    | O(n)      |
+| `remove(int)` | O(n)      |
+| `size()`      | O(1)      |
+| `isEmpty()`   | O(1)      |
+
+### Ограничения реализации
+
+- Для простоты не реализованы методы, такие как `contains`, `clear`, `iterator`,
+  или поддержка интерфейса `List`.
+- Нет поддержки операций, специфичных для `Deque` (например, `addFirst`,
+  `addLast`), хотя их легко добавить.
+- Не реализована потокобезопасность (как и в стандартном `LinkedList`).
+
+### Инструкции по использованию
+
+1. Скомпилируйте и запустите код в среде Java.
+2. Используйте класс `MyLinkedList` как замену стандартного `LinkedList` для
+   базовых операций.
+3. Для добавления новых функций (например, `iterator` или `addFirst`) расширьте
+   класс дополнительными методами.
+
+Если нужна более сложная реализация (например, с поддержкой `Iterator` или
+методов `Deque`), дайте знать, и я доработаю код!
 
 #### Преимущества LinkedList
 
