@@ -1,4 +1,4 @@
-package dev.folomkin.pro.qa.algos_datastructure.algos;
+package dev.folomkin.pro.qa.algos;
 
 public class Demo {
     public static void main(String[] args) {

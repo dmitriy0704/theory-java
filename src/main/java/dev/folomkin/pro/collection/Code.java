@@ -1,6 +1,5 @@
-package dev.folomkin.pro.collection.code;
+package dev.folomkin.pro.collection;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
