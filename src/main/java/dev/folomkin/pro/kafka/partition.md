@@ -299,7 +299,7 @@ public class UserIdPartitioner implements Partitioner {
             return 0; // по умолчанию
         }
 
-        // Пример: если key = "user-123", берём hash, делим на количество партиций
+        // Пример: если key = "user-123", берём hash-table.md, делим на количество партиций
         return Math.abs(key.hashCode()) % partitionCount;
     }
 

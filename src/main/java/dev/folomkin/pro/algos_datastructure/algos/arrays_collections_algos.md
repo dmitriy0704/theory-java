@@ -179,11 +179,9 @@ public class ExampleStart {
 
 ### Сортировка
 
+#### Стандартные методы сортировки Java
 
-
-## Стандартные методы сортировки Java
-
-### Collections.sort()
+##### Collections.sort()
 
 ```java
 public class Demo {
@@ -212,7 +210,6 @@ public class Demo {
     }
 }
 ```
-
 
 #### Arrays
 
@@ -313,3 +310,189 @@ public class ExampleCode {
   T> comp);
 - public static <T> T min(Collection<Collection? extends T>c, Comparator<? super
   T> comp);
+
+===================
+
+## Алгоритмы работы с коллекциями
+
+В Java для работы с коллекциями (из пакета `java.util`) используются различные
+алгоритмы, предоставленные в основном классом `Collections` и другими утилитами.
+Вот основные алгоритмы и методы для работы с коллекциями:
+
+### 1. **Сортировка**
+
+- **`Collections.sort(List<T> list)`**: Сортирует список в естественном
+  порядке (для элементов, реализующих интерфейс `Comparable`).
+- **`Collections.sort(List<T> list, Comparator<? super T> c)`**: Сортирует
+  список с использованием пользовательского компаратора.
+- **Пример**:
+  ```java
+  List<Integer> list = Arrays.asList(5, 2, 8, 1);
+  Collections.sort(list); // [1, 2, 5, 8]
+  ```
+
+### 2. **Поиск**
+
+- **`Collections.binarySearch(List<? extends Comparable<? super 
+T>> list, T key)`**: Выполняет бинарный поиск в отсортированном списке.
+  Возвращает индекс
+  элемента или отрицательное значение, если элемент не найден.
+
+- **
+  `Collections.binarySearch(List<? extends T> list, T key, Comparator<? super T> c)`
+  **: Бинарный поиск с использованием компаратора.
+- **Примечание**: Список должен быть предварительно отсортирован.
+- **Пример**:
+  ```java
+  List<Integer> list = Arrays.asList(1, 2, 5, 8);
+  int index = Collections.binarySearch(list, 5); // 2
+  ```
+
+### 3. **Перемешивание**
+
+- **`Collections.shuffle(List<?> list)`**: Случайно перемешивает элементы в
+  списке.
+- **`Collections.shuffle(List<?> list, Random rnd)`**: Перемешивание с заданным
+  генератором случайных чисел.
+- **Пример**:
+  ```java
+  List<Integer> list = Arrays.asList(1, 2, 3, 4);
+  Collections.shuffle(list); // Например, [3, 1, 4, 2]
+  ```
+
+### 4. **Обратный порядок**
+
+- **`Collections.reverse(List<?> list)`**: Изменяет порядок элементов в списке
+  на обратный.
+- **Пример**:
+  ```java
+  List<Integer> list = Arrays.asList(1, 2, 3);
+  Collections.reverse(list); // [3, 2, 1]
+  ```
+
+### 5. **Заполнение**
+
+- **`Collections.fill(List<? super T> list, T obj)`**: Заменяет все элементы
+  списка указанным объектом.
+- **Пример**:
+  ```java
+  List<String> list = new ArrayList<>(Arrays.asList("a", "b", "c"));
+  Collections.fill(list, "x"); // [x, x, x]
+  ```
+
+### 6. **Копирование**
+
+- **`Collections.copy(List<? super T> dest, List<? extends T> src)`**: Копирует
+  элементы из исходного списка в целевой. Целевой список должен быть не короче
+  исходного.
+- **Пример**:
+  ```java
+  List<Integer> src = Arrays.asList(1, 2, 3);
+  List<Integer> dest = new ArrayList<>(Arrays.asList(0, 0, 0, 0));
+  Collections.copy(dest, src); // dest: [1, 2, 3, 0]
+  ```
+
+### 7. **Минимальный и максимальный элементы**
+
+- **`Collections.min(Collection<? extends T> coll)`**: Находит минимальный
+  элемент в коллекции (для элементов, реализующих `Comparable`).
+- **`Collections.max(Collection<? extends T> coll)`**: Находит максимальный
+  элемент.
+- **
+  `Collections.min/max(Collection<? extends T> coll, Comparator<? super T> comp)`
+  **: С использованием компаратора.
+- **Пример**:
+  ```java
+  List<Integer> list = Arrays.asList(5, 2, 8, 1);
+  int min = Collections.min(list); // 1
+  int max = Collections.max(list); // 8
+  ```
+
+### 8. **Частота и подсчет**
+
+- **`Collections.frequency(Collection<?> c, Object o)`**: Подсчитывает
+  количество вхождений элемента в коллекции.
+- **Пример**:
+  ```java
+  List<String> list = Arrays.asList("a", "b", "a", "c");
+  int freq = Collections.frequency(list, "a"); // 2
+  ```
+
+### 9. **Проверка непересечения**
+
+- **`Collections.disjoint(Collection<?> c1, Collection<?> c2)`**: Проверяет, нет
+  ли общих элементов в двух коллекциях.
+- **Пример**:
+  ```java
+  List<Integer> list1 = Arrays.asList(1, 2, 3);
+  List<Integer> list2 = Arrays.asList(4, 5, 6);
+  boolean disjoint = Collections.disjoint(list1, list2); // true
+  ```
+
+### 10. **Синхронизация**
+
+- **`Collections.synchronizedCollection(Collection<T> c)`**: Создает
+  синхронизированную (потокобезопасную) версию коллекции.
+- **`Collections.synchronizedList(List<T> c)`**, *
+  *`Collections.synchronizedSet(Set<T> c)`**, и т.д.
+- **Пример**:
+  ```java
+  List<String> list = Collections.synchronizedList(new ArrayList<>());
+  ```
+
+### 11. **Неизменяемые коллекции**
+
+- **`Collections.unmodifiableCollection(Collection<? extends T> c)`**: Создает
+  неизменяемую обертку над коллекцией.
+- Аналогичные методы: `unmodifiableList`, `unmodifiableSet`, `unmodifiableMap`,
+  и т.д.
+- **Пример**:
+  ```java
+  List<String> list = Collections.unmodifiableList(Arrays.asList("a", "b"));
+  // list.add("c"); // UnsupportedOperationException
+  ```
+
+### 12. **Пакетные операции**
+
+- **`List.replaceAll(UnaryOperator<E> operator)`**: Заменяет каждый элемент
+  списка результатом применения функции.
+- **`List.removeIf(Predicate<? super E> filter)`**: Удаляет элементы,
+  удовлетворяющие условию.
+- **Пример**:
+  ```java
+  List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4));
+  list.replaceAll(x -> x * 2); // [2, 4, 6, 8]
+  list.removeIf(x -> x > 5); // [2, 4]
+  ```
+
+### 13. **Stream API (Java 8+)**
+
+Хотя это не часть `Collections`, Stream API предоставляет мощные функциональные
+алгоритмы для работы с коллекциями:
+
+- **Фильтрация**: `stream().filter(...)`
+- **Сортировка**: `stream().sorted(...)`
+- **Маппинг**: `stream().map(...)`
+- **Сбор**: `stream().collect(...)`
+- **Пример**:
+  ```java
+  List<Integer> list = Arrays.asList(1, 2, 3, 4);
+  List<Integer> result = list.stream()
+                             .filter(x -> x % 2 == 0)
+                             .map(x -> x * 2)
+                             .collect(Collectors.toList()); // [4, 8]
+  ```
+
+### 14. **Другие полезные методы**
+
+- **`Collections.swap(List<?> list, int i, int j)`**: Меняет местами элементы по
+  указанным индексам.
+- **`Collections.rotate(List<?> list, int distance)`**: Циклически сдвигает
+  элементы списка.
+- **`Collections.nCopies(int n, T o)`**: Создает неизменяемый список из `n`
+  копий элемента.
+- **Пример**:
+  ```java
+  List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3));
+  Collections.swap(list, 0, 2); // [3, 2, 1]
+  ```
