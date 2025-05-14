@@ -52,8 +52,6 @@
    объекты из какого-то хранилища или кэша.
 
 ```java
-package dev.folomkin.design_patterns.pattterns.creational.factory_method;
-
 
 // Шаблон продукта
 // 1. Это интерфейс, который определяет метод doShift(), который будут реализовывать конкретные продукты.
@@ -63,14 +61,14 @@ interface Product {
 
 // Конкретные продукты
 // 2. ConcreteProductA и ConcreteProductB — это конкретные реализации интерфейса Product.
-class ConcreteProductA implements dev.folomkin.pro.design_patterns.pattterns.gof.creational.factory_method.Product {
+class ConcreteProductA implements Product {
     @Override
     public void doShift() {
         System.out.println("Используется продукт A");
     }
 }
 
-class ConcreteProductB implements dev.folomkin.pro.design_patterns.pattterns.gof.creational.factory_method.Product {
+class ConcreteProductB implements Product {
     @Override
     public void doShift() {
         System.out.println("Используется продукт B");
@@ -82,11 +80,11 @@ class ConcreteProductB implements dev.folomkin.pro.design_patterns.pattterns.gof
 // factoryMethod(). Он также содержит метод someOperation(), который использует
 // продукт.
 abstract class Creator {
-    public abstract dev.folomkin.pro.design_patterns.pattterns.gof.creational.factory_method.Product factoryMethod();
+    public abstract Product factoryMethod();
 
     public void someOperation() {
         // Вызываем фабричный метод для создания продукта
-        dev.folomkin.pro.design_patterns.pattterns.gof.creational.factory_method.Product product = factoryMethod();
+        Product product = factoryMethod();
         // Используем продукт
         product.doShift();
     }
