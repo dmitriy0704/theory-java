@@ -1,11 +1,11 @@
 # Паттерны проектирования
 
 ---
-Самые популярные:
+Популярные:
 
-3. Одиночка (Singleton)
-1. Фабричный метод (Factory Method)
-2. Абстрактная фабрика ( Abstract Factory)
+1. Одиночка (Singleton)
+2. Фабричный метод (Factory Method)
+3. Абстрактная фабрика ( Abstract Factory)
 4. Декоратор (Decorator)
 5. Наблюдатель (Observer)
 6. Стратегия (Strategy)
@@ -2454,15 +2454,1313 @@ Java он широко используется в стандартной биб
 
 ## Фасад (Facade)
 
+**Паттерн Facade (Фасад)** — это структурный паттерн проектирования, который
+предоставляет упрощённый интерфейс к сложной подсистеме, скрывая её внутреннюю
+сложность. Он действует как "единая точка входа", упрощая взаимодействие клиента
+с набором классов или модулей, которые вместе решают задачу.
 
+---
 
+### **Описание паттерна**
+
+**Цель**:
+
+- Обеспечить простой и удобный интерфейс для работы со сложной подсистемой.
+- Скрыть детали реализации подсистемы от клиента.
+- Уменьшить связанность между клиентским кодом и подсистемой.
+
+**Когда использовать**:
+
+- Когда подсистема состоит из множества классов с сложными взаимодействиями, а
+  клиенту нужен простой доступ.
+- Когда требуется изолировать клиентский код от деталей реализации подсистемы.
+- Когда нужно разделить подсистему на слои или предоставить точку входа для
+  внешнего использования.
+- Для упрощения работы с библиотеками или API с большим количеством методов.
+
+**Примеры использования**:
+
+- Упрощение работы с API фреймворков (например, JDBC или Hibernate).
+- Управление сложными системами, такими как мультимедийные плееры или
+  компиляторы.
+- Обёртывание устаревших систем для интеграции с новым кодом.
+
+---
+
+### **Структура паттерна**
+
+1. **Фасад (Facade)**: Класс, предоставляющий упрощённый интерфейс с методами,
+   которые вызывают функции подсистемы.
+2. **Подсистема (Subsystem)**: Набор классов, выполняющих сложные операции. Эти
+   классы могут быть независимыми или взаимодействовать друг с другом.
+3. **Клиент (Client)**: Код, который использует фасад для взаимодействия с
+   подсистемой.
+
+---
+
+### **Реализация в Java**
+
+Пример: фасад для упрощения работы с подсистемой домашнего кинотеатра, которая
+включает DVD-плеер, проектор и аудиосистему.
+
+```java
+// Подсистема: классы с индивидуальной функциональностью
+class DVDPlayer {
+    public void on() {
+        System.out.println("DVD Player is on");
+    }
+
+    public void play(String movie) {
+        System.out.println("Playing movie: " + movie);
+    }
+
+    public void off() {
+        System.out.println("DVD Player is off");
+    }
+}
+
+class Projector {
+    public void on() {
+        System.out.println("Projector is on");
+    }
+
+    public void setInput(String input) {
+        System.out.println("Projector input set to " + input);
+    }
+
+    public void off() {
+        System.out.println("Projector is off");
+    }
+}
+
+class AudioSystem {
+    public void on() {
+        System.out.println("Audio System is on");
+    }
+
+    public void setVolume(int level) {
+        System.out.println("Audio volume set to " + level);
+    }
+
+    public void off() {
+        System.out.println("Audio System is off");
+    }
+}
+
+// Фасад
+class HomeTheaterFacade {
+    private final DVDPlayer dvdPlayer;
+    private final Projector projector;
+    private final AudioSystem audioSystem;
+
+    public HomeTheaterFacade(DVDPlayer dvdPlayer, Projector projector, AudioSystem audioSystem) {
+        this.dvdPlayer = dvdPlayer;
+        this.projector = projector;
+        this.audioSystem = audioSystem;
+    }
+
+    public void watchMovie(String movie) {
+        System.out.println("Preparing to watch movie...");
+        dvdPlayer.on();
+        projector.on();
+        projector.setInput("DVD");
+        audioSystem.on();
+        audioSystem.setVolume(5);
+        dvdPlayer.play(movie);
+        System.out.println("Movie started!");
+    }
+
+    public void endMovie() {
+        System.out.println("Shutting down home theater...");
+        dvdPlayer.off();
+        projector.off();
+        audioSystem.off();
+        System.out.println("Home theater shut down.");
+    }
+}
+
+// Клиентский код
+public class FacadeExample {
+    public static void main(String[] args) {
+        DVDPlayer dvdPlayer = new DVDPlayer();
+        Projector projector = new Projector();
+        AudioSystem audioSystem = new AudioSystem();
+
+        HomeTheaterFacade homeTheater = new HomeTheaterFacade(dvdPlayer, projector, audioSystem);
+
+        homeTheater.watchMovie("Inception");
+        // Вывод:
+        // Preparing to watch movie...
+        // DVD Player is on
+        // Projector is on
+        // Projector input set to DVD
+        // Audio System is on
+        // Audio volume set to 5
+        // Playing movie: Inception
+        // Movie started!
+
+        homeTheater.endMovie();
+        // Вывод:
+        // Shutting down home theater...
+        // DVD Player is off
+        // Projector is off
+        // Audio System is off
+        // Home theater shut down.
+    }
+}
+```
+
+---
+
+### **Как это работает**
+
+1. Клиент создаёт экземпляры классов подсистемы (`DVDPlayer`, `Projector`,
+   `AudioSystem`) и передаёт их в фасад (`HomeTheaterFacade`).
+2. Фасад предоставляет высокоуровневые методы (`watchMovie`, `endMovie`),
+   которые координируют работу подсистемы.
+3. Клиент вызывает методы фасада, не взаимодействуя напрямую с подсистемой, что
+   упрощает код и скрывает сложность.
+
+---
+
+### **Реальное использование в Java**
+
+1. **JDBC API**:
+   Класс `java.sql.DriverManager` действует как фасад, упрощая работу с
+   подключением к базе данных:
+   ```java
+   import java.sql.Connection;
+   import java.sql.DriverManager;
+
+   Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", "user", "pass");
+   ```
+   `DriverManager` скрывает детали загрузки драйверов и управления соединениями.
+
+2. **SLF4J/Logging**:
+   Логгеры, такие как SLF4J, предоставляют фасад для различных реализаций
+   логирования (Log4j, JUL):
+   ```java
+   import org.slf4j.Logger;
+   import org.slf4j.LoggerFactory;
+
+   Logger logger = LoggerFactory.getLogger(MyClass.class);
+   logger.info("Hello, world!");
+   ```
+   SLF4J скрывает выбор конкретной системы логирования.
+
+3. **Spring Framework**:
+   В Spring фасады часто используются для упрощения работы с подсистемами.
+   Например, `JdbcTemplate` — это фасад для работы с JDBC:
+   ```java
+   import org.springframework.jdbc.core.JdbcTemplate;
+
+   JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+   jdbcTemplate.update("INSERT INTO users (name) VALUES (?)", "Alice");
+   ```
+   `JdbcTemplate` скрывает сложности управления соединениями, обработки
+   исключений и т.д.
+
+---
+
+### **Преимущества**
+
+- **Упрощение интерфейса**: Клиент работает с простыми методами вместо сложной
+  подсистемы.
+- **Снижение связанности**: Клиентский код зависит только от фасада, а не от
+  множества классов подсистемы.
+- **Инкапсуляция**: Скрывает детали реализации подсистемы.
+- **Гибкость**: Легко изменить или заменить подсистему, не затрагивая клиентский
+  код.
+- **Поддержка слоёв**: Фасад может служить точкой входа для слоя архитектуры.
+
+---
+
+### **Недостатки**
+
+- **Ограничение функциональности**: Фасад может предоставлять только
+  подмножество возможностей подсистемы.
+- **Риск превращения в "божественный объект"**: Если фасад обрастает слишком
+  многими методами, он может стать сложным для поддержки.
+- **Дополнительный слой**: Вводит ещё один класс, что может быть избыточным для
+  простых систем.
+
+---
+
+### **Отличие от других паттернов**
+
+- **Facade vs Adapter**:
+    - **Facade** упрощает интерфейс к сложной подсистеме.
+    - **Adapter** преобразует интерфейс одного класса в другой, совместимый с
+      клиентом.
+- **Facade vs Mediator**:
+    - **Facade** предоставляет упрощённый доступ к подсистеме, не координируя её
+      части.
+    - **Mediator** управляет взаимодействием между объектами, уменьшая их прямые
+      связи.
+- **Facade vs Abstract Factory**:
+    - **Facade** скрывает сложность подсистемы, предоставляя высокоуровневые
+      операции.
+    - **Abstract Factory** создаёт семейства связанных объектов.
+
+---
+
+### **Проблемы и антипаттерны**
+
+1. **Слишком сложный фасад**: Если фасад включает слишком много методов, он
+   становится трудно поддерживаемым.
+    - **Решение**: Ограничивайте фасад высокоуровневыми операциями, оставляя
+      детали подсистеме.
+2. **Нарушение инкапсуляции**: Если фасад предоставляет прямой доступ к объектам
+   подсистемы, он теряет свою цель.
+    - **Решение**: Возвращайте результаты, а не ссылки на внутренние объекты.
+3. **Избыточность для простых систем**: В небольших системах фасад может быть
+   ненужным усложнением.
+    - **Решение**: Используйте фасад только для систем с реальной сложностью.
+
+---
+
+### **Современные альтернативы в Java**
+
+- **Spring Service Layer**:
+  В Spring сервисы часто действуют как фасады, упрощая доступ к бизнес-логике:
+  ```java
+  @Service
+  class UserService {
+      public void registerUser(String name, String email) {
+          // Взаимодействие с репозиториями, валидацией и т.д.
+      }
+  }
+  ```
+- **API Gateways**:
+  В микросервисной архитектуре API-шлюзы (например, Spring Cloud Gateway)
+  выступают как фасады, предоставляя единый интерфейс к множеству сервисов.
+- **Fluent Interfaces**:
+  Для упрощения взаимодействия можно использовать цепочки вызовов вместо фасада:
+  ```java
+  HomeTheater theater = new HomeTheater()
+          .withDVDPlayer()
+          .withProjector()
+          .startMovie("Inception");
+  ```
+
+---
+
+### **Итог**
+
+Паттерн Facade — это эффективный способ упростить взаимодействие со сложной
+подсистемой, скрывая её детали и предоставляя удобный интерфейс. В Java он
+широко используется в стандартной библиотеке (JDBC, SLF4J) и фреймворках (
+Spring). Фасад снижает связанность, улучшает читаемость кода и облегчает
+поддержку, но требует осторожности, чтобы не превратиться в громоздкий объект.
+Он особенно полезен в системах с высокой сложностью или при интеграции с
+устаревшими API.
+
+Если вам нужен более сложный пример, помощь с реализацией в вашем проекте,
+сравнение с другими паттернами (например, Adapter или Mediator) или разбор
+конкретной задачи, напишите!
 
 ---
 
 ## Заместитель (Proxy)
 
+**Паттерн Proxy (Заместитель)** — это структурный паттерн проектирования,
+который предоставляет объект-заместитель (прокси) для управления доступом к
+другому объекту, добавляя дополнительную функциональность, такую как ленивая
+инициализация, контроль доступа, логирование или кэширование, без изменения
+исходного объекта. Прокси действует как посредник между клиентом и реальным
+объектом.
+
+---
+
+### **Описание паттерна**
+
+**Цель**:
+
+- Контролировать доступ к объекту, добавляя промежуточный слой.
+- Отложить создание или выполнение операций до момента, когда они действительно
+  нужны.
+- Предоставить дополнительную функциональность (например, проверку прав,
+  кэширование).
+
+**Когда использовать**:
+
+- Когда нужно отложить создание дорогостоящего объекта до его фактического
+  использования (ленивая инициализация).
+- Когда требуется ограничить доступ к объекту (например, проверка прав).
+- Когда нужно логировать операции или кэшировать результаты.
+- Когда требуется управлять доступом к удалённым объектам (например, в
+  распределённых системах).
+
+**Примеры использования**:
+
+- Ленивая загрузка данных (например, изображений в приложении).
+- Проверка прав доступа перед вызовом методов сервиса.
+- Прокси для удалённых объектов (например, RMI в Java).
+- Кэширование результатов операций.
+
+---
+
+### **Структура паттерна**
+
+1. **Субъект (Subject)**: Интерфейс, который определяет общие методы для
+   реального объекта и прокси.
+2. **Реальный объект (Real Subject)**: Класс, выполняющий основную работу, к
+   которому прокси управляет доступом.
+3. **Прокси (Proxy)**: Класс, реализующий тот же интерфейс, что и реальный
+   объект, и содержащий ссылку на него. Прокси добавляет дополнительную логику
+   перед или после вызова методов реального объекта.
+4. **Клиент (Client)**: Код, который работает с прокси, как с реальным объектом.
+
+---
+
+### **Типы прокси**
+
+1. **Виртуальный прокси**: Откладывает создание реального объекта до момента его
+   использования (ленивая инициализация).
+2. **Защитный прокси**: Контролирует доступ к объекту (например, проверяет
+   права).
+3. **Удалённый прокси**: Управляет доступом к объекту, расположенному в другом
+   адресном пространстве (например, в распределённых системах).
+4. **Кэширующий прокси**: Сохраняет результаты операций для повторного
+   использования.
+5. **Логирующий прокси**: Добавляет логирование вызовов методов.
+
+---
+
+### **Реализация в Java**
+
+Пример: виртуальный прокси для ленивой загрузки изображения.
+
+```java
+// Интерфейс субъекта
+interface Image {
+    void display();
+}
+
+// Реальный объект
+class RealImage implements Image {
+    private final String filename;
+
+    public RealImage(String filename) {
+        this.filename = filename;
+        loadImageFromDisk();
+    }
+
+    private void loadImageFromDisk() {
+        System.out.println("Loading image: " + filename);
+    }
+
+    @Override
+    public void display() {
+        System.out.println("Displaying image: " + filename);
+    }
+}
+
+// Прокси
+class ProxyImage implements Image {
+    private RealImage realImage;
+    private final String filename;
+
+    public ProxyImage(String filename) {
+        this.filename = filename;
+    }
+
+    @Override
+    public void display() {
+        if (realImage == null) {
+            realImage = new RealImage(filename); // Ленивая инициализация
+        }
+        realImage.display();
+    }
+}
+
+// Клиентский код
+public class ProxyExample {
+    public static void main(String[] args) {
+        Image image = new ProxyImage("photo.jpg");
+
+        // Изображение загружается только при первом вызове
+        image.display();
+        // Вывод:
+        // Loading image: photo.jpg
+        // Displaying image: photo.jpg
+
+        // При повторном вызове загрузка не происходит
+        image.display();
+        // Вывод:
+        // Displaying image: photo.jpg
+    }
+}
+```
+
+---
+
+### **Как это работает**
+
+1. Клиент работает с прокси (`ProxyImage`) через интерфейс `Image`, не зная, что
+   это не реальный объект.
+2. Прокси создаёт реальный объект (`RealImage`) только при первом вызове метода
+   `display` (ленивая инициализация).
+3. Последующие вызовы используют уже созданный объект, избегая повторной
+   загрузки.
+
+---
+
+### **Реальное использование в Java**
+
+1. **Java RMI (Remote Method Invocation)**:
+   RMI использует удалённый прокси для доступа к объектам на другом JVM:
+   ```java
+   import java.rmi.Remote;
+   import java.rmi.RemoteException;
+
+   public interface MyRemote extends Remote {
+       String sayHello() throws RemoteException;
+   }
+   ```
+   Прокси-объект, созданный RMI, управляет сетевыми вызовами.
+
+2. **Spring AOP**:
+   Spring использует прокси для добавления сквозной функциональности, например,
+   транзакций или логирования:
+   ```java
+   @Service
+   class MyService {
+       @Transactional
+       public void doWork() { /* Логика */ }
+   }
+   ```
+   Spring создаёт прокси, который оборачивает метод `doWork` транзакционной
+   логикой.
+
+3. **Hibernate Lazy Loading**:
+   В Hibernate прокси используются для ленивой загрузки сущностей:
+   ```java
+   @Entity
+   class User {
+       @OneToMany(fetch = FetchType.LAZY)
+       private List<Order> orders;
+   }
+   ```
+   Hibernate создаёт прокси для коллекции `orders`, загружая данные только при
+   обращении.
+
+4. **Dynamic Proxy API**:
+   Java предоставляет `java.lang.reflect.Proxy` для создания динамических
+   прокси:
+   ```java
+   import java.lang.reflect.InvocationHandler;
+   import java.lang.reflect.Proxy;
+
+   interface Service {
+       void perform();
+   }
+
+   class RealService implements Service {
+       public void perform() { System.out.println("Performing service"); }
+   }
+
+   class LoggingHandler implements InvocationHandler {
+       private final Object target;
+
+       public LoggingHandler(Object target) { this.target = target; }
+
+       @Override
+       public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+           System.out.println("Before: " + method.getName());
+           Object result = method.invoke(target, args);
+           System.out.println("After: " + method.getName());
+           return result;
+       }
+   }
+
+   Service service = (Service) Proxy.newProxyInstance(
+           Service.class.getClassLoader(),
+           new Class[]{Service.class},
+           new LoggingHandler(new RealService())
+   );
+   service.perform();
+   // Вывод:
+   // Before: perform
+   // Performing service
+   // After: perform
+   ```
+
+---
+
+### **Преимущества**
+
+- **Контроль доступа**: Прокси может проверять права или ограничивать операции.
+- **Ленивая инициализация**: Экономит ресурсы, откладывая создание объекта.
+- **Дополнительная функциональность**: Легко добавить логирование, кэширование
+  или проверку.
+- **Прозрачность**: Клиент работает с прокси, как с реальным объектом.
+- **Изоляция**: Скрывает детали реализации подсистемы.
+
+---
+
+### **Недостатки**
+
+- **Дополнительный слой**: Прокси добавляет сложность в архитектуру.
+- **Задержки**: Ленивая инициализация может вызвать задержки при первом вызове.
+- **Сложность отладки**: Прокси может затруднить отслеживание вызовов.
+- **Ограничение интерфейса**: Прокси должен соответствовать интерфейсу реального
+  объекта, что ограничивает добавление новых методов.
+
+---
+
+### **Отличие от других паттернов**
+
+- **Proxy vs Decorator**:
+    - **Proxy** управляет доступом или жизненным циклом объекта (например,
+      ленивая инициализация).
+    - **Decorator** добавляет новое поведение, сохраняя тот же интерфейс.
+- **Proxy vs Adapter**:
+    - **Proxy** работает с тем же интерфейсом, что и реальный объект, добавляя
+      функциональность.
+    - **Adapter** преобразует интерфейс одного класса в другой.
+- **Proxy vs Facade**:
+    - **Proxy** управляет доступом к одному объекту.
+    - **Facade** упрощает интерфейс к целой подсистеме.
+
+---
+
+### **Проблемы и антипаттерны**
+
+1. **Слишком сложный прокси**: Если прокси выполняет слишком много функций, он
+   может стать трудно поддерживаемым.
+    - **Решение**: Ограничивайте прокси одной задачей (например, только ленивая
+      инициализация).
+2. **Утечки ресурсов**: Ленивая инициализация может привести к созданию объектов
+   в неподходящий момент.
+    - **Решение**: Тестируйте прокси в сценариях с высокой нагрузкой.
+3. **Нарушение прозрачности**: Если прокси изменяет поведение реального объекта,
+   это может вызвать ошибки.
+    - **Решение**: Убедитесь, что прокси строго следует интерфейсу субъекта.
+
+---
+
+### **Современные альтернативы в Java**
+
+- **Spring AOP и Proxy**:
+  Spring автоматически создаёт прокси для добавления сквозной функциональности (
+  транзакции, логирование):
+  ```java
+  @Transactional
+  public void saveData() { /* Логика */ }
+  ```
+- **Dynamic Proxy**:
+  Использование `java.lang.reflect.Proxy` для динамического создания прокси (см.
+  пример выше).
+- **Bytecode Manipulation**:
+  Библиотеки, такие как CGLIB, создают прокси на уровне байт-кода, что
+  используется в Spring и Hibernate.
+- **Functional Wrappers**:
+  В Java 8+ можно использовать лямбда-выражения для обёртывания вызовов:
+  ```java
+  Function<String, String> loggingProxy = input -> {
+      System.out.println("Processing: " + input);
+      return input.toUpperCase();
+  };
+  ```
+
+---
+
+### **Итог**
+
+Паттерн Proxy — это мощный инструмент для управления доступом к объектам,
+добавления функциональности и оптимизации ресурсов. В Java он широко
+используется в стандартной библиотеке (RMI), фреймворках (Spring, Hibernate) и
+для реализации ленивой загрузки или кэширования. Прокси обеспечивает
+прозрачность и гибкость, но требует осторожности, чтобы не усложнить
+архитектуру. В современных приложениях динамические прокси и AOP часто заменяют
+ручную реализацию.
+
+Если вам нужен более сложный пример, помощь с реализацией в вашем проекте,
+сравнение с другими паттернами (например, Decorator или Facade) или разбор
+конкретной задачи, напишите!
+
+
 ---
 
 ## Шаблонный метод(Template Method)
 
+**Паттерн Template Method (Шаблонный метод)** — это поведенческий паттерн
+проектирования, который определяет общий алгоритм в суперклассе, позволяя
+подклассам переопределять отдельные шаги этого алгоритма без изменения его общей
+структуры. Он обеспечивает "скелет" алгоритма, где неизменяемая часть остаётся в
+суперклассе, а изменяемые части делегируются подклассам.
+
+---
+
+### **Описание паттерна**
+
+**Цель**:
+
+- Определить общий алгоритм, позволяя подклассам настраивать отдельные его шаги.
+- Обеспечить повторное использование кода для общей логики.
+- Гарантировать, что структура алгоритма остаётся неизменной.
+
+**Когда использовать**:
+
+- Когда несколько классов имеют схожий алгоритм, но с различиями в отдельных
+  шагах.
+- Когда нужно избежать дублирования кода, вынося общую логику в суперкласс.
+- Когда требуется контролировать порядок выполнения шагов алгоритма.
+- Когда подклассы должны переопределять только определённые части алгоритма.
+
+**Примеры использования**:
+
+- Обработка данных в разных форматах (например, чтение CSV, JSON).
+- Шаблоны обработки запросов в веб-приложениях (например, фильтры в Servlet
+  API).
+- Жизненный цикл классов в фреймворках (например, методы `onCreate` в Android).
+
+---
+
+### **Структура паттерна**
+
+1. **Абстрактный класс (Abstract Class)**: Определяет шаблонный метод,
+   содержащий алгоритм, и абстрактные методы для шагов, которые должны
+   реализовать подклассы. Может также содержать конкретные методы или хуки (
+   hooks) для необязательной настройки.
+2. **Конкретный класс (Concrete Class)**: Подкласс, реализующий абстрактные
+   методы и, при необходимости, переопределяющий хуки.
+3. **Клиент (Client)**: Использует абстрактный класс или его подклассы, вызывая
+   шаблонный метод.
+
+---
+
+### **Реализация в Java**
+
+Пример: шаблонный метод для приготовления напитков (кофе и чая), где процесс
+приготовления схож, но отдельные шаги различаются.
+
+```java
+// Абстрактный класс
+abstract class BeverageMaker {
+    // Шаблонный метод
+    public final void prepareBeverage() {
+        boilWater();
+        brew();
+        pourInCup();
+        if (customerWantsCondiments()) {
+            addCondiments();
+        }
+    }
+
+    // Общие методы
+    private void boilWater() {
+        System.out.println("Boiling water");
+    }
+
+    private void pourInCup() {
+        System.out.println("Pouring into cup");
+    }
+
+    // Абстрактные методы, которые должны реализовать подклассы
+    protected abstract void brew();
+
+    protected abstract void addCondiments();
+
+    // Хук (hook) для необязательной настройки
+    protected boolean customerWantsCondiments() {
+        return true; // По умолчанию добавляем добавки
+    }
+}
+
+// Конкретный класс: Кофе
+class CoffeeMaker extends BeverageMaker {
+    @Override
+    protected void brew() {
+        System.out.println("Brewing coffee grounds");
+    }
+
+    @Override
+    protected void addCondiments() {
+        System.out.println("Adding sugar and milk");
+    }
+}
+
+// Конкретный класс: Чай
+class TeaMaker extends BeverageMaker {
+    @Override
+    protected void brew() {
+        System.out.println("Steeping tea leaves");
+    }
+
+    @Override
+    protected void addCondiments() {
+        System.out.println("Adding lemon");
+    }
+
+    @Override
+    protected boolean customerWantsCondiments() {
+        return false; // По умолчанию без добавок
+    }
+}
+
+// Клиентский код
+public class TemplateMethodExample {
+    public static void main(String[] args) {
+        System.out.println("Making Coffee:");
+        BeverageMaker coffee = new CoffeeMaker();
+        coffee.prepareBeverage();
+        // Вывод:
+        // Boiling water
+        // Brewing coffee grounds
+        // Pouring into cup
+        // Adding sugar and milk
+
+        System.out.println("\nMaking Tea:");
+        BeverageMaker tea = new TeaMaker();
+        tea.prepareBeverage();
+        // Вывод:
+        // Boiling water
+        // Steeping tea leaves
+        // Pouring into cup
+    }
+}
+```
+
+---
+
+### **Как это работает**
+
+1. Абстрактный класс `BeverageMaker` определяет шаблонный метод
+   `prepareBeverage()`, который фиксирует порядок шагов: кипячение воды,
+   заваривание, наливание в чашку и добавление добавок (если нужно).
+2. Конкретные методы (`boilWater`, `pourInCup`) содержат общую логику,
+   одинаковую для всех напитков.
+3. Абстрактные методы (`brew`, `addCondiments`) должны быть реализованы
+   подклассами (`CoffeeMaker`, `TeaMaker`).
+4. Хук `customerWantsCondiments` позволяет подклассам настраивать поведение (
+   например, отключить добавки для чая).
+5. Клиент вызывает `prepareBeverage()` на объекте подкласса, и алгоритм
+   выполняется с учётом специфичных для подкласса шагов.
+
+---
+
+### **Реальное использование в Java**
+
+1. **Servlet API**:
+   В Java Servlet API метод `service()` в `HttpServlet` действует как шаблонный
+   метод:
+   ```java
+   import javax.servlet.http.HttpServlet;
+   import javax.servlet.http.HttpServletRequest;
+   import javax.servlet.http.HttpServletResponse;
+
+   public class MyServlet extends HttpServlet {
+       @Override
+       protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+           // Обработка GET-запроса
+       }
+
+       @Override
+       protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
+           // Обработка POST-запроса
+       }
+   }
+   ```
+   Метод `service()` в `HttpServlet` определяет общий алгоритм обработки
+   HTTP-запросов, вызывая `doGet`, `doPost` и другие методы, которые
+   переопределяются в подклассах.
+
+2. **Abstract Classes в Java Collections**:
+   Классы, такие как `AbstractList`, предоставляют шаблонные методы:
+   ```java
+   import java.util.AbstractList;
+
+   public class MyList extends AbstractList<String> {
+       private final String[] data = {"A", "B", "C"};
+
+       @Override
+       public String get(int index) {
+           return data[index];
+       }
+
+       @Override
+       public int size() {
+           return data.length;
+       }
+   }
+   ```
+   `AbstractList` реализует общую логику списка, а подклассы переопределяют
+   методы, такие как `get` и `size`.
+
+3. **Spring Framework**:
+   Spring использует Template Method в классах, таких как `JdbcTemplate`:
+   ```java
+   import org.springframework.jdbc.core.JdbcTemplate;
+
+   JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+   jdbcTemplate.execute("SELECT * FROM users");
+   ```
+   `JdbcTemplate` определяет общий алгоритм выполнения SQL-запросов (
+   подключение, выполнение, обработка ошибок), а конкретные запросы задаются
+   клиентом.
+
+---
+
+### **Преимущества**
+
+- **Повторное использование кода**: Общая логика выносится в суперкласс,
+  уменьшая дублирование.
+- **Контроль структуры**: Шаблонный метод гарантирует неизменность общей
+  структуры алгоритма.
+- **Гибкость**: Подклассы могут настраивать отдельные шаги, не затрагивая общий
+  алгоритм.
+- **Соответствие принципу Open/Closed**: Алгоритм открыт для расширения (новые
+  подклассы), но закрыт для модификации.
+
+---
+
+### **Недостатки**
+
+- **Ограниченность наследованием**: Подклассы должны наследовать абстрактный
+  класс, что может быть неудобно в сравнении с композицией.
+- **Жёсткая структура**: Изменение порядка шагов требует модификации шаблонного
+  метода.
+- **Сложность поддержки**: При большом числе подклассов может быть трудно
+  отслеживать все переопределения.
+- **Ограниченная гибкость**: Подклассы могут переопределять только те шаги,
+  которые предусмотрены в суперклассе.
+
+---
+
+### **Отличие от других паттернов**
+
+- **Template Method vs Strategy**:
+    - **Template Method** использует наследование для настройки шагов алгоритма.
+    - **Strategy** использует композицию, передавая алгоритм как объект.
+- **Template Method vs Factory Method**:
+    - **Template Method** определяет алгоритм с переопределяемыми шагами.
+    - **Factory Method** фокусируется на создании объектов через абстрактный
+      метод.
+- **Template Method vs Builder**:
+    - **Template Method** фиксирует порядок шагов для выполнения алгоритма.
+    - **Builder** фокусируется на пошаговом создании объекта.
+
+---
+
+### **Проблемы и антипаттерны**
+
+1. **Слишком жёсткий шаблон**: Если алгоритм слишком строго фиксирует шаги,
+   подклассы могут быть ограничены в гибкости.
+    - **Решение**: Используйте хуки или делайте больше методов защищёнными (
+      `protected`), чтобы подклассы могли их переопределять.
+2. **Злоупотребление наследованием**: Наследование может привести к сильной
+   связанности и усложнить тестирование.
+    - **Решение**: Рассмотрите Strategy или композицию для большей гибкости.
+3. **Сложность тестирования**: Тестирование подклассов может быть затруднено
+   из-за зависимости от суперкласса.
+    - **Решение**: Используйте мок-объекты или извлекайте логику в отдельные
+      классы.
+
+---
+
+### **Современные альтернативы в Java**
+
+- **Strategy с композицией**:
+  Вместо наследования можно использовать Strategy для большей гибкости:
+  ```java
+  interface BrewStrategy {
+      void brew();
+  }
+
+  class CoffeeBrew implements BrewStrategy {
+      public void brew() { System.out.println("Brewing coffee grounds"); }
+  }
+
+  class BeverageMaker {
+      private final BrewStrategy brewStrategy;
+
+      public BeverageMaker(BrewStrategy brewStrategy) {
+          this.brewStrategy = brewStrategy;
+      }
+
+      public void prepareBeverage() {
+          System.out.println("Boiling water");
+          brewStrategy.brew();
+          System.out.println("Pouring into cup");
+      }
+  }
+  ```
+- **Лямбда-выражения**:
+  В Java 8+ шаги алгоритма можно передавать как лямбда-выражения:
+  ```java
+  class BeverageMaker {
+      public void prepareBeverage(Runnable brew, Runnable addCondiments) {
+          System.out.println("Boiling water");
+          brew.run();
+          System.out.println("Pouring into cup");
+          addCondiments.run();
+      }
+  }
+
+  BeverageMaker maker = new BeverageMaker();
+  maker.prepareBeverage(
+          () -> System.out.println("Brewing coffee grounds"),
+          () -> System.out.println("Adding sugar and milk")
+  );
+  ```
+- **Spring Template Classes**:
+  Spring использует подход, похожий на Template Method, в классах, таких как
+  `JdbcTemplate` или `RestTemplate`, где общая логика фиксирована, а клиент
+  предоставляет детали.
+
+---
+
+### **Итог**
+
+Паттерн Template Method — это эффективный способ определения общего алгоритма с
+возможностью настройки его шагов в подклассах. Он широко используется в Java,
+особенно в стандартной библиотеке (Servlet API, Collections) и фреймворках (
+Spring). Паттерн обеспечивает повторное использование кода и контроль структуры,
+но его зависимость от наследования может быть ограничением. В современных
+приложениях Template Method иногда заменяется Strategy или лямбда-выражениями
+для большей гибкости.
+
+Если вам нужен более сложный пример, помощь с реализацией в вашем проекте,
+сравнение с другими паттернами (например, Strategy или Builder) или разбор
+конкретной задачи, напишите!
+
+----
+
 ## Итератор(Iterator)
+
+**Паттерн Iterator (Итератор)** — это поведенческий паттерн проектирования,
+который предоставляет способ последовательного доступа к элементам коллекции (
+например, списка, массива, дерева) без раскрытия её внутренней структуры. Он
+позволяет клиентам обходить элементы коллекции, не зная, как они хранятся (
+например, в массиве, списке или хэш-таблице), и обеспечивает единый интерфейс
+для работы с разными типами коллекций.
+
+---
+
+### **Описание паттерна**
+
+**Цель**:
+
+- Обеспечить стандартизированный способ обхода элементов коллекции.
+- Скрыть детали реализации коллекции от клиента.
+- Поддерживать различные способы обхода (например, прямой, обратный,
+  фильтрованный).
+
+**Когда использовать**:
+
+- Когда нужно предоставить доступ к элементам сложной структуры данных без
+  раскрытия её внутренней организации.
+- Когда требуется поддерживать несколько способов обхода одной коллекции.
+- Когда нужно унифицировать работу с разными типами коллекций (списки, массивы,
+  деревья).
+- Когда коллекция должна быть обойдена без изменения её структуры.
+
+**Примеры использования**:
+
+- Обход элементов коллекций в Java (`List`, `Set`, `Map`).
+- Итерация по результатам базы данных (например, `ResultSet` в JDBC).
+- Перебор узлов в структурах данных, таких как деревья или графы.
+
+---
+
+### **Структура паттерна**
+
+1. **Итератор (Iterator)**: Интерфейс, определяющий методы для доступа к
+   элементам коллекции, такие как `hasNext()` (есть ли следующий элемент) и
+   `next()` (получить следующий элемент).
+2. **Конкретный итератор (Concrete Iterator)**: Класс, реализующий интерфейс
+   итератора, который отслеживает текущую позицию и логику обхода.
+3. **Агрегат (Aggregate)**: Интерфейс или абстрактный класс, представляющий
+   коллекцию и предоставляющий метод для создания итератора.
+4. **Конкретный агрегат (Concrete Aggregate)**: Класс, реализующий коллекцию и
+   возвращающий соответствующий итератор.
+5. **Клиент (Client)**: Код, использующий итератор для обхода элементов
+   коллекции.
+
+---
+
+### **Реализация в Java**
+
+Пример: итератор для обхода пользовательской коллекции книг.
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+// Интерфейс итератора
+interface Iterator<T> {
+    boolean hasNext();
+
+    T next();
+}
+
+// Интерфейс агрегата
+interface BookCollection {
+    Iterator<Book> createIterator();
+}
+
+// Класс продукта
+class Book {
+    private final String title;
+
+    public Book(String title) {
+        this.title = title;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+}
+
+// Конкретный агрегат
+class Library implements BookCollection {
+    private final List<Book> books;
+
+    public Library() {
+        this.books = new ArrayList<>();
+    }
+
+    public void addBook(Book book) {
+        books.add(book);
+    }
+
+    @Override
+    public Iterator<Book> createIterator() {
+        return new LibraryIterator(books);
+    }
+}
+
+// Конкретный итератор
+class LibraryIterator implements Iterator<Book> {
+    private final List<Book> books;
+    private int index;
+
+    public LibraryIterator(List<Book> books) {
+        this.books = books;
+        this.index = 0;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return index < books.size();
+    }
+
+    @Override
+    public Book next() {
+        if (!hasNext()) {
+            throw new IndexOutOfBoundsException("No more books");
+        }
+        return books.get(index++);
+    }
+}
+
+// Клиентский код
+public class IteratorExample {
+    public static void main(String[] args) {
+        Library library = new Library();
+        library.addBook(new Book("The Hobbit"));
+        library.addBook(new Book("1984"));
+        library.addBook(new Book("Pride and Prejudice"));
+
+        Iterator<Book> iterator = library.createIterator();
+        while (iterator.hasNext()) {
+            Book book = iterator.next();
+            System.out.println("Book: " + book.getTitle());
+        }
+        // Вывод:
+        // Book: The Hobbit
+        // Book: 1984
+        // Book: Pride and Prejudice
+    }
+}
+```
+
+---
+
+### **Как это работает**
+
+1. Клиент запрашивает итератор у коллекции (`Library`) через метод
+   `createIterator()`.
+2. Итератор (`LibraryIterator`) отслеживает текущую позицию в коллекции (с
+   помощью `index`) и предоставляет методы `hasNext()` и `next()` для доступа к
+   элементам.
+3. Клиент использует итератор для последовательного обхода элементов, не зная,
+   как они хранятся в коллекции (например, в `ArrayList`).
+4. Коллекция остаётся неизменной, а итератор управляет процессом обхода.
+
+---
+
+### **Реальное использование в Java**
+
+Java имеет встроенную поддержку паттерна Iterator через интерфейсы
+`java.util.Iterator` и `java.util.Iterable`, которые используются повсеместно в
+стандартной библиотеке.
+
+1. **Collections Framework**:
+   Все коллекции, реализующие `Iterable` (например, `List`, `Set`, `Map`),
+   предоставляют итератор:
+   ```java
+   import java.util.ArrayList;
+   import java.util.Iterator;
+
+   ArrayList<String> list = new ArrayList<>();
+   list.add("A");
+   list.add("B");
+   list.add("C");
+
+   Iterator<String> iterator = list.iterator();
+   while (iterator.hasNext()) {
+       System.out.println(iterator.next());
+   }
+   ```
+   Или с использованием цикла `for-each`, который автоматически использует
+   итератор:
+   ```java
+   for (String item : list) {
+       System.out.println(item);
+   }
+   ```
+
+2. **JDBC ResultSet**:
+   `ResultSet` в JDBC реализует итератор для обхода строк результата запроса:
+   ```java
+   import java.sql.ResultSet;
+   import java.sql.Statement;
+   import java.sql.Connection;
+
+   try (Connection conn = getConnection();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM users")) {
+       while (rs.next()) {
+           System.out.println(rs.getString("name"));
+       }
+   }
+   ```
+
+3. **Stream API**:
+   В Java 8+ итераторы частично заменены Stream API, но они всё ещё используются
+   под капотом:
+   ```java
+   import java.util.List;
+
+   List<String> list = List.of("A", "B", "C");
+   list.stream().forEach(System.out::println);
+   ```
+
+---
+
+### **Преимущества**
+
+- **Инкапсуляция**: Скрывает внутреннюю структуру коллекции от клиента.
+- **Универсальность**: Предоставляет единый интерфейс для обхода разных типов
+  коллекций.
+- **Гибкость**: Поддерживает различные способы обхода (например, прямой,
+  обратный, фильтрованный).
+- **Безопасность**: Позволяет обходить коллекцию без её модификации.
+- **Поддержка for-each**: В Java коллекции, реализующие `Iterable`,
+  автоматически работают с циклом `for-each`.
+
+---
+
+### **Недостатки**
+
+- **Ограниченная функциональность**: Классический итератор поддерживает только
+  последовательный доступ (нет возможности вернуться назад или пропустить
+  элементы).
+- **Сложность для сложных структур**: Реализация итератора для деревьев или
+  графов может быть нетривиальной.
+- **Потенциальные проблемы с concorrency**: Итератор может выбросить
+  `ConcurrentModificationException`, если коллекция изменяется во время обхода.
+- **Менее мощный, чем Stream API**: В современных Java-приложениях Stream API
+  часто предпочтительнее для сложных операций.
+
+---
+
+### **Отличие от других паттернов**
+
+- **Iterator vs Composite**:
+    - **Iterator** предоставляет способ обхода элементов коллекции.
+    - **Composite** управляет древовидной структурой объектов, позволяя работать
+      с группами как с единым объектом.
+- **Iterator vs Visitor**:
+    - **Iterator** фокусируется на последовательном доступе к элементам.
+    - **Visitor** позволяет выполнять операции над элементами, передавая логику
+      в отдельный объект.
+- **Iterator vs Strategy**:
+    - **Iterator** определяет способ обхода коллекции.
+    - **Strategy** определяет взаимозаменяемые алгоритмы для выполнения задачи.
+
+---
+
+### **Проблемы и антипаттерны**
+
+1. **ConcurrentModificationException**: Если коллекция изменяется во время
+   итерации, итератор может выбросить исключение.
+    - **Решение**: Используйте `CopyOnWriteArrayList` или синхронизируйте доступ
+      к коллекции.
+    - **Альтернатива**: Используйте Stream API, которая работает с неизменяемыми
+      данными.
+2. **Сложность реализации для нестандартных структур**: Итераторы для деревьев
+   или графов требуют сложной логики.
+    - **Решение**: Используйте рекурсию или библиотеки, такие как Guava, для
+      упрощения.
+3. **Злоупотребление итератором**: Использование итератора для простых
+   коллекций, где достаточно `for-each` или Stream.
+    - **Решение**: Применяйте итератор только для сложных или нестандартных
+      сценариев.
+
+---
+
+### **Современные альтернативы в Java**
+
+- **Stream API**:
+  В Java 8+ Stream API предоставляет более мощный и декларативный способ
+  обработки коллекций:
+  ```java
+  List<String> list = List.of("A", "B", "C");
+  list.stream()
+      .filter(s -> s.startsWith("A"))
+      .forEach(System.out::println);
+  ```
+  Stream API поддерживает ленивые вычисления, параллелизм и сложные операции (
+  фильтрация, маппинг).
+
+- **Spliterator**:
+  В Java 8 введён `Spliterator` (Splittable Iterator), который поддерживает
+  параллельную обработку:
+  ```java
+  import java.util.Spliterator;
+  import java.util.List;
+
+  List<String> list = List.of("A", "B", "C");
+  Spliterator<String> spliterator = list.spliterator();
+  spliterator.forEachRemaining(System.out::println);
+  ```
+
+- **Guava Iterators**:
+  Библиотека Guava предоставляет утилиты для работы с итераторами, такие как
+  `Iterators.filter` или `Iterators.transform`:
+  ```java
+  import com.google.common.collect.Iterators;
+  import java.util.Iterator;
+
+  Iterator<String> filtered = Iterators.filter(list.iterator(), s -> s.startsWith("A"));
+  ```
+
+---
+
+### **Итог**
+
+Паттерн Iterator — это фундаментальный инструмент для последовательного доступа
+к элементам коллекции, скрывающий её внутреннюю структуру. В Java он встроен в
+стандартную библиотеку через `Iterator` и `Iterable`, что делает его основой для
+работы с коллекциями. Хотя Stream API и Spliterator в современных приложениях
+часто заменяют классический итератор для сложных операций, паттерн остаётся
+актуальным для нестандартных коллекций или случаев, где требуется явный контроль
+над обходом.
+
+Если вам нужен более сложный пример (например, итератор для дерева), помощь с
+реализацией в вашем проекте, сравнение с другими паттернами (например, Visitor
+или Composite) или разбор конкретной задачи, напишите!
