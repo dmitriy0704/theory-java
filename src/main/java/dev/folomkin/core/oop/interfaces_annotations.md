@@ -204,7 +204,7 @@ class Code {
             action = new TriangleAction();
             System.out.println("Square triangle: " + action.computeSquare(trShape));
             System.out.println("Perimeter triangle: " + action.computePerimeter(trShape));
-            action.computePerimeter(rectShape); // runtime exception
+            action.computePerimeter(rectShape); // runtime exception.md
         } catch (IllegalArgumentException e) {
             System.err.println(e.getMessage());
         }
