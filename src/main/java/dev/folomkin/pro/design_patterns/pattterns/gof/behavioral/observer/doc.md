@@ -26,7 +26,7 @@ javax.faces.event.PhaseListener
 
 ## Структура
 
-[design_patterns](/img/design_pattern/design_patterns)
+![observer_structure.png](/img/design_pattern/design_patterns/observer_structure.png)
 
 1. Издатель владеетвнутреннимсостоянием,изменениекото-
    рого интересно отслеживать подписчикам. Издатель содер-
