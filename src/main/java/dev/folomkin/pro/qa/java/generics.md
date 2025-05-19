@@ -36,7 +36,7 @@
 **Пример**:
 
 ```java
-public <T extends Number> void printNumber(T number) {
+public <T extends > void printNumber(T number) {
     System.out.println(number.doubleValue()); // Метод доступен, так как T — подтип Number
 }
 
@@ -226,6 +226,29 @@ PECS применяется к коллекциям или другим обоб
   или его супертипов.
 
 ### Подробное объяснение
+
+
+
+```java
+// Основная идея:
+
+// ? extend SuperClass
+// ? < class - отдает данные, нельзя записать
+// ? > class - получает данные, нельзя отдавать
+
+public static void main(String[] args) {
+    List<? extends Number> numbers = List.of(1.0, 2.0, 3.0);
+    Number n = numbers.get(1);
+    System.out.println(n);
+
+    List<? super Integer> integers = new ArrayList<>();
+    integers.add(1);
+    Number m = integers.get(1);
+    System.out.println(m);
+
+
+}
+```
 
 #### 1. **Producer Extends (`? extends T`)**
 
