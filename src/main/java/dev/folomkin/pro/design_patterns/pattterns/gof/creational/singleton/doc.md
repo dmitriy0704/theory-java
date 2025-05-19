@@ -29,9 +29,9 @@ java.lang.System#getSecurityManager()
 
 ![singleton_structure.png](/img/design_pattern/design_patterns/singleton_structure.png)
 
-Одиночка определяет статический метод getInstance,
+1. Одиночка определяет статический метод getInstance,
 который возвращает единственный экземпляр своего
-класса.
+класса.<br>
 Конструктор одиночки должен быть скрыт от клиентов.
 Вызов метода getInstance должен стать единственным
 способом получить объект этого класса.
