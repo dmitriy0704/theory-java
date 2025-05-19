@@ -1,5 +1,9 @@
 
-> ## JAVA CORE. <br><br> Collection.<br> HashMap чуть лучше про то как устроен, и сложности методов
+# JAVA Collection 
+
+## HASHMAP
+
+(чуть лучше про то как устроен, и сложности методов)
 
 ### **Устройство**
 
@@ -549,9 +553,11 @@ buckets) в зависимости от их хеш-кода. Однако, ра
 может достигать O(n).
 
 
-> ## JAVA CORE. <br><br>Collection. <br> Сложность получения элементов в ArrayList и LinkedList
+> ## JAVA CORE. <br><br>Collection. <br> 
 
-**ARRAYLIST**
+## ARRAYLIST, LINKEDLIST
+
+> (Сложность получения элементов в ArrayList и LinkedList)
 
 **ПРИНЦИП РАБОТЫ**
 
