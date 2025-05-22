@@ -1486,3 +1486,224 @@ public class AppConfig {
     }
 }
 ```
+
+## Сроки жизни бинов с Scope request, session и application.
+
+В Spring Framework сроки жизни бинов зависят от их **области видимости (scope)
+**. Области `request`, `session` и `application` используются в веб-приложениях
+и привязаны к специфическим аспектам веб-контекста, определённого в *
+*ServletContext**. Давайте разберём сроки жизни каждого из этих scopes кратко и
+понятно.
+
+### **1. Request Scope**
+
+- **Срок жизни**:
+    - Бин живёт в течение **одного HTTP-запроса**.
+    - Создаётся при поступлении запроса и уничтожается после завершения
+      обработки этого запроса.
+- **Подробности**:
+    - Каждый HTTP-запрос (например, GET, POST) создаёт новый экземпляр бина.
+    - После завершения запроса (например, когда ответ отправлен клиенту) бин
+      становится недоступным, и методы уничтожения (`@PreDestroy`,
+      `destroy-method`) вызываются.
+    - Используется для хранения данных, специфичных для конкретного запроса,
+      например, параметры формы или временные данные обработки.
+- **Пример**:
+  ```java
+  @Component
+  @Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+  public class RequestBean {
+      @PostConstruct
+      public void init() {
+          System.out.println("RequestBean создан для запроса");
+      }
+
+      @PreDestroy
+      public void destroy() {
+          System.out.println("RequestBean уничтожен после запроса");
+      }
+  }
+  ```
+- **Контекст**:
+    - Привязан к текущему HTTP-запросу, который обрабатывается через
+      `DispatcherServlet`.
+    - Требует `spring-web` и работает в рамках `WebApplicationContext`.
+
+### **2. Session Scope**
+
+- **Срок жизни**:
+    - Бин живёт в течение **одной HTTP-сессии пользователя**.
+    - Создаётся при старте новой сессии (например, когда пользователь впервые
+      обращается к приложению) и уничтожается при завершении сессии (например,
+      при истечении времени сессии или вызове `session.invalidate()`).
+- **Подробности**:
+    - Один экземпляр бина существует для каждой пользовательской сессии.
+    - Сессия обычно сохраняется на сервере (или в кластере) и идентифицируется
+      через `HttpSession`.
+    - Подходит для хранения данных, связанных с пользователем, например, корзины
+      покупок или настроек пользователя.
+    - Методы уничтожения (`@PreDestroy`, `destroy-method`) вызываются при
+      завершении сессии.
+- **Пример**:
+  ```java
+  @Component
+  @Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+  public class SessionBean {
+      private int counter = 0;
+
+      public void increment() {
+          counter++;
+      }
+
+      public int getCounter() {
+          return counter;
+      }
+
+      @PreDestroy
+      public void destroy() {
+          System.out.println("SessionBean уничтожен после завершения сессии");
+      }
+  }
+  ```
+- **Контекст**:
+    - Привязан к `HttpSession`, которая хранится в `ServletContext`.
+    - Требует `spring-web` и работает в рамках `WebApplicationContext`.
+
+### **3. Application Scope**
+
+- **Срок жизни**:
+    - Бин живёт в течение **всего жизненного цикла веб-приложения**.
+    - Создаётся при старте приложения (разворачивании WAR-файла) и уничтожается
+      при остановке приложения или сервера.
+- **Подробности**:
+    - Один экземпляр бина существует для всего `ServletContext`.
+    - Подходит для хранения глобальных данных или ресурсов, общих для всех
+      пользователей и всех контекстов в приложении (например, глобальный кэш или
+      конфигурация).
+    - Методы уничтожения (`@PreDestroy`, `destroy-method`) вызываются при
+      остановке приложения.
+- **Пример**:
+  ```java
+  @Component
+  @Scope(value = "application", proxyMode = ScopedProxyMode.TARGET_CLASS)
+  public class ApplicationBean {
+      @PostConstruct
+      public void init() {
+          System.out.println("ApplicationBean создан при старте приложения");
+      }
+
+      @PreDestroy
+      public void destroy() {
+          System.out.println("ApplicationBean уничтожен при остановке приложения");
+      }
+  }
+  ```
+- **Контекст**:
+    - Привязан к `ServletContext`, который существует на протяжении всего
+      жизненного цикла веб-приложения.
+    - Общий для всех `ApplicationContext` (корневого и дочерних) в рамках одного
+      приложения.
+
+### **Сравнение сроков жизни**
+
+| Scope           | Срок жизни                         | Создаётся               | Уничтожается                                | Типичное использование               |
+|-----------------|------------------------------------|-------------------------|---------------------------------------------|--------------------------------------|
+| **Request**     | Один HTTP-запрос                   | При поступлении запроса | После завершения запроса                    | Данные запроса, временные результаты |
+| **Session**     | Одна HTTP-сессия пользователя      | При создании сессии     | При завершении сессии (timeout, invalidate) | Корзина, настройки пользователя      |
+| **Application** | Весь жизненный цикл веб-приложения | При старте приложения   | При остановке приложения                    | Глобальные конфигурации, кэши        |
+
+### **Связь с ServletContext**
+
+- Все три scope (`request`, `session`, `application`) работают в контексте
+  веб-приложения и привязаны к **ServletContext**:
+    - **Request**: Связан с текущим `HttpServletRequest`, который хранится в
+      рамках запроса.
+    - **Session**: Связан с `HttpSession`, которая хранится в `ServletContext`.
+    - **Application**: Непосредственно привязан к `ServletContext`, который
+      является глобальным для всего приложения.
+
+### **Особенности и proxyMode**
+
+- Для внедрения бинов с `request`, `session`, или `application` scope в бины с
+  более долгоживущими scopes (например, `singleton`) используется `proxyMode` (
+  как обсуждалось ранее). Это позволяет подставлять актуальный экземпляр бина в
+  зависимости от текущего контекста (запроса, сессии или приложения).
+- Без `proxyMode` (например, `ScopedProxyMode.TARGET_CLASS`) внедрение request-
+  или session-бинов в singleton-бин вызовет проблемы, так как singleton-бин не
+  сможет работать с динамически меняющимися экземплярами.
+
+### **Связь с жизненным циклом бинов**
+
+- **Создание**:
+    - Бины в `request` scope создаются для каждого запроса.
+    - Бины в `session` scope создаются при старте сессии.
+    - Бины в `application` scope создаются один раз при старте приложения.
+- **Инициализация**: Вызываются методы `@PostConstruct` или `init-method` при
+  создании бина.
+- **Уничтожение**:
+    - Для `request`: После завершения запроса.
+    - Для `session`: После завершения сессии.
+    - Для `application`: При остановке приложения.
+    - Методы `@PreDestroy` или `destroy-method` вызываются при уничтожении.
+
+### **Практические замечания**
+
+- **Request**: Используйте для данных, которые нужны только на время обработки
+  одного запроса (например, данные формы).
+- **Session**: Используйте для данных, связанных с конкретным пользователем (
+  например, авторизация, корзина).
+- **Application**: Используйте для глобальных ресурсов, общих для всех
+  пользователей (например, кэш или конфигурация).
+- Все эти scopes требуют зависимости `spring-web` и работают только в
+  веб-приложениях с `WebApplicationContext`.
+
+### **Пример полного кода**
+
+```java
+
+@Component
+@Scope(value = "request", proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class RequestBean {
+    public String getRequestId() {
+        return "Request ID: " + UUID.randomUUID().toString();
+    }
+}
+
+@Component
+@Scope(value = "session", proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class SessionBean {
+    private int counter = 0;
+
+    public void increment() {
+        counter++;
+    }
+
+    public int getCounter() {
+        return counter;
+    }
+}
+
+@Component
+@Scope(value = "application", proxyMode = ScopedProxyMode.TARGET_CLASS)
+public class ApplicationBean {
+    public String getAppName() {
+        return "MyApp";
+    }
+}
+
+@Component
+public class MyService {
+    @Autowired
+    private RequestBean requestBean;
+    @Autowired
+    private SessionBean sessionBean;
+    @Autowired
+    private ApplicationBean applicationBean;
+
+    public void printInfo() {
+        System.out.println(requestBean.getRequestId()); // Новый ID для каждого запроса
+        System.out.println("Session counter: " + sessionBean.getCounter()); // Сохраняется в сессии
+        System.out.println("App name: " + applicationBean.getAppName()); // Общее для приложения
+    }
+}
+```
