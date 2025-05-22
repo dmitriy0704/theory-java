@@ -1,5 +1,225 @@
 # SPRING
 
+## IoC и DI
+
+**Inversion of Control (IoC)** и **Dependency Injection (DI)** — это
+фундаментальные концепции фреймворка Spring в Java, которые связаны между собой
+и лежат в основе его архитектуры. Они помогают создавать гибкие, модульные и
+легко тестируемые приложения. Давайте разберём их кратко и понятно.
+
+### **Inversion of Control (IoC)**
+
+- **Определение**: IoC (Инверсия управления) — это принцип проектирования, при
+  котором управление жизненным циклом объектов и их зависимостями передаётся от
+  самого объекта к внешнему контейнеру (в Spring — это **ApplicationContext**).
+- **Как работает**:
+    - Вместо того чтобы объект сам создавал свои зависимости или управлял своим
+      жизненным циклом, контейнер Spring (IoC-контейнер) берёт на себя
+      ответственность за:
+        - Создание объектов (бинов).
+        - Управление их конфигурацией и жизненным циклом.
+        - Внедрение зависимостей.
+    - Объект "пассивно" получает всё необходимое от контейнера, а не "активно"
+      создаёт зависимости.
+- **Пример аналогии**:
+    - Без IoC: Вы сами идёте в магазин, покупаете ингредиенты и готовите еду.
+    - С IoC: Вы заказываете еду, а ресторан (контейнер) готовит и доставляет её
+      вам.
+- **В Spring**:
+    - IoC реализуется через **ApplicationContext** или **BeanFactory**, которые
+      управляют созданием, конфигурацией и связыванием бинов.
+    - Вы описываете бины и их зависимости (через XML, Java-конфигурации или
+      аннотации), а контейнер решает, когда и как их создавать.
+
+### **Dependency Injection (DI)**
+
+- **Определение**: DI (Внедрение зависимостей) — это конкретная реализация IoC,
+  при которой зависимости объекта (другие объекты или ресурсы) предоставляются
+  ему извне, а не создаются внутри самого объекта.
+- **Как работает**:
+    - Вместо того чтобы объект создавал свои зависимости (например, через
+      `new`), контейнер Spring "внедряет" их в объект.
+    - Это делает код более модульным, тестируемым и независимым от конкретных
+      реализаций.
+- **Типы DI в Spring**:
+    1. **Конструкторное внедрение**:
+        - Зависимости передаются через конструктор.
+       ```java
+       @Component
+       public class UserService {
+           private final DatabaseRepository repository;
+  
+           @Autowired
+           public UserService(DatabaseRepository repository) {
+               this.repository = repository;
+           }
+       }
+       ```
+    2. **Сеттерное внедрение**:
+        - Зависимости устанавливаются через сеттеры.
+       ```java
+       @Component
+       public class UserService {
+           private DatabaseRepository repository;
+  
+           @Autowired
+           public void setRepository(DatabaseRepository repository) {
+               this.repository = repository;
+           }
+       }
+       ```
+    3. **Полевое внедрение** (реже используется):
+        - Зависимости внедряются напрямую в поля через аннотацию `@Autowired`.
+       ```java
+       @Component
+       public class UserService {
+           @Autowired
+           private DatabaseRepository repository;
+       }
+       ```
+- **Преимущества DI**:
+    - Упрощает тестирование (можно подменять зависимости моками).
+    - Снижает связанность (loose coupling) между классами.
+    - Позволяет легко заменять реализации зависимостей.
+
+### **Связь IoC и DI**:
+
+- **IoC** — это общий принцип: управление объектами передаётся контейнеру.
+- **DI** — это способ реализации IoC, когда контейнер "внедряет" зависимости в
+  объекты.
+- В Spring IoC-контейнер (ApplicationContext) использует DI для предоставления
+  бинам их зависимостей, что позволяет избежать жёсткой привязки классов друг к
+  другу.
+
+### **Пример в Spring**:
+
+```java
+// Конфигурация через Java
+@Configuration
+public class AppConfig {
+    @Bean
+    public DatabaseRepository databaseRepository() {
+        return new DatabaseRepository();
+    }
+
+    @Bean
+    public UserService userService(DatabaseRepository repository) {
+        return new UserService(repository);
+    }
+}
+
+// Классы
+public class DatabaseRepository {
+    public void save() {
+        System.out.println("Сохранение в базе данных");
+    }
+}
+
+public class UserService {
+    private final DatabaseRepository repository;
+
+    public UserService(DatabaseRepository repository) {
+        this.repository = repository;
+    }
+
+    public void performAction() {
+        repository.save();
+    }
+}
+
+// Использование
+public class Main {
+    public static void main(String[] args) {
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+        UserService service = context.getBean(UserService.class);
+        service.performAction(); // Выведет: Сохранение в базе данных
+    }
+}
+```
+
+### **Ключевые моменты**:
+
+- **IoC**:
+    - Передаёт управление созданием и жизненным циклом объектов контейнеру.
+    - Делает приложение более декларативным (вы описываете, "что нужно", а не "
+      как это сделать").
+- **DI**:
+    - Реализует IoC, предоставляя зависимости объектам.
+    - В Spring поддерживается через аннотации (`@Autowired`, `@Inject`), XML или
+      Java-конфигурации.
+- **Преимущества**:
+    - Модульность: классы не зависят от конкретных реализаций.
+    - Тестируемость: легко подменять зависимости.
+    - Гибкость: можно менять конфигурацию без изменения кода.
+
+### **Связь с жизненным циклом бинов**:
+
+- IoC-контейнер управляет полным жизненным циклом бинов (создание,
+  инициализация, использование, уничтожение).
+- DI обеспечивает внедрение зависимостей на этапе создания или конфигурирования
+  бина.
+
+---
+
+## Жизненный цикл бинов
+
+Жизненный цикл бинов в контексте фреймворка Spring (если вы имеете в виду Java
+Spring, так как запрос на русском языке и термин "бины" чаще всего ассоциируется
+с этим фреймворком) состоит из нескольких этапов. Я опишу его кратко и понятно,
+а если вам нужны детали или другой контекст, уточните, пожалуйста.
+
+### Жизненный цикл бина в Spring:
+
+1. **Создание экземпляра (Instantiation)**: Spring контейнер создаёт объект бина
+   с помощью конструктора или фабричного метода.
+
+2. **Заполнение свойств (Populate Properties)**: Контейнер внедряет зависимости,
+   указанные в конфигурации (через XML, аннотации или Java-конфигурацию).
+
+3. **Инициализация (Initialization)**:
+    - Вызываются методы, помеченные аннотацией `@PostConstruct`, или методы,
+      указанные в `init-method`.
+    - Реализуются интерфейсы, такие как `InitializingBean` (метод
+      `afterPropertiesSet`).
+
+4. **Использование (Usage)**: Бин готов к использованию в приложении.
+
+5. **Уничтожение (Destruction)**:
+    - При завершении работы контейнера вызываются методы, помеченные
+      `@PreDestroy`, или методы, указанные в `destroy-method`.
+    - Реализуются интерфейсы, такие как `DisposableBean` (метод `destroy`).
+
+### Дополнительные аспекты:
+
+- **Bean Post Processors**: На этапах до и после инициализации могут быть
+  вызваны методы `BeanPostProcessor` для дополнительной обработки.
+- **Скоупы (Scopes)**: Жизненный цикл зависит от области видимости бина (
+  `singleton`, `prototype`, `request`, и т.д.). Например, `prototype` бины не
+  проходят этап уничтожения.
+- **Aware-интерфейсы**: Если бин реализует интерфейсы, такие как
+  `ApplicationContextAware` или `BeanNameAware`, Spring вызывает соответствующие
+  методы для передачи контекста или имени бина.
+
+### Пример:
+
+```java
+
+@Component
+public class ExampleBean {
+    @PostConstruct
+    public void init() {
+        System.out.println("Бин инициализирован!");
+    }
+
+    @PreDestroy
+    public void destroy() {
+        System.out.println("Бин уничтожен!");
+    }
+}
+```
+
+---
+
 ## Scope бинов
 
 В Java Spring **scope** (область видимости) бина определяет, как и когда Spring
@@ -254,14 +474,14 @@
 - В Spring для stateful-бинов в веб-приложениях часто применяют scope `request`
   или `session` с `proxyMode` для корректного внедрения в singleton-бины.
 
-Если нужен пример кода или разбор конкретного случая, дайте знать!
-
-
 ---
 
 ## Отличие области видимости Singleton от Application
 
-    В Java Spring **Singleton** и **Application** — это два разных scope (области видимости) бинов, которые определяют, как и когда создаются и управляются экземпляры бинов в контейнере Spring. Хотя на первый взгляд они могут казаться похожими, между ними есть ключевые различия. Давайте разберём их подробно.
+В Java Spring **Singleton** и **Application** — это два разных scope (области
+видимости) бинов, которые определяют, как и когда создаются и управляются
+экземпляры бинов в контейнере Spring. Хотя на первый взгляд они могут казаться
+похожими, между ними есть ключевые различия. Давайте разберём их подробно.
 
 ### **1. Singleton Scope**
 
@@ -358,71 +578,6 @@
 - `Application` scope редко используется, так как необходимость в глобальном
   бине, привязанном к ServletContext, возникает только в специфичных случаях (
   например, кэширование данных, общих для всего приложения).
-
-Если вам нужен пример кода, демонстрация работы этих scope в приложении или
-разъяснение какого-то аспекта, уточните, пожалуйста!
-
-
-
-
----
-
-## Жизненный цикл бинов
-
-Жизненный цикл бинов в контексте фреймворка Spring (если вы имеете в виду Java
-Spring, так как запрос на русском языке и термин "бины" чаще всего ассоциируется
-с этим фреймворком) состоит из нескольких этапов. Я опишу его кратко и понятно,
-а если вам нужны детали или другой контекст, уточните, пожалуйста.
-
-### Жизненный цикл бина в Spring:
-
-1. **Создание экземпляра (Instantiation)**: Spring контейнер создаёт объект бина
-   с помощью конструктора или фабричного метода.
-
-2. **Заполнение свойств (Populate Properties)**: Контейнер внедряет зависимости,
-   указанные в конфигурации (через XML, аннотации или Java-конфигурацию).
-
-3. **Инициализация (Initialization)**:
-    - Вызываются методы, помеченные аннотацией `@PostConstruct`, или методы,
-      указанные в `init-method`.
-    - Реализуются интерфейсы, такие как `InitializingBean` (метод
-      `afterPropertiesSet`).
-
-4. **Использование (Usage)**: Бин готов к использованию в приложении.
-
-5. **Уничтожение (Destruction)**:
-    - При завершении работы контейнера вызываются методы, помеченные
-      `@PreDestroy`, или методы, указанные в `destroy-method`.
-    - Реализуются интерфейсы, такие как `DisposableBean` (метод `destroy`).
-
-### Дополнительные аспекты:
-
-- **Bean Post Processors**: На этапах до и после инициализации могут быть
-  вызваны методы `BeanPostProcessor` для дополнительной обработки.
-- **Скоупы (Scopes)**: Жизненный цикл зависит от области видимости бина (
-  `singleton`, `prototype`, `request`, и т.д.). Например, `prototype` бины не
-  проходят этап уничтожения.
-- **Aware-интерфейсы**: Если бин реализует интерфейсы, такие как
-  `ApplicationContextAware` или `BeanNameAware`, Spring вызывает соответствующие
-  методы для передачи контекста или имени бина.
-
-### Пример:
-
-```java
-
-@Component
-public class ExampleBean {
-    @PostConstruct
-    public void init() {
-        System.out.println("Бин инициализирован!");
-    }
-
-    @PreDestroy
-    public void destroy() {
-        System.out.println("Бин уничтожен!");
-    }
-}
-```
 
 ---
 
@@ -546,6 +701,242 @@ public class Main {
   так как он предоставляет полный набор функций.
 - Используйте `BeanFactory` только в очень ограниченных сценариях (например, в
   средах с минимальными ресурсами).
+
+---
+
+## Несколько контекстов ApplicationContext
+
+В Spring Framework несколько **ApplicationContext** (контекстов) могут
+существовать в одном приложении в определённых сценариях, когда требуется
+разделение конфигураций, бинов или логики приложения. Это чаще всего встречается
+в **веб-приложениях**, но может быть и в невеб-приложениях при сложной
+архитектуре. Давайте разберём основные случаи, когда в приложении может быть
+несколько `ApplicationContext`, кратко и понятно.
+
+### **Случаи, когда возникает несколько ApplicationContext**
+
+1. **Веб-приложения с ContextLoaderListener и DispatcherServlet**:
+    - **Описание**: В Spring MVC стандартная конфигурация включает:
+        - **Корневой ApplicationContext**, создаваемый `ContextLoaderListener`,
+          который содержит глобальные бины (сервисы, репозитории, конфигурации
+          базы данных).
+        - **Дочерний WebApplicationContext**, создаваемый каждым
+          `DispatcherServlet`, для веб-специфичных бинов (контроллеры,
+          ViewResolver, HandlerMapping).
+    - **Почему несколько контекстов?**
+        - Разделение ответственности: корневой контекст хранит общие бины,
+          доступные всему приложению, а контексты `DispatcherServlet` — бины,
+          связанные с обработкой HTTP-запросов.
+        - Если в приложении несколько `DispatcherServlet` (например, для разных
+          URL-паттернов, таких как `/api/*` и `/web/*`), каждый из них создаёт
+          свой собственный `WebApplicationContext`.
+    - **Пример**:
+      ```xml
+      <!-- web.xml -->
+      <listener>
+          <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+      </listener>
+      <context-param>
+          <param-name>contextConfigLocation</param-name>
+          <param-value>/WEB-INF/applicationContext.xml</param-value>
+      </context-param>
+ 
+      <servlet>
+          <servlet-name>apiDispatcher</servlet-name>
+          <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+          <init-param>
+              <param-name>contextConfigLocation</param-name>
+              <param-value>/WEB-INF/api-servlet.xml</param-value>
+          </init-param>
+      </servlet>
+      <servlet-mapping>
+          <servlet-name>apiDispatcher</servlet-name>
+          <url-pattern>/api/*</url-pattern>
+      </servlet-mapping>
+ 
+      <servlet>
+          <servlet-name>webDispatcher</servlet-name>
+          <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+          <init-param>
+              <param-name>contextConfigLocation</param-name>
+              <param-value>/WEB-INF/web-servlet.xml</param-value>
+          </init-param>
+      </servlet>
+      <servlet-mapping>
+          <servlet-name>webDispatcher</servlet-name>
+          <url-pattern>/web/*</url-pattern>
+      </servlet-mapping>
+      ```
+        - Здесь создаётся:
+            - Один корневой `ApplicationContext` (`ContextLoaderListener`).
+            - Два дочерних `WebApplicationContext` (по одному для каждого
+              `DispatcherServlet`).
+
+2. **Модульные приложения с иерархией контекстов**:
+    - **Описание**: В крупных приложениях может быть несколько
+      `ApplicationContext`, организованных в иерархию (родительский и дочерние
+      контексты), чтобы разделить конфигурации по модулям или слоям.
+    - **Почему несколько контекстов?**
+        - Для изоляции бинов: например, один контекст для инфраструктуры (база
+          данных, кэши), другой для бизнес-логики.
+        - Дочерние контексты наследуют бины из родительского, но могут добавлять
+          свои собственные.
+    - **Пример**:
+      ```java
+      public class Main {
+          public static void main(String[] args) {
+              // Родительский контекст
+              AnnotationConfigApplicationContext parentContext = new AnnotationConfigApplicationContext(InfrastructureConfig.class);
+              // Дочерний контекст
+              AnnotationConfigApplicationContext childContext = new AnnotationConfigApplicationContext();
+              childContext.setParent(parentContext);
+              childContext.register(BusinessConfig.class);
+              childContext.refresh();
+          }
+      }
+      ```
+        - Здесь родительский контекст содержит инфраструктурные бины, а
+          дочерний — бизнес-логику.
+
+3. **Микросервисная архитектура или модульные WAR-файлы**:
+    - **Описание**: Если приложение состоит из нескольких WAR-файлов,
+      развёрнутых в одном сервере (например, Tomcat), каждый WAR имеет свой
+      собственный `ServletContext` и, соответственно, свой `ApplicationContext`.
+    - **Почему несколько контекстов?**
+        - Каждый WAR — это отдельное веб-приложение со своим `ServletContext` и
+          Spring-контекстами.
+        - Даже если используется общий корневой контекст, каждый WAR может иметь
+          свои `DispatcherServlet` с отдельными `WebApplicationContext`.
+    - **Пример**: Разные модули приложения (например, админ-панель и публичный
+      API) развёрнуты как отдельные WAR-файлы, каждый со своим
+      `ApplicationContext`.
+
+4. **Тестирование**:
+    - **Описание**: В тестах часто создаются отдельные `ApplicationContext` для
+      каждого тестового класса или набора тестов, чтобы изолировать конфигурации
+      и бины.
+    - **Почему несколько контекстов?**
+        - Тестовые контексты создаются с разными конфигурациями (например, с
+          моками или тестовой базой данных).
+        - Spring кэширует контексты, но разные тесты могут использовать разные
+          конфигурации, что приводит к созданию нескольких `ApplicationContext`.
+    - **Пример**:
+      ```java
+      @SpringBootTest
+      @ContextConfiguration(classes = TestConfig1.class)
+      public class Test1 {
+          @Autowired
+          private SomeService service;
+      }
+ 
+      @SpringBootTest
+      @ContextConfiguration(classes = TestConfig2.class)
+      public class Test2 {
+          @Autowired
+          private SomeService service;
+      }
+      ```
+        - Здесь создаются два отдельных `ApplicationContext` для `TestConfig1` и
+          `TestConfig2`.
+
+5. **Плагины или модульные приложения**:
+    - **Описание**: В приложениях с модульной структурой (например, плагины или
+      подключаемые модули) каждый модуль может создавать свой собственный
+      `ApplicationContext`.
+    - **Почему несколько контекстов?**
+        - Каждый модуль имеет свою конфигурацию и бины, которые изолированы от
+          других модулей.
+        - Модули могут загружаться динамически, создавая свои контексты во время
+          выполнения.
+    - **Пример**: В приложении с плагинами каждый плагин регистрирует свой
+      `ApplicationContext` для обработки своей логики.
+
+6. **Разные профили или окружения**:
+    - **Описание**: Spring позволяет использовать профили (`@Profile`) для
+      разделения конфигураций (например, `dev`, `prod`). Хотя профили обычно
+      работают в рамках одного контекста, в некоторых случаях разные профили
+      могут приводить к созданию отдельных контекстов.
+    - **Пример**:
+      ```java
+      AnnotationConfigApplicationContext context1 = new AnnotationConfigApplicationContext();
+      context1.getEnvironment().setActiveProfiles("dev");
+      context1.register(DevConfig.class);
+      context1.refresh();
+ 
+      AnnotationConfigApplicationContext context2 = new AnnotationConfigApplicationContext();
+      context2.getEnvironment().setActiveProfiles("prod");
+      context2.register(ProdConfig.class);
+      context2.refresh();
+      ```
+        - Здесь создаются два `ApplicationContext` для разных профилей.
+
+### **Как управляются множественные контексты?**
+
+- **Иерархия контекстов**:
+    - В веб-приложениях часто используется иерархия: корневой
+      `ApplicationContext` (от `ContextLoaderListener`) и дочерние
+      `WebApplicationContext` (от `DispatcherServlet`).
+    - Дочерние контексты наследуют бины из родительского, но могут
+      переопределять их или добавлять свои.
+- **Изоляция**:
+    - Каждый `ApplicationContext` изолирован и управляет своими бинами.
+    - Бины в scope `singleton` уникальны для каждого контекста (например, два
+      `ApplicationContext` будут иметь разные экземпляры singleton-бинов).
+- **Связь с ServletContext**:
+    - В веб-приложении все контексты привязаны к одному `ServletContext`,
+      который обеспечивает глобальный доступ к ресурсам и атрибутам приложения.
+    - Бины в scope `application` общие для всех контекстов в рамках одного
+      `ServletContext`.
+
+### **Практические замечания**
+
+- **Когда несколько контекстов полезны?**
+    - Для разделения конфигураций (например, инфраструктура, бизнес-логика,
+      веб-слой).
+    - Для поддержки нескольких точек входа (например, REST API и MVC в одном
+      приложении).
+    - Для модульности и изоляции в больших приложениях.
+- **Недостатки**:
+    - Увеличивают сложность приложения.
+    - Могут потребовать больше памяти, так как каждый контекст хранит свои бины.
+    - Требуют осторожности при управлении зависимостями между контекстами.
+- **Scope и множественные контексты**:
+    - Бины в scope `singleton` уникальны для каждого `ApplicationContext`.
+    - Бины в scope `application` общие для всех контекстов в рамках одного
+      `ServletContext`.
+    - Для внедрения бинов с короткоживущими scopes (например, `request`,
+      `session`) в singleton-бины используется `proxyMode` (как обсуждалось
+      ранее).
+
+### **Пример сценария**
+
+Предположим, у вас есть веб-приложение с REST API и веб-интерфейсом:
+
+- **Корневой контекст** (`ContextLoaderListener`): Хранит сервисы, репозитории,
+  настройки базы данных.
+- **Дочерний контекст 1** (`DispatcherServlet` для `/api/*`): Контроллеры для
+  REST API.
+- **Дочерний контекст 2** (`DispatcherServlet` для `/web/*`): Контроллеры для
+  MVC и рендеринга HTML.
+- Все контексты используют общий `ServletContext`, а бины в scope
+  `application` (например, глобальный кэш) общие для всех.
+
+### **Связь с предыдущими темами**
+
+- **ServletContext**: Все `ApplicationContext` в веб-приложении привязаны к
+  одному `ServletContext`, который обеспечивает доступ к глобальным ресурсам.
+- **DispatcherServlet**: Создаёт дочерний `WebApplicationContext` для обработки
+  HTTP-запросов.
+- **ContextLoaderListener**: Создаёт корневой `ApplicationContext`, общий для
+  всех `DispatcherServlet`.
+- **proxyMode**: Используется для корректного внедрения бинов с scopes
+  `request`, `session`, `application` в бины из разных контекстов.
+
+Если вам нужен пример кода, разбор конкретного случая или помощь с
+конфигурацией, уточните, пожалуйста!
+
+
+
 
 ---
 
@@ -693,171 +1084,7 @@ public class MyServlet {
   `ServletContext` используйте, если требуется взаимодействие с веб-контейнером
   или scope `application`.
 
-Если нужен пример кода, разбор интеграции с Spring или уточнение какого-то
-аспекта, дайте знать!
-
 ---
-
-## IoC и DI
-
-**Inversion of Control (IoC)** и **Dependency Injection (DI)** — это
-фундаментальные концепции фреймворка Spring в Java, которые связаны между собой
-и лежат в основе его архитектуры. Они помогают создавать гибкие, модульные и
-легко тестируемые приложения. Давайте разберём их кратко и понятно.
-
-### **Inversion of Control (IoC)**
-
-- **Определение**: IoC (Инверсия управления) — это принцип проектирования, при
-  котором управление жизненным циклом объектов и их зависимостями передаётся от
-  самого объекта к внешнему контейнеру (в Spring — это **ApplicationContext**).
-- **Как работает**:
-    - Вместо того чтобы объект сам создавал свои зависимости или управлял своим
-      жизненным циклом, контейнер Spring (IoC-контейнер) берёт на себя
-      ответственность за:
-        - Создание объектов (бинов).
-        - Управление их конфигурацией и жизненным циклом.
-        - Внедрение зависимостей.
-    - Объект "пассивно" получает всё необходимое от контейнера, а не "активно"
-      создаёт зависимости.
-- **Пример аналогии**:
-    - Без IoC: Вы сами идёте в магазин, покупаете ингредиенты и готовите еду.
-    - С IoC: Вы заказываете еду, а ресторан (контейнер) готовит и доставляет её
-      вам.
-- **В Spring**:
-    - IoC реализуется через **ApplicationContext** или **BeanFactory**, которые
-      управляют созданием, конфигурацией и связыванием бинов.
-    - Вы описываете бины и их зависимости (через XML, Java-конфигурации или
-      аннотации), а контейнер решает, когда и как их создавать.
-
-### **Dependency Injection (DI)**
-
-- **Определение**: DI (Внедрение зависимостей) — это конкретная реализация IoC,
-  при которой зависимости объекта (другие объекты или ресурсы) предоставляются
-  ему извне, а не создаются внутри самого объекта.
-- **Как работает**:
-    - Вместо того чтобы объект создавал свои зависимости (например, через
-      `new`), контейнер Spring "внедряет" их в объект.
-    - Это делает код более модульным, тестируемым и независимым от конкретных
-      реализаций.
-- **Типы DI в Spring**:
-    1. **Конструкторное внедрение**:
-        - Зависимости передаются через конструктор.
-       ```java
-       @Component
-       public class UserService {
-           private final DatabaseRepository repository;
-  
-           @Autowired
-           public UserService(DatabaseRepository repository) {
-               this.repository = repository;
-           }
-       }
-       ```
-    2. **Сеттерное внедрение**:
-        - Зависимости устанавливаются через сеттеры.
-       ```java
-       @Component
-       public class UserService {
-           private DatabaseRepository repository;
-  
-           @Autowired
-           public void setRepository(DatabaseRepository repository) {
-               this.repository = repository;
-           }
-       }
-       ```
-    3. **Полевое внедрение** (реже используется):
-        - Зависимости внедряются напрямую в поля через аннотацию `@Autowired`.
-       ```java
-       @Component
-       public class UserService {
-           @Autowired
-           private DatabaseRepository repository;
-       }
-       ```
-- **Преимущества DI**:
-    - Упрощает тестирование (можно подменять зависимости моками).
-    - Снижает связанность (loose coupling) между классами.
-    - Позволяет легко заменять реализации зависимостей.
-
-### **Связь IoC и DI**:
-
-- **IoC** — это общий принцип: управление объектами передаётся контейнеру.
-- **DI** — это способ реализации IoC, когда контейнер "внедряет" зависимости в
-  объекты.
-- В Spring IoC-контейнер (ApplicationContext) использует DI для предоставления
-  бинам их зависимостей, что позволяет избежать жёсткой привязки классов друг к
-  другу.
-
-### **Пример в Spring**:
-
-```java
-// Конфигурация через Java
-@Configuration
-public class AppConfig {
-    @Bean
-    public DatabaseRepository databaseRepository() {
-        return new DatabaseRepository();
-    }
-
-    @Bean
-    public UserService userService(DatabaseRepository repository) {
-        return new UserService(repository);
-    }
-}
-
-// Классы
-public class DatabaseRepository {
-    public void save() {
-        System.out.println("Сохранение в базе данных");
-    }
-}
-
-public class UserService {
-    private final DatabaseRepository repository;
-
-    public UserService(DatabaseRepository repository) {
-        this.repository = repository;
-    }
-
-    public void performAction() {
-        repository.save();
-    }
-}
-
-// Использование
-public class Main {
-    public static void main(String[] args) {
-        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-        UserService service = context.getBean(UserService.class);
-        service.performAction(); // Выведет: Сохранение в базе данных
-    }
-}
-```
-
-### **Ключевые моменты**:
-
-- **IoC**:
-    - Передаёт управление созданием и жизненным циклом объектов контейнеру.
-    - Делает приложение более декларативным (вы описываете, "что нужно", а не "
-      как это сделать").
-- **DI**:
-    - Реализует IoC, предоставляя зависимости объектам.
-    - В Spring поддерживается через аннотации (`@Autowired`, `@Inject`), XML или
-      Java-конфигурации.
-- **Преимущества**:
-    - Модульность: классы не зависят от конкретных реализаций.
-    - Тестируемость: легко подменять зависимости.
-    - Гибкость: можно менять конфигурацию без изменения кода.
-
-### **Связь с жизненным циклом бинов**:
-
-- IoC-контейнер управляет полным жизненным циклом бинов (создание,
-  инициализация, использование, уничтожение).
-- DI обеспечивает внедрение зависимостей на этапе создания или конфигурирования
-  бина.
-
-------
 
 ## Что такое DispatcherServlet и ContextLoaderListener?
 
