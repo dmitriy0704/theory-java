@@ -12,9 +12,10 @@
 - Java Collection. Сложность получения последнего элемента в LinkedList (O(1))
 - Java multithreading. ExecutorService
 - Java multithreading. Atomic пакет Механизм под капотом (CAS)
+- Spring. Scope бинов чуть лучше
+- Жизненный цикл бинов
 
-> ## Spring. Scope бинов чуть лучше
-> ## Жизненный цикл бинов
+
 > ## Hibernate. Проблема n+1
 
 **Проблема N+1 запросов** возникает, когда при работе с ORM (например,
