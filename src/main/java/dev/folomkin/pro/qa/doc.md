@@ -2263,5 +2263,5 @@ _**Где применяются:**_
 > - Проблемы race condition и deadlock, способы решения
 > - Многопоточные коллекции, пулы потоков, Future и CompletableFuture
 
-> - Collection Framework и внутренняя работа коллекций
+> - Collection Framework и внутренняя работа коллекций, Compare/Comparable
 

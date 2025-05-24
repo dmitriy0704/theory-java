@@ -22,6 +22,8 @@ Java Core:
 ООП
 Exceptions
 Enum
+Equals, hashcode
+
 
 Stream Api
 Collections
