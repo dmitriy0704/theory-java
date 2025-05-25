@@ -23,11 +23,18 @@ Java Core:
 Exceptions
 Enum
 Equals, hashcode
-
+Исключения
+Отличие абстрактного класса от интерфейса 
 
 Stream Api
 Collections
 •Многопоточность и асинхронность
+Объясните ключевые слова volatile, synchronized и transient
+
+Spring: 
+
+Разница между Component и Bean
+
 
 ========
 Вопросы с собесов:

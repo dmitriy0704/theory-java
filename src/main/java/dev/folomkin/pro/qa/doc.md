@@ -2,19 +2,27 @@
 
 ## Вопросы
 
-- SOLID 
-- Java Generic. Можем как-то ограничить типы (про super)
-- JAVA CORE. <br> Generics. PECS 
-- Java StreamApi. Вызов без терминальной операции
-- Java StreamApi. .parallel(), fork-join-poll
-- Java Core. GCRoot
-- Java Collection. HashMap чуть лучше про то как устроен и сложности методов
-- Java Collection. Сложность получения последнего элемента в LinkedList (O(1))
-- Java multithreading. ExecutorService
-- Java multithreading. Atomic пакет Механизм под капотом (CAS)
-- Spring. Scope бинов чуть лучше
-- Жизненный цикл бинов
+- SOLID - [SOLID.md](code_style/SOLID.md)
+- Java Generic. Можем как-то ограничить типы (про
+  super) - [generics.md](java/generics.md)
+- JAVA CORE. <br> Generics. PECS -  [generics.md](java/generics.md)
+- Java StreamApi. Вызов без терминальной
+  операции - [stream-api.md](java/stream-api.md)
+- Java StreamApi. .parallel(),
+  fork-join-poll - [stream-api.md](java/stream-api.md)
+- Java multithreading.
+  ExecutorService - [executorservice.md](java/multithreading/executorservice.md)
+- Java multithreading. Atomic пакет Механизм под капотом (
+  CAS) - [atomic_cas.md](java/multithreading/atomic_cas.md)
+- Spring. Scope бинов чуть лучше - [beans.md](../spring/beans/beans.md)
+- Жизненный цикл бинов - [beans.md](../spring/beans/beans.md)
 
+-----
+
+- Java Collection. Сложность получения последнего элемента в LinkedList (O(1))
+- Java Collection. HashMap чуть лучше про то как устроен и сложности методов
+- Java Core. GCRoot
+- Оптимистические/писсимистические блокировки
 
 > ## Hibernate. Проблема n+1
 
