@@ -17,6 +17,7 @@
 - Spring. Scope бинов чуть лучше - [beans.md](../spring/beans/beans.md)
 - Жизненный цикл бинов - [beans.md](../spring/beans/beans.md)  
 - Hibernate. Проблема n+1 [hibernate.md](../spring/hibernate/hibernate.md)
+- Hibernate. Уровни кеширования в Hibernate лучше изучить [hibernate.md](../spring/hibernate/hibernate.md)
 - Spring. Self injection и как работать с аннотациями в спринге. Например, Transaction, Уровни транзакции, ACID, проблемы [transactional.md](../spring/transactional/transactional.md)
 
 --------------
@@ -32,6 +33,7 @@
 
 - Работа с исключениями
 - Java Core. HashCode, equals()
+- SQL. JOIN
 
 
 
