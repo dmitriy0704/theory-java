@@ -25,6 +25,7 @@ Enum
 Equals, hashcode
 Исключения
 Отличие абстрактного класса от интерфейса 
+Статические методы
 
 Stream Api
 Collections
