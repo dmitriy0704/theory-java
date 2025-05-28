@@ -36,7 +36,7 @@
 **Пример**:
 
 ```java
-public <T extends > void printNumber(T number) {
+public <T extends Number> void printNumber(T number) {
     System.out.println(number.doubleValue()); // Метод доступен, так как T — подтип Number
 }
 
@@ -226,7 +226,6 @@ PECS применяется к коллекциям или другим обоб
   или его супертипов.
 
 ### Подробное объяснение
-
 
 
 ```java

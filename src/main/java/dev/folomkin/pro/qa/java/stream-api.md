@@ -62,7 +62,7 @@ public static void main(String[] args) {
 происходит анализ операций в пайплайне, и определяется эффективная стратегия его
 выполнения.
 
-## .parallel(),Проблемы parallel в Stream API, fork-join-poll, commonPool()
+## .parallel(), Проблемы parallel в Stream API, fork-join-poll, commonPool()
 
 Для параллельного выполнения потоков в Stream Api collection.stream()
 можно заменить на` collection.parallelStream().operation()`  
