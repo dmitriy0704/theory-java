@@ -76,7 +76,7 @@ class Person implements Comparable<Person> {
 Строго рекомендуется, чтобы метод compareTo() был совместимым с equals() и
 hashCode() (наследуемых из java.lang.Object):
 
-1. Если compareTo() возвращает ноль, то equals() должен воз вращать true.
+1. Если compareTo() возвращает ноль, то equals() должен возвращать true.
 2. Если equals() возвращает true, то hashCode() будет создавать то же int.
 
 Все восемь классов-оболочек базовых типов (Byte, Short, Integer, Long, Float,

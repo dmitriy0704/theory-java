@@ -15,16 +15,19 @@
 - Java multithreading. Atomic пакет Механизм под капотом (
   CAS) - [atomic_cas.md](java/multithreading/atomic_cas.md)
 - Spring. Scope бинов чуть лучше - [beans.md](../spring/beans/beans.md)
-- Жизненный цикл бинов - [beans.md](../spring/beans/beans.md)  
+- Жизненный цикл бинов - [beans.md](../spring/beans/beans.md)
 - Hibernate. Проблема n+1 [hibernate.md](../spring/hibernate/hibernate.md)
-- Hibernate. Уровни кеширования в Hibernate лучше изучить [hibernate.md](../spring/hibernate/hibernate.md)
-- Spring. Self injection и как работать с аннотациями в спринге. Например, Transaction, Уровни транзакции, ACID, проблемы [transactional.md](../spring/transactional/transactional.md)
+- Hibernate. Уровни кеширования в Hibernate лучше
+  изучить [hibernate.md](../spring/hibernate/hibernate.md)
+- Spring. Self injection и как работать с аннотациями в спринге.
+  Например, Transaction, Уровни транзакции, ACID,
+  проблемы [transactional.md](../spring/transactional/transactional.md)
+- Java Core. GCRoot [core.md](java/core.md)
 
 --------------
 
 - Java Collection. Сложность получения последнего элемента в LinkedList (O(1))
 - Java Collection. HashMap чуть лучше про то как устроен и сложности методов
-- Java Core. GCRoot
 - SQL. Оптимистические/Пессимистические блокировки
 - Kafka про партиции чуть лучше
 - Индексы в SQL
@@ -35,9 +38,8 @@
 - Java Core. HashCode, equals()
 - SQL. JOIN
 
-
-
 **Multithreading**
+
 - Механизмы синхронизации: synchronized, volatile, atomic types
 - Проблемы race condition и deadlock, способы решения
 - Многопоточные коллекции, пулы потоков, Future и CompletableFuture
