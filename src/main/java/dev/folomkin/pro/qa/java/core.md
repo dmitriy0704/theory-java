@@ -1,4 +1,233 @@
-# Управление памятью в JAVA.
+# JAVA CORE
+
+################################################################################
+--------------------------------------------------------------------------------
+
+# Нововведения по версиям Java
+
+Я расскажу о ключевых нововведениях в Java по основным версиям, начиная с Java
+1.0 и до актуальных на май 2025 года. Список будет кратким, но охватит основные
+изменения, влияющие на язык, стандартную библиотеку и JVM. Для удобства разобью
+по версиям, выделяя наиболее значимые новшества.
+
+### Java 1.0 (1996)
+
+- Первый релиз Java.
+- Основные черты: платформонезависимость, объектно-ориентированное
+  программирование, автоматическое управление памятью (сборка мусора).
+- Библиотека: базовые классы (AWT для GUI, java.util для коллекций).
+
+### Java 1.1 (1997)
+
+- Введение внутреннего классов (inner classes).
+- JDBC для работы с базами данных.
+- Улучшения в AWT и добавление JavaBeans.
+
+### Java 2 (Java 1.2, 1998)
+
+- Коллекции (Collections Framework: List, Set, Map).
+- Swing для продвинутого GUI.
+- JIT-компилятор (Just-In-Time) для повышения производительности.
+- Поддержка строгой типизации в `strictfp`.
+
+### Java 1.3 (2000)
+
+- HotSpot JVM — новый движок для оптимизации производительности.
+- JNDI (Java Naming and Directory Interface).
+- Улучшения в JavaSound и RMI.
+
+### Java 1.4 (2002)
+
+- Регулярные выражения (`java.util.regex`).
+- Assertions для отладки.
+- NIO (New Input/Output) для неблокирующего ввода-вывода.
+- Логгинг API (`java.util.logging`).
+- Поддержка XML (JAXP).
+
+### Java 5 (1.5, 2004)
+
+- **Generics**: обобщённые типы для безопасной работы с коллекциями.
+- Перечисления (Enums).
+- Аннотации (`@Override`, `@Deprecated` и др.).
+- Autoboxing/unboxing для автоматического преобразования примитивов в объекты.
+- Цикл `for-each` для упрощения итерации.
+- Varargs (`...`) для методов с переменным числом аргументов.
+- `java.util.concurrent` для многопоточного программирования (ExecutorService,
+  ConcurrentHashMap).
+
+### Java 6 (2006)
+
+- Улучшения производительности JVM.
+- Поддержка скриптовых языков (JavaScript через `javax.script`).
+- Улучшения в JDBC 4.0 и поддержка XML (JAXB 2.0).
+- Инструменты мониторинга и диагностики JVM.
+
+### Java 7 (2011)
+
+- **Switch с String**: использование строк в `switch`.
+- Try-with-resources для автоматического закрытия ресурсов.
+- Diamond-оператор (`<>`) для упрощения работы с Generics.
+- NIO.2: улучшения для работы с файловой системой (`java.nio.file`).
+- Fork/Join Framework для параллельных вычислений.
+- Мелкие улучшения синтаксиса (бинарные литералы, подчёркивания в числах).
+
+### Java 8 (2014)
+
+- **Lambda-выражения**: функциональное программирование (`x -> x * 2`).
+- **Stream API**: обработка данных в функциональном стиле (`filter`, `map`,
+  `reduce`).
+- Интерфейсы с методами по умолчанию (`default methods`).
+- `Optional` для борьбы с `NullPointerException`.
+- Новый API для работы с датой и временем (`java.time`).
+- Nashorn JavaScript-движок.
+- Удаление PermGen, замена на Metaspace в JVM.
+
+### Java 9 (2017)
+
+- **Модульная система** (JPMS, Jigsaw): `module-info.java` для модульности.
+- Интерактивная консоль JShell.
+- Улучшения в Stream API и `Optional`.
+- `HttpClient` для работы с HTTP/2.
+- Private методы в интерфейсах.
+- Улучшения в Process API и GC (G1 стал сборщиком по умолчанию).
+
+### Java 10 (2018)
+
+- **Local-Variable Type Inference**: `var` для локальных переменных.
+- Улучшения в GC и контейнеризации.
+- API для неизменяемых коллекций (`List.of()`, `Set.of()`).
+- Экспериментальная поддержка GraalVM.
+
+### Java 11 (2018, LTS)
+
+- Новый HTTP Client (стандарт).
+- Удаление Java EE и CORBA модулей.
+- Поддержка TLS 1.3.
+- `String` методы: `isBlank()`, `lines()`, `strip()`.
+- `var` в лямбда-выражениях.
+- Epsilon GC (без сборки мусора для специфичных случаев).
+
+### Java 12 (2019)
+
+- Switch-выражения (preview, упрощённый синтаксис).
+- Shenandoah GC (экспериментальный, низкие паузы).
+- Улучшения в производительности JVM.
+- `String` методы: `indent()`, `transform()`.
+
+### Java 13 (2019)
+
+- Улучшения в switch-выражениях (preview).
+- Текстовые блоки (preview, многострочные строки).
+- Улучшения в ZGC (Z Garbage Collector).
+- Динамические CDS (Class Data Sharing) архивы.
+
+### Java 14 (2020)
+
+- Switch-выражения стали стандартными.
+- Текстовые блоки (preview 2).
+- Records (preview, компактные классы для данных).
+- Pattern Matching для `instanceof` (preview).
+- Улучшения в ZGC и NullPointerException (подробные сообщения).
+
+### Java 15 (2020)
+
+- Текстовые блоки стали стандартными.
+- Records (preview 2).
+- Sealed Classes (preview, ограничение наследования).
+- Hidden Classes для фреймворков.
+- Улучшения в GC (ZGC, Shenandoah).
+
+### Java 16 (2021)
+
+- Records стали стандартными.
+- Pattern Matching для `instanceof` (стандарт).
+- Sealed Classes (preview 2).
+- Новый инструмент `jpackage` для создания инсталляторов.
+- Улучшения в Stream API и Vector API (incubator).
+
+### Java 17 (2021, LTS)
+
+- Sealed Classes стали стандартными.
+- Улучшения в Random API.
+- Удаление устаревших API (Applet API).
+- Восстановление Always-Strict Floating-Point семантики.
+- Поддержка macOS/AArch64.
+
+### Java 18 (2022)
+
+- UTF-8 как кодировка по умолчанию.
+- Простой веб-сервер (`jwebserver`).
+- Code Snippets в JavaDoc (`@snippet`).
+- Vector API (второй incubator).
+- Pattern Matching для switch (preview).
+
+### Java 19 (2022)
+
+- Pattern Matching для switch (preview 2).
+- Virtual Threads (preview, Project Loom) для упрощения многопоточности.
+- Vector API (третий incubator).
+- Record Patterns (preview).
+
+### Java 20 (2023)
+
+- Pattern Matching для switch (preview 3).
+- Record Patterns (preview 2).
+- Virtual Threads (preview 2).
+- Scoped Values (incubator, для передачи данных в потоках).
+- Structured Concurrency (incubator).
+
+### Java 21 (2023, LTS)
+
+- Virtual Threads стали стандартными.
+- Pattern Matching для switch (стандарт).
+- Record Patterns (стандарт).
+- Sequenced Collections (новый интерфейс для коллекций с порядком).
+- String Templates (preview).
+- Unnamed Classes и Instance Main Methods (preview, упрощение кода).
+
+### Java 22 (2024)
+
+- Unnamed Classes и Instance Main Methods (стандарт).
+- String Templates (preview 2).
+- Foreign Function & Memory API (стандарт, для взаимодействия с нативным кодом).
+- Structured Concurrency (стандарт).
+- Vector API (стандарт).
+- Statements перед `super()` в конструкторах (preview).
+
+### Java 23 (2024)
+
+- Модульные JAR-файлы для упрощения работы с модулями.
+- Улучшения в `Stream` API (Gatherers для кастомной обработки).
+- Implicit Classes и Instance Main Methods (preview 2).
+- Primitive Types в Pattern Matching (preview).
+- Flexible Constructor Bodies (стандарт).
+
+### Java 24 (ожидается в 2025)
+
+На момент мая 2025 года Java 24 ещё не выпущена, но ожидаемые нововведения (на
+основе JEP и обсуждений сообщества):
+
+- Улучшения в Project Valhalla (Value Objects, Primitive Classes для оптимизации
+  производительности).
+- Дальнейшая работа над Pattern Matching для примитивов.
+- Упрощение API для многопоточности (Project Loom).
+- Потенциальные улучшения в GC и JVM для контейнеров.
+
+### Текущая ситуация (май 2025)
+
+- **LTS-версии**: Java 8, 11, 17, 21 — самые используемые в продакшене.
+- **Активные проекты**:
+    - **Project Loom**: упрощение многопоточности (Virtual Threads).
+    - **Project Valhalla**: Value Objects и примитивные классы.
+    - **Project Panama**: улучшение взаимодействия с нативным кодом.
+    - **Project Amber**: упрощение синтаксиса (Pattern Matching, Records).
+- Oracle продолжает выпускать версии каждые полгода, с долгосрочной поддержкой (
+  LTS) каждые два года.
+
+Если нужно углубиться в конкретную версию, проект или пример кода, дайте знать!
+
+################################################################################
+--------------------------------------------------------------------------------
 
 # Устройство памяти
 
@@ -904,8 +1133,6 @@ Java 7 он находится в куче, что упрощает управл
 
 ================================================================================
 --------------------------------------------------------------------------------
-
-
 
 # HashCode, equals()
 
