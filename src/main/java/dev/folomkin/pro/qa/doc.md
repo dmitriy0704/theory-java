@@ -2,18 +2,18 @@
 
 ## Вопросы
 
-- SOLID - [SOLID.md](code_style/SOLID.md)
+- SOLID - [SOLID.md](../code_style/SOLID.md)
 - Java Generic. Можем как-то ограничить типы (про
-  super) - [generics.md](java/generics.md)
-- JAVA CORE. <br> Generics. PECS -  [generics.md](java/generics.md)
+  super) - [generics.md](../../java/generics.md)
+- JAVA CORE. <br> Generics. PECS -  [generics.md](../../java/generics.md)
 - Java StreamApi. Вызов без терминальной
-  операции - [stream-api.md](java/stream-api.md)
+  операции - [stream-api.md](../../java/stream-api.md)
 - Java StreamApi. .parallel(),
-  fork-join-poll - [stream-api.md](java/stream-api.md)
+  fork-join-poll - [stream-api.md](../../java/stream-api.md)
 - Java multithreading.
-  ExecutorService - [executorservice.md](java/multithreading/executorservice.md)
+  ExecutorService - [executorservice.md](../../java/multithrading/executorservice.md)
 - Java multithreading. Atomic пакет Механизм под капотом (
-  CAS) - [atomic_cas.md](java/multithreading/atomic_cas.md)
+  CAS) - [atomic_cas.md](../../java/multithrading/atomic_cas.md)
 - Spring. Scope бинов чуть лучше - [beans.md](../../spring/beans/beans.md)
 - Жизненный цикл бинов - [beans.md](../../spring/beans/beans.md)
 - Hibernate. Проблема n+1 [hibernate.md](../../hibernate/hibernate.md)
@@ -22,7 +22,7 @@
 - Spring. Self injection и как работать с аннотациями в спринге.
   Например, Transaction, Уровни транзакции, ACID,
   проблемы [transaction.md](../../spring/transaction/transaction.md)
-- Java Core. GCRoot [core.md](java/core.md)
+- Java Core. GCRoot [core.md](../../java/core.md)
 
 --------------
 
@@ -34,8 +34,8 @@
 
 =====================================================================
 
-- Работа с исключениями [exception.md](java/exception.md)
-- Java Core. HashCode, equals() [core.md](java/core.md)
+- Работа с исключениями [exception.md](../../java/exception.md)
+- Java Core. HashCode, equals() [core.md](../../java/core.md)
 - SQL. JOIN [sql.md](../../sql/sql.md)
 
 **Multithreading**
