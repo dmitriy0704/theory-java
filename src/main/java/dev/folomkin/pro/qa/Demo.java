@@ -3,24 +3,26 @@ package dev.folomkin.pro.qa;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class Demo {
 
     public static void main(String[] args) {
 
-        List<? extends Number> numbers = List.of(1.0, 2.0, 3.0);
-        Number n = numbers.get(1);
-        System.out.println(n);
+        System.out.println(
 
+                Map.of(1, "one", 2, "two", 3, "three").entrySet().stream()
 
-        List<? super Integer> integers = new ArrayList<>();
-        integers.add(1);
+                        .filter(entry -> entry.getValue().length() > 3)
 
-        Number m = integers.get(1);
-        System.out.println(m);
+                        .map(Map.Entry::getKey)
 
+                        .findFirst() .map(x -> "result = " + x)
 
+                        .orElse("result = null")
+
+        );
     }
 }
 
